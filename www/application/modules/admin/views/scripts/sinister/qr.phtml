@@ -1,0 +1,161 @@
+<?php if ($this->parameters["action"] != 'add'): ?>
+    <?php if ($this->parameters["action"] == 'order'): ?>
+        <div class="btn-group pull-right hidden-print">
+            <button class="btn btn-default" type="button" onclick="history.go(-1);">Volver</button>
+            <button class="btn btn-info" type="button" onclick="window.print();"><span class="glyphicon glyphicon-print"> </span>Imprimir</button>
+        </div>
+        <div class="clearfix"></div>
+        <br/>
+    <?php endif; ?>
+    <?php if ($this->parameters["action"] != 'order'):
+        ?>
+        <div class="hidden-print">
+        <?php endif; ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Orden de Trabajo
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-9">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <p><label>Fecha</label> : <?php echo $this->result["si_date"]; ?></p>
+                                <p><label>Dominio</label> : <?php echo $this->result["si_domain"]; ?></p>
+                                <p><label>Vehículo</label> : <?php echo $this->result["br_name"]; ?> <?php echo $this->result["mo_name"]; ?> <?php echo $this->result["si_version"]; ?></p>
+                            </div>
+                            <div class="col-xs-6">
+                                <p><label>Nombre</label> : <?php echo $this->result["si_fullname"]; ?></p>
+                                <p><label>Siniestro</label> : <?php echo $this->result["si_number"]; ?></p>
+                                <p><label>Compañia</label> : <?php echo $this->result["co_name"]; ?></p>
+                            </div>
+                            <div class="col-xs-12">
+                                <?php if ($this->result["si_loan"]): ?>
+                                    <p><b>Préstamos:</b> <?php echo $this->result["si_loan"]; ?></p>
+                                <?php endif; ?>
+                                <p><label>Repuestos</label></p>
+                                <?php
+                                if ($this->result['si_tamount_au'] > 0):
+                                    $count_stock++;
+                                    ?>
+                                    <p><b><?php echo $this->result['si_tamount_au']; ?></b> LLanta de Auxilio / <?php echo $this->result['tb_name_au']; ?></p>
+                                <?php endif;
+                                ?>
+                                <?php
+                                if ($this->result['si_amount_po'] > 0):
+                                    $count_stock++;
+                                    ?>
+                                    <p><b><?php echo $this->result['si_amount_po']; ?></b> LLanta de Posición / <?php echo $this->result['tb_name_po']; ?></p>
+                                <?php endif;
+                                ?>
+                                <?php
+                                if ($this->result['si_amount_co'] > 0):
+                                    $count_stock++;
+                                    ?>
+                                    <p><b><?php echo $this->result['si_amount_co']; ?></b> Neumático / <?php echo $this->result['cb_name']; ?></p>
+                                <?php endif;
+                                ?>
+                                <?php
+                                if ($this->result['si_amount_ba'] > 0):
+                                    $count_stock++;
+                                    ?>
+                                    <p><b><?php echo $this->result['si_amount_ba']; ?></b> Batería / <?php echo $this->result['bb_name']; ?></p>
+                                    <?php
+                                endif;
+                                foreach ($this->sinister_accesory as $si_ac):
+                                    ?>
+                                    
+                                        <p><b><?php echo $si_ac["sa_count"]; ?></b> <?php echo $si_ac["ac_name"]; ?></p>
+                                    
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <img src="<?php echo $this->baseUrl() . URL_IMG . $this->result["si_qr"] ?>" style="width: 100%;">
+                    </div>
+                </div>
+                <?php if ($this->parameters["action"] == 'order'): ?>
+                    <div class="visible-print">
+                        <label>Observaciones</label>
+                        <textarea class="form-control" style="resize: none; height: 100px;"></textarea>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php if ($this->parameters["action"] != 'order'): ?>
+        </div>  
+    <?php endif; ?>
+    <?php if ($this->parameters["action"] == 'order'): ?>
+        <br/>
+        <br/>
+        <div class="panel panel-default visible-print">
+            <div class="panel-heading">
+                Orden de Trabajo
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-9">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <p><label>Fecha</label> : <?php echo $this->result["si_date"]; ?></p>
+                                <p><label>Dominio</label> : <?php echo $this->result["si_domain"]; ?></p>
+                                <p><label>Vehículo</label> : <?php echo $this->result["br_name"]; ?> <?php echo $this->result["mo_name"]; ?> <?php echo $this->result["si_version"]; ?></p>
+                            </div>
+                            <div class="col-xs-6">
+                                <p><label>Nombre</label> : <?php echo $this->result["si_fullname"]; ?></p>
+                                <p><label>Siniestro</label> : <?php echo $this->result["si_number"]; ?></p>
+                                <p><label>Compañia</label> : <?php echo $this->result["co_name"]; ?></p>
+                            </div>
+                            <div class="col-xs-12">
+                                <?php if ($this->result["si_loan"]): ?>
+                                    <p><b>Préstamos:</b> <?php echo $this->result["si_loan"]; ?></p>
+                                <?php endif; ?>
+                                <p><label>Repuestos</label></p>
+                                <?php
+                                if ($this->result['si_tamount_au'] > 0):
+                                    $count_stock++;
+                                    ?>
+                                    <p><b><?php echo $this->result['si_tamount_au']; ?></b> LLanta de Auxilio / <?php echo $this->result['tb_name_au']; ?></p>
+                                <?php endif;
+                                ?>
+                                <?php
+                                if ($this->result['si_amount_po'] > 0):
+                                    $count_stock++;
+                                    ?>
+                                    <p><b><?php echo $this->result['si_amount_po']; ?></b> LLanta de Posición / <?php echo $this->result['tb_name_po']; ?></p>
+                                <?php endif;
+                                ?>
+                                <?php
+                                if ($this->result['si_amount_co'] > 0):
+                                    $count_stock++;
+                                    ?>
+                                    <p><b><?php echo $this->result['si_amount_co']; ?></b> Neumático / <?php echo $this->result['cb_name']; ?></p>
+                                <?php endif;
+                                ?>
+                                <?php
+                                if ($this->result['si_amount_ba'] > 0):
+                                    $count_stock++;
+                                    ?>
+                                    <p><b><?php echo $this->result['si_amount_ba']; ?></b> Batería / <?php echo $this->result['bb_name']; ?> / <?php echo $this->result['bm_name']; ?></p>
+                                    <?php
+                                endif;
+                                foreach ($this->sinister_accesory as $si_ac):
+                                    ?>
+                                        <p><b><?php echo $si_ac["sa_count"]; ?></b> <?php echo $si_ac["ac_name"]; ?></p>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <img src="<?php echo $this->baseUrl() . URL_IMG . $this->result["si_qr"] ?>" style="width: 100%;">
+                    </div>
+                </div>
+                <div class="visible-print">
+                    <label>Observaciones</label>
+                    <textarea class="form-control" style="resize: none; height: 100px;"></textarea>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>

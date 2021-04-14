@@ -1,0 +1,79 @@
+<br/>
+<div class="col-md-4 col-md-offset-4 ">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <div class="panel-title text-center">Iniciar Sesión</div>
+        </div>
+        <div class="panel-body">
+            <?php if ($this->response) { ?>
+                <p class="text-danger text-center"><?php echo $this->response ?></p>
+            <?php } ?>
+            <div class="col-xs-12 alert alert-danger" style="display: none;"></div>
+            <div class="col-xs-12 alert alert-success" style="display: none;"></div>
+            <div class="form-group">
+                <label>Usuario</label>
+                <input type="text" class="form-control keyenter" id="user" name="user" placeholder="Usuario">
+            </div>
+            <div class="form-group">
+                <label>Clave</label>
+                <input type="password" class="form-control keyenter" id="password" name="password" placeholder="Contraseña" autocomplete="off">
+                <!--<a href="javascript:parent.closeModal();parent.location.href='<?php echo $this->url(array('controller' => 'login', 'action' => 'forgot'), null, true) ?>';">¿Olvidaste la clave?</a>-->
+            </div>
+            <div class="text-center" id="loading" style="display: none;">
+                <img src='<?php echo $this->baseUrl(); ?>/imgs/loading.gif'><br/>
+            </div>
+            <div class="text-center">
+                <button type="button" id="submit" onclick="login();" class="btn btn-primary btn-block">Ingresar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    function lockSubmit(lock) {
+        if (lock == true) {
+            $("#loading").fadeIn("fast");
+            $("#submit").removeClass("btn-primary").addClass("btn-default").addClass("disabled").html("Validando sus datos, por favor espere...").blur();
+        } else {
+            $("#loading").fadeOut("fast");
+            $("#submit").addClass("btn-primary").removeClass("btn-default").removeClass("disabled").html("Ingresar");
+        }
+    }
+
+    $('.keyenter').keyup(function(e) {
+        if (e.keyCode == 13)
+        {
+            login();
+        }
+    });
+    function login() {
+        $(".alert.alert-danger").slideUp('fast');
+        $(".alert.alert-success").slideUp('fast');
+        lockSubmit(true);
+        $.post("<?php echo $this->url(array('controller' => 'login', 'action' => 'index')); ?>",
+                {
+                    token: "<?php echo $this->token ?>",
+                    user: $("#user").val(),
+                    password: $("#password").val(),
+                })
+                .done(function(data) {
+
+                    //alert(data);
+                    if (data.length > 0) {
+                        result = jQuery.parseJSON(data);
+                        if (result.response == false) {
+                            lockSubmit(false);
+                            $(".alert.alert-danger").slideDown('fast', function(index) {
+                                $(".alert.alert-danger").html(result.message);
+                            });
+                        } else {
+                            $(".alert.alert-success").slideDown('fast', function(index) {
+                                $(".alert.alert-success").html(result.message);
+                                location.href = '<?php echo $this->url(array(null), null, true); ?>';
+                            });
+                        }
+                    }
+                });
+        $("#password").val("");
+    }
+</script>

@@ -1,0 +1,160 @@
+<form method="POST" action="<?php echo $this->url(array('action' => 'receive')); ?>">
+    <div class="form-group col-xs-3">
+        <label>Tipo de Repuesto</label>
+        <select name="type" class="form-control" onchange="changeReplacement(this.value);">
+            <option value=""></option>
+            <optgroup label="Repuestos">
+                <?php foreach ($this->types as $key => $type): ?>
+                    <option value="<?php echo $key; ?>"><?php echo $type; ?></option>
+                <?php endforeach; ?>
+            </optgroup>
+            <optgroup label="Accesorios o Servicios">
+                <?php foreach ($this->accesories as $key => $type): ?>
+                    <option value="<?php echo $key; ?>"><?php echo $type; ?></option>
+                <?php endforeach; ?>
+            </optgroup>
+        </select>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-xs-12">
+        <hr>
+    </div>
+    <div class="col-xs-6 form-group au" style="display: none;">
+        <label>Modelo</label>
+        <select class="form-control autocomplete" name="si_tb_id_au"  id="si_tb_id_au">
+            <option value=""></option>
+            <?php foreach ($this->tbranchies as $key => $value): ?>
+                <option value="<?php echo $key ?>"><?php echo $value ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="col-xs-3 form-group au" style="display: none;">
+        <label>Cantidad</label>
+        <select class="form-control" name="si_tamount_au">
+            <?php for ($i = 1; $i <= MAX_AMOUNT; $i++): ?>
+                <option value="<?php echo $i ?>"><?php echo $i ?></option>
+            <?php endfor; ?>
+        </select>
+    </div>
+    <div class="col-xs-6 form-group po" style="display: none;">
+        <label>Modelo</label>
+        <select class="form-control autocomplete" name="si_tb_id_po" id="si_tb_id_po">
+            <option value=""></option>
+            <?php foreach ($this->tbranchies as $key => $value): ?>
+                <option value="<?php echo $key ?>"><?php echo $value ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="col-xs-3 form-group po" style="display: none;">
+        <label>Cantidad</label>
+        <select class="form-control" name="si_tamount_po">
+            <?php for ($i = 1; $i <= MAX_AMOUNT; $i++): ?>
+                <option value="<?php echo $i ?>"><?php echo $i ?></option>
+            <?php endfor; ?>
+        </select>
+    </div>
+    <div class="col-xs-6 form-group co" style="display: none;">
+        <label>Modelo</label>
+        <select class="form-control autocomplete" name="si_cb_id" name="si_cb_id">
+            <option value=""></option>
+            <?php foreach ($this->cbranchies as $key => $value): ?>
+                <option value="<?php echo $key ?>"><?php echo $value ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="col-xs-3 form-group co" style="display: none;">
+        <label>Cantidad</label>
+        <select class="form-control" name="si_amount_co">
+            <?php for ($i = 1; $i <= MAX_AMOUNT; $i++): ?>
+                <option value="<?php echo $i ?>"><?php echo $i ?></option>
+            <?php endfor; ?>
+        </select>
+    </div>
+    <div class="col-xs-6 form-group ba" style="display: none;">
+        <label>Modelo</label>
+        <select class="form-control autocomplete" name="si_bb_id" name="si_bb_id">
+            <option value=""></option>
+            <?php foreach ($this->bbranchies as $key => $value): ?>
+                <option value="<?php echo $key ?>"><?php echo $value ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="col-xs-3 form-group ba" style="display: none;">
+        <label>Cantidad</label>
+        <select class="form-control" name="si_amount_ba">
+            <?php for ($i = 1; $i <= MAX_AMOUNT; $i++): ?>
+                <option value="<?php echo $i ?>"><?php echo $i ?></option>
+            <?php endfor; ?>
+        </select>
+    </div>
+    <div class="col-xs-3 form-group acc" style="display: none;">
+        <label>Cantidad</label>
+        <select class="form-control autocomplete" name="amount" >
+            <?php for ($i = 1; $i <= MAX_AMOUNT; $i++): ?>
+                <option value="<?php echo $i ?>"><?php echo $i ?></option>
+            <?php endfor; ?>
+        </select>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-xs-12">
+        <hr class="btn-save" style="display: none;">
+        <div class="btn-group btn-save" style="display: none;">
+            <button class="btn btn-default" onclick="window.parent.closeModal();">Cancelar</button>
+            <button class="btn btn-primary" type="submit">Aceptar</button>
+        </div>
+    </div>
+</form>
+<script>
+    function loadModel(id) {
+        $.post("<?php echo $this->url(array('module' => 'admin', 'controller' => 'replacement', 'action' => 'loadcmodel'), NULL, TRUE); ?>",
+                {
+                    cb_id: id
+                })
+                .done(function(data) {
+                    if (data.length > 0) {
+                        $("#si_cm_id").html(data);
+                    }
+                });
+    }
+    function loadTSize() {
+        $.post("<?php echo $this->url(array('module' => 'admin', 'controller' => 'replacement', 'action' => 'loadtsize'), NULL, TRUE); ?>",
+                {
+                    ts_tb_id: $("#si_tb_id_au").val(),
+                    ts_tm_id: $("#si_tm_id_au").val(),
+                })
+                .done(function(data) {
+                    if (data.length > 0) {
+                        $("#si_ts_id_au").html(data);
+                    }
+                });
+    }
+    function loadTSizePo() {
+        $.post("<?php echo $this->url(array('module' => 'admin', 'controller' => 'replacement', 'action' => 'loadtsize'), NULL, TRUE); ?>",
+                {
+                    ts_tb_id: $("#si_tb_id_po").val(),
+                    ts_tm_id: $("#si_tm_id_po").val(),
+                })
+                .done(function(data) {
+                    if (data.length > 0) {
+                        $("#si_ts_id_po").html(data);
+                    }
+                });
+    }
+
+
+    function loadSize(id) {
+        var res = id.split("###");
+        $("#size").val(res[1]);
+    }
+    function changeReplacement(val) {
+        $(".au, .po, .co, .ba, .btn-save, .acc").hide();
+        if (val > 0) {
+            $(".acc").fadeIn('fast');
+        } else {
+            $("." + val).fadeIn('fast');
+        }
+        if (val) {
+            $(".btn-save").fadeIn('fast');
+        }
+    }
+</script>

@@ -1,0 +1,32 @@
+<div class="form-container">
+    <blockquote>
+        <?php if ($this->title) { ?>
+            <p class="text-primary"><?php echo ($this->icon) ? '<label class="glyphicon glyphicon-' . $this->icon . '"></label> ' : ''; ?> <?php echo $this->title ?></p>
+        <?php } ?>
+        <?php if ($this->description) { ?>
+            <small><?php echo $this->description ?></small>
+        <?php } ?>
+    </blockquote>
+    <div class="row">
+        <div class="form-group col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-body text-center">
+                    <form id="form" method="post" novalidate enctype="multipart/form-data">
+                        <?php
+                        $url_embed = str_replace("youtube.com/watch?v=", "youtube.com/embed/", $this->result["url"]);
+                        ?>
+                        <input type="hidden" value="<?php echo $url_embed; ?>" name="url">
+                        <div class="btn-group">
+                            <button type="button" name="submit" class="btn btn-info" onclick="window.parent.returnGallery('<?php echo $this->parameters["field"];?>','','<?php echo $url_embed; ?>');window.parent.closeModal();">Aceptar</button>
+                            <button type="button" class="btn btn-default" onclick='location.href = "<?php echo $this->url(array('action' => 'upload')); ?>"'>Cancelar</button>
+                        </div>
+                        <div class="clearfix"></div><br/>
+                        <iframe width="560" height="315" src="<?php echo $url_embed; ?>" frameborder="0" allowfullscreen></iframe>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+</div>

@@ -1,0 +1,127 @@
+<?php
+foreach ($this->fields as $key => $field) {
+    if ($field['list-edit'] == true):
+        $display_form = true;
+    endif;
+}
+?>
+<form method="POST">
+    <?php if ($display_form): ?>
+        <input type="hidden" name="token" value="<?php echo $this->token; ?>">
+        <button class="btn btn-info pull-right" name="save" value="1" type="submit">Guardar Cambios</button>
+        <div class="clearfix"></div>
+        <br/>
+    <?php endif; ?>
+    <table class="table table-striped">
+        <tr>
+            <?php
+            foreach ($this->fields as $key => $field) {
+                if ($field['list'] == true) {
+                    echo '<th width="' . $field["width"] . '" ';
+                    if ($field["class"]):
+                        echo 'class="' . $field["class"] . '"';
+                    endif;
+                    echo '><a href="';
+                    if ($field['order'] == true) {
+                        echo $this->url(array('module' => $this->parameters['module'],
+                            'controller' => $this->parameters['controller'],
+                            'action' => $this->parameters['action'],
+                            'sort' => $field["field"],
+                            'page' => 1,
+                            'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) . '';
+                    } else
+                        echo '#';
+                    echo '">' . $field["label"] . '</a></th>';
+                }
+            }
+            if (count($this->options)):
+                ?>
+                <th class='opciones'>Opciones</th>
+                <?php
+            endif;
+            ?>
+        </tr>
+        <?php
+        if (count($this->results) > 0) {
+            foreach ($this->results as $keyRow => $result) {
+                ?>
+                <tr id='row_<?php echo $keyRow ?>'>
+                    <?php
+                    foreach ($this->fields as $key => $field) {
+                        if ($field['list'] == true) {
+                            if ($field['type'] == 'image') {
+                                if ($field['link']):
+                                    $result[$field["field"]] = "<a href='" . $field['link'] . "/id/" . $result[$this->fields[0]["field"]] . "' title='" . $field['title'] . "' target='" . $field['target'] . "'><img src='" . $this->baseUrl() . "/files/" . $result[$field["field"]] . "' class='img-thumbnail cut' width='" . $field["width"] . "'></a>";
+                                else:
+                                    $result[$field["field"]] = "<img src='" . $this->baseUrl() . "/files/" . $result[$field["field"]] . "' class='img-thumbnail cut' width='" . $field["width"] . "'>";
+                                endif;
+                            }
+                            if ($field['type'] == 'email') {
+                                $result[$field["field"]] = "<a href='mailto:" . $result[$field["field"]] . "'>" . $result[$field["field"]] . "</a>";
+                            }
+                            if ($field['type'] == 'money') {
+                                $result[$field["field"]] = "$ " . number_format($result[$field["field"]], 2, ",", ".");
+                            }
+                            if ($field['type'] == 'date') {
+                                $result[$field["field"]] = invertDate($result[$field["field"]], '-');
+                            }
+                            if ($field['list-edit'] == true):
+                                echo '<td class="' . $field["class"] . '" ' . $field["nowrap"] . ' style="text-align:' . $field["align"] . '"><input name="' . $field["field"] . '[' . $result[$this->fields[0]["field"]] . ']" style="width:' . $field["width"] . '" type="text" class="form-control" value="' . $result[$field["field"]] . '"></td>';
+                            else:
+                                echo '<td class="' . $field["class"] . '" ' . $field["nowrap"] . ' style="text-align:' . $field["align"] . '">' . $result[$field["field"]] . '</td>';
+                            endif;
+                        }
+                    }
+                    if (count($this->options)):
+                        ?>            
+                        <td class='opciones'>
+                               <?php foreach ($this->options as $key => $option) { ?>
+                                <a class="glyphicon glyphicon-<?php echo $option['icon'] ?>" 
+                                   title='<?php echo $option['title'] ?>' 
+                                       <?php if ($option["modal"] == true): ?>
+                                       href="javascript:openModalScript('ajax','<?php echo $this->title ?>','','<?php echo $this->url(array('module' => 'admin', 'controller' => $this->parameters["controller"], 'action' => $option['action'], 'id' => $result[$this->fields[0]["field"]]), '', true); ?>','1000');">
+                                    <?php else: ?>
+                                        <?php if ($option["dialog"] == true): ?>
+                                            href="javascript:openDialog('<?php echo $option["dialog_message"]; ?>','deleteRow(<?php echo $keyRow ?>,<?php echo $result[$this->fields[0]["field"]] ?>)');">
+                                        <?php else: ?>
+                                            href="<?php echo $this->url(array('module' => 'admin', 'controller' => $this->parameters["controller"], 'action' => $option['action'], 'id' => $result[$this->fields[0]["field"]]), '', true); ?>">
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                                </a>
+                        <?php } ?>
+                        </td>
+                        <?php
+                    endif;
+                    ?>
+                </tr>
+                <?php
+            }
+        } else {
+            ?>
+            <tr>
+                <td colspan="<?php echo count($this->fields) + 1 ?>">
+                    <div class="alert alert-info"><b>No se encontraron resultados</b> <?php echo ($this->search) ? '- Intente con otro criterio de busqueda' : ''; ?></div>
+                </td>
+            </tr>  
+<?php } ?>
+    </table>
+</form>
+<div class="text-center">
+<?php echo $this->paginationControl($this->results, 'Sliding', 'paginationControl.phtml'); ?>
+</div>
+<script>
+    function deleteRow(row, id) {
+
+        $.post("<?php echo $this->url(array('module' => 'admin', 'controller' => $this->parameters["controller"], 'action' => 'delete'), '', true); ?>",
+                {
+                    id: id,
+                })
+                .done(function(data) {
+//                    if (data != "") {
+//                        openDialog(data, 'closeModal();', true);
+//                    }else{
+                    $("#row_" + row).slideUp("fast");
+//                    }
+                });
+    }
+</script>

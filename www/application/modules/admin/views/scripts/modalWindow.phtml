@@ -1,0 +1,125 @@
+<div class="modal fade" id="myModalAjax" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="padding-top:2%; overflow-y:visible;">
+    <div class="modal-dialog" id="myModalAjaxContent">
+        <div class="modal-content noRadius">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 id="titleModal" class="text-primary"></h5>
+            </div>
+            <div class="modal-body  col-lg-12" id="">
+                <div id="modalBody">
+                    <iframe id="iframeModal" width="100%" style="display: none; border: none;" src=""></iframe>
+                </div>
+            </div>
+            <div class="modal-footer" id="footerModal" style="display: none;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<div id="modalDialog" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">
+    <div class="modal-dialog modal-m">
+        <div class="modal-content noRadius">
+            <div class="modal-body text-center">
+                <div class="col-sm-12">
+                    <p id='dialogBody'></p>
+                     <button class="btn btn-sm btn-default noRadius" onclick="closeDialog();" id="btnCancel">Cancelar</button>
+                    <button class="btn btn-sm btn-danger noRadius" id="btnAccept" >Aceptar</button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>            
+    </div>
+</div>
+<div id="pleaseWaitDialog" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content noRadius">
+            <div class="modal-body">
+                <div class="progress" style="margin-bottom: 0;">
+                    <div class="progress-bar progress-bar-success progress-bar-striped active" id="progressBar" role="progressbar"
+                         aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                        Cargando, por favor espere...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>            
+</div>
+<script>
+    function openModalScript(type, title, footer, url, width, height) {
+        if (title == "") {
+            $('#myModalAjax .modal-header').hide();
+        } else {
+            $('#myModalAjax .modal-header').show();
+            $('#myModalAjax #titleModal').html(title);
+        }
+//        alert(($(window).height() * 0.25));
+        if (type == "iframe") {
+            $('#myModalAjax #iframeModal').css('display', 'block');
+            $('#myModalAjax #iframeModal').attr('src', url);
+            $('#myModalAjax #iframeModal').css('min-height', height);
+        } else if (type == "ajax") {
+            $('#myModalAjax #iframeModal').css('display', 'none');
+            $("#modalBody").html("<div class='text-center' style='margin-top:50px;'><img src='<?php echo $this->baseUrl(); ?>/imgs/loading.gif'><br/>Cargando</div>");
+            //$('#myModalAjax #titleModal').html("Cargando página, por favor espere...");
+            $.ajax({
+                url: url,
+                context: document.body
+            }).done(function(data) {
+                $("#modalBody").html(data);
+            });
+        } else {
+            $('#myModalAjax #iframeModal').css('display', 'none');
+        }
+        if (footer == "true") {
+            $('#myModalAjax #footerModal').css('display', 'block');
+        } else {
+            $('#myModalAjax #footerModal').css('display', 'none');
+        }
+
+        if (!width || width == undefined) {
+            width = '250px';
+        }
+        if (height || height != undefined) {
+            $('#myModalAjax .modal-body').css('min-height', height);
+
+        }
+        //$('#myModalAjaxContent').load(url);
+        /*
+         * 
+         * 768px
+         * 992px
+         */
+        if ($(window).width() < 1200) {
+            if ($(window).width() < 768) {
+                NewWidth = "100%";
+            } else {
+                NewWidth = "60%";
+            }
+        } else {
+            NewWidth = width;
+        }
+        $('#myModalAjax .modal-dialog').css('width', NewWidth);
+        $('#myModalAjax').modal('show');
+    }
+
+    function closeModal() {
+        $('#myModalAjax').modal('hide');
+    }
+
+    function openDialog(title, callback,disabledCancel) {
+        if(disabledCancel!=undefined){
+            $("#btnCancel").hide();
+        }else{
+            $("#btnCancel").show();
+        }
+        $('#modalDialog #dialogBody').html(title);
+        callback = "closeDialog();" + callback;
+        $('#modalDialog #btnAccept').attr("onclick", callback);
+        $('#modalDialog').modal('show');
+        
+    }
+    function closeDialog() {
+        $('#modalDialog').modal('hide');
+    }
+</script>

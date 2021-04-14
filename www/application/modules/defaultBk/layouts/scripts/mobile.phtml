@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title><?php echo $this->setting["se_title"]; ?></title>
+        <?php
+        echo $this->headMeta()
+                ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+                ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+        <?php
+        echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->baseUrl() . '/imgs/favicon.png'))
+                ->prependStylesheet($this->baseUrl() . '/css/mobile.css')
+                ->prependStylesheet($this->baseUrl() . '/css/bootstrap.css')
+                ->prependStylesheet($this->baseUrl() . '/css/jquery-ui.css');
+        echo $this->headScript()
+                ->prependFile($this->baseUrl() . '/js/bootstrap.min.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/bootstrap.validate.en.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/bootstrap.validate.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/jquery-ui.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/jquery-1.9.1.js', 'text/javascript');
+        ?>
+    </head>
+    <body>
+        <?php echo $this->layout()->content; ?>
+        <br/>
+        <br/>
+    </body>
+    <script>
+        $(function() {
+            $('form.validate').bt_validate();
+            $('.tooltipon').tooltip();
+            $.datepicker.regional['es'] = {
+                closeText: 'Cerrar',
+                prevText: '&#x3c;Ant',
+                nextText: 'Sig&#x3e;',
+                currentText: 'Hoy',
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Mi&eacute;rcoles', 'Jueves', 'Viernes', 'S&aacute;bado'],
+                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mi&eacute;', 'Juv', 'Vie', 'S&aacute;b'],
+                dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'S&aacute;'],
+                weekHeader: 'Sm',
+                dateFormat: 'dd-mm-yy',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''};
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+            $(".calendar").datepicker({changeMonth: true, changeYear: true});
+        });
+    </script>
+</html>

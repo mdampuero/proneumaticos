@@ -1,0 +1,38 @@
+<div class="form-container">
+    <blockquote>
+        <?php if ($this->title) { ?>
+            <p class="text-primary"><?php echo ($this->icon) ? '<label class="glyphicon glyphicon-' . $this->icon . '"></label> ' : ''; ?> <?php echo $this->title ?></p>
+        <?php } ?>
+        <?php if ($this->description) { ?>
+            <small class="visible-lg visible-md visible-sm"><?php echo $this->description ?></small>
+        <?php } ?>
+    </blockquote>
+    <form id="form" method="post" novalidate enctype="multipart/form-data">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Registros de Base de Datos
+            </div>
+            <div class="panel-body">
+                <input type="hidden" name="token" value="<?php echo $this->token; ?>">
+                <?php
+                $key = 2;
+                foreach ($this->fields as $field):
+                    ?>
+                    <div class="form-group col-lg-12">
+                        <div class="checkbox" >
+                            <label >
+                                <input type="checkbox"  name="<?php echo $field["field"] ?>" value="1"> <b><?php echo $field["label"] ?></b>
+                            </label>
+                        </div>
+                    </div>
+                    <?php
+                endforeach;
+                ?>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="btn-group">
+            <button type="submit" name="submit" class="btn btn-info" data-loading-text="Validando...">Ejecutar</button>
+        </div>
+    </form>
+</div>

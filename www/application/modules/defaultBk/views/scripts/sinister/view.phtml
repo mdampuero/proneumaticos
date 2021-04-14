@@ -1,0 +1,351 @@
+<?php echo $this->render('_alert.phtml'); ?>
+<button class="hidden-print  btn btn-sm btn-primary pull-right" type="button" onclick="window.print();"><span class="glyphicon glyphicon-print"></span> Imprimir</button>
+<ol class="breadcrumb hidden-print">
+    <li><a href="<?php echo $this->url(array('controller' => 'sinister', 'action' => 'index'), NULL, TRUE); ?>">Siniestros</a></li>
+    <li class="active">ID #<?php echo $this->sinister["si_id"]; ?></li>
+</ol>
+<?php
+if ($this->sinister["si_status"] == 1) {
+    ?>
+    <div class="alert alert-danger">
+        Faltan Definir Repuestos
+    </div>
+    <?php
+} elseif ($this->sinister["si_status"] == 2) {
+    ?>
+    <div class="alert alert-warning">
+        En espera de repuestos
+    </div>
+    <?php
+} elseif ($this->sinister["si_status"] == 4) {
+    ?>
+    <div class="panel panel-success">
+        <div class="panel-heading hidden-print">Entregado</div>
+        <div class="panel-body">
+            <?php
+            $last=$this->sinister_activities[count($this->sinister_activities)-1];
+            ?>
+            <blockquote>
+                <p>Entregado</p>
+                <p><small class="text-muted">Fecha: <?php echo date("d-m-Y H:i", $last['act_created']); ?></small></p>
+                <p><small class="text-muted">Usuario: <?php echo $last['ad_name'] . " " . $last['ad_last']; ?></small></p>
+                <p><small class="text-muted">Nº de Factura u observaciones: <?php echo $this->sinister['si_finish_description']; ?></small></p>
+            </blockquote>
+        </div>
+    </div>
+    <?php
+} elseif ($this->sinister["si_status"] == 3) {
+    ?>
+    <div class="alert alert-warning h5">
+        Ingresado sin entregar
+    </div>
+    <?php
+}
+?>
+<div class="clearfix"></div>
+<div class="panel panel-default">
+    <div class="panel-heading panel-title text-center hidden-print">
+        Datos Generales
+    </div>
+    <div class="panel-body">
+        <div class="col-xs-12 col-sm-4 col-lg-3 form-group">
+            <label>Fecha Ingreso *</label>
+            <input disabled="disabled" class="form-control calendar" name="si_date" value="<?php echo $this->sinister["si_date"]; ?>">
+        </div>
+        <div class="form-group  col-lg-6 col-lg-6">
+            <label>Compañia *</label>
+            <input disabled="disabled" class="form-control" value="<?php echo $this->sinister["co_name"]; ?>">
+        </div>
+        <div class="col-xs-12 col-sm-4 col-lg-3 form-group">
+            <label>Marca *</label>
+            <input disabled="disabled" class="form-control" value="<?php echo $this->sinister["br_name"]; ?>">
+        </div>
+        <div class="col-xs-12 col-sm-4 col-lg-3 form-group">
+            <label>Modelo *</label>
+            <input disabled="disabled" class="form-control" value="<?php echo $this->sinister["mo_name"]; ?>">
+        </div>
+        <div class="col-xs-12 col-sm-4 col-lg-3 form-group">
+            <label>Nº de Siniestro</label>
+            <input disabled="disabled" class="form-control" value="<?php echo $this->sinister["si_number"]; ?>">
+        </div>
+        <div class="col-xs-12 col-sm-4 col-lg-3 form-group">
+            <label>Dominio *</label>
+            <input disabled="disabled" class="form-control" value="<?php echo $this->sinister["si_domain"]; ?>">
+        </div>
+        <div class="col-xs-12 col-sm-4 col-lg-3 form-group">
+            <label>Nombre del Asegurado *</label>
+            <input disabled="disabled" class="form-control" value="<?php echo $this->sinister["si_fullname"]; ?>">
+        </div>
+        <div class="col-xs-12 col-sm-4 col-lg-3 form-group">
+            <label>Teléfonos *</label>
+            <input disabled="disabled" class="form-control" value="<?php echo $this->sinister["si_phone"]; ?>">
+        </div>
+        <div class="col-xs-12 col-sm-4 col-lg-3 form-group">
+            <label>E-Mail</label>
+            <input disabled="disabled" class="form-control" value="<?php echo $this->sinister["si_email"]; ?>">
+        </div>
+        <div class="form-group col-xs-12 col-lg-6">
+            <label>Dirección</label>
+            <input disabled="disabled" class="form-control" value="<?php echo $this->sinister["si_customer_address"]; ?>">
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading panel-title text-center">
+        Repuestos
+    </div>
+    <div class="panel-body">
+        <table class="table stock " style="margin-top: 0px; border: #EFEFEF solid 1px;">
+            <tr>
+                <th>Cant</th>
+                <th>Repuesto</th>
+                <th class="text-center">Stock</th>
+                <th class="hidden-xs">Fecha de Pedido</th>
+                <th class="hidden-xs">Fecha de Llegada</th>
+                <th class="hidden-xs">Transporte</th>
+            </tr>
+            <?php
+            $count_stock = 0;
+            if ($this->sinister['si_tamount_au'] > 0):
+                $count_stock++;
+                ?>
+                <tr>
+                    <td style="font-size: 18px; line-height: 18px;"><b><?php echo $this->sinister['si_tamount_au']; ?></b></td>
+                    <td style="vertical-align: middle;">
+                        LLANTA AUXILIO 
+                        <p style="font-size: 14px; color: #999;"><?php echo $this->sinister['tb_name_au']; ?></p></td>
+                    <td class="text-center">
+                        <?php if ($this->sinister['si_stock_au'] == 1): ?>
+                            <span class="glyphicon glyphicon-ok text-success" style="font-size: 20px;"></span>
+                        <?php else: ?>
+                            <span class="glyphicon glyphicon-remove text-danger" style="font-size: 20px;"></span>
+                        <?php endif; ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        if ($this->sinister["si_au_date_from"] != "0000-00-00"):
+                            echo date("d-m-Y", strtotime($this->sinister["si_au_date_from"]));
+                        endif;
+                        ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        if ($this->sinister["si_au_date"] != "0000-00-00"):
+                            echo date("d-m-Y", strtotime($this->sinister["si_au_date"]));
+                        endif;
+                        ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        echo $this->sinister["si_au_transport"];
+                        ?>
+                    </td>
+                </tr>
+                <?php
+            endif;
+            if ($this->sinister['si_amount_po'] > 0):
+                $count_stock++;
+                ?>
+                <tr>
+                    <td style="font-size: 18px; line-height: 18px;"><b><?php echo $this->sinister['si_amount_po']; ?></b></td>
+                    <td style="vertical-align: middle;">
+                        LLANTA POSICIÓN 
+                        <p style="font-size: 14px; color: #999;"><?php echo $this->sinister['tb_name_po']; ?></p></td>
+                    <td class="text-center">
+                        <?php if ($this->sinister['si_stock_po'] == 1): ?>
+                            <span class="glyphicon glyphicon-ok text-success" style="font-size: 20px;"></span>
+                        <?php else: ?>
+                            <span class="glyphicon glyphicon-remove text-danger" style="font-size: 20px;"></span>
+                        <?php endif; ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        if ($this->sinister["si_po_date_from"] != "0000-00-00"):
+                            echo date("d-m-Y", strtotime($this->sinister["si_po_date_from"]));
+                        endif;
+                        ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        if ($this->sinister["si_po_date"] != "0000-00-00"):
+                            echo date("d-m-Y", strtotime($this->sinister["si_po_date"]));
+                        endif;
+                        ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        echo $this->sinister["si_po_transport"];
+                        ?>
+                    </td>
+                </tr>
+                <?php
+            endif;
+            if ($this->sinister['si_amount_co'] > 0):
+                $count_stock++;
+                ?>
+                <tr>
+                    <td style="font-size: 18px; line-height: 18px;"><b><?php echo $this->sinister['si_amount_co']; ?></b></td>
+                    <td style="vertical-align: middle;">
+                        NEUMÁTICO 
+                        <p style="font-size: 14px; color: #999;"><?php echo $this->sinister['cb_name']; ?></p></td>
+                    <td class="text-center">
+                        <?php if ($this->sinister['si_stock_co'] == 1): ?>
+                            <span class="glyphicon glyphicon-ok text-success" style="font-size: 20px;"></span>
+                        <?php else: ?>
+                            <span class="glyphicon glyphicon-remove text-danger" style="font-size: 20px;"></span>
+                        <?php endif; ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        if ($this->sinister["si_co_date_from"] != "0000-00-00"):
+                            echo date("d-m-Y", strtotime($this->sinister["si_co_date_from"]));
+                        endif;
+                        ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        if ($this->sinister["si_co_date"] != "0000-00-00"):
+                            echo date("d-m-Y", strtotime($this->sinister["si_co_date"]));
+                        endif;
+                        ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        echo $this->sinister["si_co_transport"];
+                        ?>
+                    </td>
+                </tr>
+                <?php
+            endif;
+            if ($this->sinister['si_amount_ba'] > 0):
+                $count_stock++;
+                ?>
+                <tr>
+                    <td style="font-size: 18px; line-height: 18px;"><b><?php echo $this->sinister['si_amount_ba']; ?></b></td>
+                    <td style="vertical-align: middle;">
+                        BATRERÍA 
+                        <p style="font-size: 14px; color: #999;"><?php echo $this->sinister['bb_name']; ?></p></td>
+                    <td class="text-center">
+                        <?php if ($this->sinister['si_stock_ba'] == 1): ?>
+                            <span class="glyphicon glyphicon-ok text-success" style="font-size: 20px;"></span>
+                        <?php else: ?>
+                            <span class="glyphicon glyphicon-remove text-danger" style="font-size: 20px;"></span>
+                        <?php endif; ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        if ($this->sinister["si_ba_date_from"] != "0000-00-00"):
+                            echo date("d-m-Y", strtotime($this->sinister["si_ba_date_from"]));
+                        endif;
+                        ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        if ($this->sinister["si_ba_date"] != "0000-00-00"):
+                            echo date("d-m-Y", strtotime($this->sinister["si_ba_date"]));
+                        endif;
+                        ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        echo $this->sinister["si_ba_transport"];
+                        ?>
+                    </td>
+                </tr>
+                <?php
+            endif;
+            foreach ($this->sinister_accesory as $si_ac):
+                $count_stock++;
+                ?>
+                <tr>
+                    <td style="font-size: 18px; line-height: 18px;"><b><?php echo $si_ac["sa_count"]; ?></b></td>
+                    <td style="line-height: 18px;"><?php echo $si_ac["ac_name"]; ?></td>
+                    <td class="text-center">
+                        <?php if ($si_ac['sa_in_stock'] == 1): ?>
+                            <span class="glyphicon glyphicon-ok text-success" style="font-size: 20px;"></span>
+                        <?php else: ?>
+                            <span class="glyphicon glyphicon-remove text-danger" style="font-size: 20px;"></span>
+                        <?php endif; ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        if ($si_ac["sa_date_from"] != "0000-00-00"):
+                            echo date("d-m-Y", strtotime($si_ac["sa_date_from"]));
+                        endif;
+                        ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        if ($si_ac["sa_date"] != "0000-00-00"):
+                            echo date("d-m-Y", strtotime($si_ac["sa_date"]));
+                        endif;
+                        ?>
+                    </td>
+                    <td class="hidden-xs">
+                        <?php
+                        echo $si_ac["sa_transport"];
+                        ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+        <blockquote>
+            <p>Observaciones:</p>
+            <small class="text-muted"><?php echo $this->sinister["si_observation_loan"]; ?></small>
+        </blockquote>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading panel-title text-center">
+        Actividades
+    </div>
+    <div class="panel-body">
+        <table class="table table-bordered table-condensed replacement">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                </tr>
+            </thead>
+            <tbody id="selecteds_id">
+                <?php
+                foreach ($this->sinister_activities as $act):
+                    ?>
+                    <tr>
+                        <td><?php echo $act["act_observation"]; ?></td>
+                        <td><?php echo date("d-m-Y H:i", $act["act_created"]); ?></td>
+                        <td><?php echo $act["ad_name"] . " " . $act["ad_last"]; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading panel-title text-center">
+        Fotos
+    </div>
+    <div class="panel-body">
+        <?php
+        if (count($this->sinister["si_pictures"])):
+            foreach ($this->sinister["si_pictures"] as $pc):
+                ?>
+                <div class="col-xs-6 col-lg-2">
+                    <img class="thumbnail" src="<?php echo $this->baseUrl() . "/files/s/" . $pc['ga_name']; ?>" style="width: 100%">
+                    <!--    </div>
+                            <div class="thumbnail" style="background:url('<?php echo $this->baseUrl() . "/files/s/" . $pc['ga_name']; ?>');
+                                             background-repeat:no-repeat;
+                                             background-size:contain;
+                                             background-position:center; width: 100%; height: 200px;">
+                                        </div>-->
+                    <!--        <img class="thumbnail" src="<?php echo $this->baseUrl() . "/files/s/" . $pc['ga_name']; ?>" style="width: 100%">-->
+                </div>
+                <?php
+            endforeach;
+        else:
+            ?><p class="text-center">No existen fotos cargadas</p><?php
+        endif;
+        ?>
+    </div>
+</div>

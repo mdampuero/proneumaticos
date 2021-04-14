@@ -1,0 +1,166 @@
+<form method="POST" action="<?php echo $this->url(array('action'=>'changestatus')); ?>">
+    <div class="panel panel-default" id="changeStatusMasive" style="display: none;">
+        <div class="panel-heading">
+            Cambiar estado
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-4 form-group">
+                    <select name="new_status" class="form-control">
+                        <option value="0">--Seleccione un estado--</option>
+                        <?php foreach ($this->status as $key => $status):?>
+                            <option value="<?php echo $key ?>"><?php echo $status ?></option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+                <div class="col-xs-4 btn-group">
+                    <button class="btn btn-info">Cambiar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="select_all"/></th>
+                <th><a href='<?php echo $this->url(array('sort' => 'si_id', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>ID</a></th>
+                <th><a href='<?php echo $this->url(array('sort' => 'si_number', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Nº Siniestro</a></th>
+                <th><a href='<?php echo $this->url(array('sort' => 'br_name', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Marca</a></th>
+                <th><a href='<?php echo $this->url(array('sort' => 'mo_name', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Modelo</a></th>
+                <th><a href='<?php echo $this->url(array('sort' => 'si_date', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>F.Ingreso</a></th>
+                <th><a href='<?php echo $this->url(array('sort' => 'days', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Días</a></th>
+                <th><a href='<?php echo $this->url(array('sort' => 'co_name', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Compañía</a></th>
+                <th><a href='<?php echo $this->url(array('sort' => 'si_fullname', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Asegurado</a></th>
+                <th><a href='<?php echo $this->url(array('sort' => 'si_domain', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Dominio</a></th>
+                <th class="text-center"><a href='<?php echo $this->url(array('sort' => 'status_label', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Estado</a></th>
+                <th class="text-center"><a href='<?php echo $this->url(array('sort' => 'si_data_complete', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>D.C</a></th>
+                <th class='opciones'>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <script type="text/javascript">
+                var titles=[];
+                var repuestos=[];
+            </script>
+            <?php if (count($this->items) > 0) :?>
+                <?php foreach ($this->items as $keyRow => $result): ?>
+                    <script type="text/javascript">
+                        titles.push('Siniestro Nº <?php echo $result['si_number'] ?> - <?php echo $result['status_label'] ?>');
+                        repuestos.push(`<?php echo $result['modal']; ?>`);
+                    </script>
+                    <tr id='row_<?php echo $keyRow ?>'>
+                        <td>
+                            <input type="checkbox" name="select[]" value="<?php echo $result['si_id']; ?>" class="checkbox_sinister"/>
+                            <input type="hidden" name="old_status[]" value="<?php echo $result['si_status']; ?>">
+                        </td>
+                        <td><b><?php echo $result['si_id'] ?></b></td>
+                        <td class="nowrap"><?php echo $result['si_number'] ?></td>
+                        <td><?php echo $result['br_name'] ?></td>
+                        <td class="trim-text">
+                            <span class="tooltipon" data-placement="left" title="<?php echo $result['mo_name'] ?>"><?php echo $result['mo_name'] ?></span>
+                        </td>
+                        <td><?php echo invertDate($result['si_date'], '-') ?></td>
+                        <td class="text-center"><?php echo $result['days'] ?></td>
+                        <td class="trim-text">
+                            <span class="tooltipon" data-placement="left" title="<?php echo $result['co_name'] ?>"><?php echo $result['co_name'] ?></span>
+                        </td>
+                        <td class="trim-text">
+                            <span class="tooltipon" data-placement="left" title="<?php echo $result['si_fullname'] ?>"><?php echo $result['si_fullname'] ?></span>
+                        </td>
+                        <td><?php echo $result['si_domain'] ?></td>
+                        <td class="text-center">
+                            <?php if ($result['si_status']!=1): ?>
+                                <a style="color:inherit;" class="tooltipon" title="Ver más" href="javascript:openModalStatus(<?php echo $keyRow ?>); void(0);">
+                                    <?php echo $result['status_label'] ?>
+                                </a>
+                            <?php else: ?>
+                                <a style="color:inherit;">
+                                    <?php echo $result['status_label'] ?>
+                                </a>
+                            <?php endif ?>
+                        </td>
+                        <td class="text-center"><?php echo $result['si_data_complete'] ?></td>
+                        <?php if (count($this->options)): ?>
+                            <td class='opciones nowrap' >
+                                <a title="Orden de Trabajo" class="glyphicon glyphicon-glyphicon glyphicon-wrench text-primary" href="<?php echo $this->url(array('action'=>'order','id'=>$result['si_id'])); ?>" ></a>
+                                <a title="Detalle" class="glyphicon glyphicon-glyphicon glyphicon-eye-open text-primary" href="<?php echo $this->url(array('action'=>'detail','id'=>$result['si_id'])); ?>" ></a>
+                                <a title="Editar" class="glyphicon glyphicon-glyphicon glyphicon-edit text-primary" href="<?php echo $this->url(array('action'=>'edit','id'=>$result['si_id'])); ?>" ></a>
+                                <a title="Orden de Trabajo" class="glyphicon glyphicon-glyphicon glyphicon-ban-circle text-danger" href="javascript:openDialog('<?php echo $option["dialog_message"]; ?>','deleteRow(<?php echo $keyRow ?>,<?php echo $result['si_id'] ?>)');" ></a>
+                            </td>
+                        <?php endif; ?>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="<?php echo count($this->fields) + 1 ?>">
+                        <div class="alert alert-info"><b>No se encontraron resultados</b> <?php echo ($this->search) ? '- Intente con otro criterio de busqueda' : ''; ?></div>
+                    </td>
+                </tr>  
+            <?php endif; ?>
+        </tbody>
+    </table>
+</form>
+<div class="text-center">
+    <?php echo $this->paginationControl($this->results, 'Sliding', 'paginationControl.phtml'); ?>
+</div>
+<div class="modal fade" id="modal_<?php echo $this->parameters['controller'];?>_<?php echo $this->parameters['action'];?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content noRadius">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 id="titleModal_<?php echo $this->parameters['controller'];?>_<?php echo $this->parameters['action'];?>" class="text-primary"></h5>
+            </div>
+            <div class="modal-body  col-lg-12" id="bodyModal_<?php echo $this->parameters['controller'];?>_<?php echo $this->parameters['action'];?>">
+
+            </div>
+            <div class="modal-footer" id="footerModal" style="display: none;">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#select_all').change(function() {
+        var checkboxes = $(".checkbox_sinister");
+        checkboxes.prop('checked', $(this).is(':checked'));
+        ifOnlyCheck();
+    });
+    $(".checkbox_sinister").change(function (){
+        ifOnlyCheck();
+    });
+    function ifOnlyCheck(){
+        checkOnly=false;
+        $(".checkbox_sinister").each(function( index ) {
+            if($(this).is(':checked')){
+                checkOnly=true;
+                return false;
+            }
+        });
+        showChangeStatus(checkOnly);
+    }
+    function showChangeStatus(check){
+        if(check){
+            if($("#changeStatusMasive").css("display")!='block')
+                $("#changeStatusMasive").slideDown('fast');
+        }else{
+            if($("#changeStatusMasive").css("display")!='none')
+                $("#changeStatusMasive").slideUp('fast');
+        }
+    }
+    function openModalStatus(index){
+        $('#titleModal_<?php echo $this->parameters['controller'];?>_<?php echo $this->parameters['action'];?>').html(titles[index]);
+        $('#bodyModal_<?php echo $this->parameters['controller'];?>_<?php echo $this->parameters['action'];?>').html(repuestos[index]);
+        $('#modal_<?php echo $this->parameters['controller'];?>_<?php echo $this->parameters['action'];?>').modal('show');
+    }
+    
+    function deleteRow(row, id) {
+        $.post("<?php echo $this->url(array('module' => 'admin', 'controller' => $this->parameters["controller"], 'action' => 'delete'), '', true); ?>",
+        {
+            id: id,
+        })
+        .done(function(data) {
+            $("#row_" + row).slideUp("fast");
+        });
+    }
+</script>

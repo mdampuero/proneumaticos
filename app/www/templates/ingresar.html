@@ -1,0 +1,97 @@
+<ion-view view-title="Ingresar siniestro">
+    <ion-content ng-init="init();">
+        <form ng-submit="submit()" novalidate>
+            <div class="list">
+                <div class="item item-divider text-center">
+                    Datos Generales
+                </div>
+                <label class="item item-input item-select">
+                    <div class="input-label">
+                        Vendedor
+                    </div>
+                    <select ng-model="form.ad_id">
+                        <option value=""></option>
+                        <option value="{{u.ad_id}}" ng-repeat="(key, u) in form.users">{{u.ad_name}} {{u.ad_last}}</option>
+                    </select>
+                </label>
+                <label class="item item-input">
+                    <input type="text" placeholder="Nº de Siniestro *" ng-model="form.si_number">
+                </label>
+                <label class="item item-input">
+                    <input type="text" placeholder="Dominio *" ng-model="form.si_domain">
+                </label>
+                <label class="item item-input item-select">
+                    <div class="input-label">
+                        Compañía *
+                    </div>
+                    <select ng-model="form.si_co_id" ng-change="changeCompany();">
+                        <option value=""></option>
+                        <option value="{{co.co_id}}" ng-repeat="(key, co) in form.companies">{{co.co_name}}</option>
+                    </select>
+                </label>
+                <label class="item item-input">
+                    <input type="text" placeholder="Nombre del asegurado" ng-model="form.si_fullname">
+                </label>
+                <label class="item item-input">
+                    <input type="email" placeholder="E-Mail" ng-model="form.si_email">
+                </label>
+                <label class="item item-input">
+                    <input type="tel" placeholder="Teléfono" ng-model="form.si_phone">
+                </label>
+                <label class="item item-input">
+                    <textarea placeholder="Dirección del cliente" ng-model="form.si_address"></textarea>
+                </label>
+                <label class="item item-input item-select">
+                    <div class="input-label">
+                        Marca
+                    </div>
+                    <select ng-model="form.si_br_id" ng-change="changeBrand();">
+                        <option value=""></option>
+                        <option value="{{br.br_id}}" ng-repeat="(key, br) in form.branchies">{{br.br_name}}</option>
+                    </select>
+                </label>
+                <label class="item item-input item-select">
+                    <div class="input-label">
+                        Modelo
+                    </div>
+                    <select ng-model="form.si_mo_id">
+                        <option value=""></option>
+                        <option value="{{key}}" ng-repeat="(key, mo) in form.models_available">{{mo}}</option>
+                    </select>
+                </label>
+                <label class="item item-input">
+                    <input type="text" placeholder="Versión/Año" ng-model="form.si_version">
+                </label>
+                <div class="item item-divider text-center item-icon-right">
+                    Repuestos
+                    <i class="icon ion-plus-circled" ng-click="add();"></i>
+                </div>
+                <div class="view-data">
+                    <div class="row" ng-repeat="re in repuestos">
+                        <div class="col col-10"><b>{{re.amount}}</b></div>        
+                        <div class="col col-80">{{re.type}}<br/>
+                            <span style="font-size: 10px;">{{re.name}}</span>
+                        </div>
+                        <div class="col col-10" ng-if="re.stock == '1'">
+                            <i class="icon ion-checkmark-round balanced"></i>
+                        </div>
+                        <div class="col col-10" ng-if="re.stock == '0'">
+                            <i class="icon ion-alert-circled energized"></i>
+                        </div>
+                    </div>
+                </div>
+                <label class="item item-input">
+                    <textarea placeholder="Observaciones" ng-model="form.si_observation_loan"></textarea>
+                </label>
+                <label class="item item-input">
+                    <textarea placeholder="Préstamos" ng-model="form.si_loan"></textarea>
+                </label>
+            </div>
+            <div class="padding">
+                <button class="button button-block button-dark" type="submit">
+                    Aceptar
+                </button>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,64 @@
+<?php
+foreach ($this->fields as $key => $field) {
+    if ($field['list'] == true) {
+        $colspan++;
+    }
+}
+?>
+<table border="1">
+    <tr>
+        <th></th>
+    </tr>
+    <tr>
+        <th colspan="<?php echo $colspan; ?>">Listado de <?php echo utf8_decode($this->currentTitle); ?></th>
+    </tr>
+    <tr>
+        <th></th>
+    </tr>
+    <tr>
+        <?php
+        foreach ($this->fields as $key => $field) {
+            if ($field['list'] == true) {
+                echo '<th>' . utf8_decode($field["label"]) . '</th>';
+            }
+        }
+        ?>
+    </tr>
+    <?php
+    if (count($this->results) > 0) {
+        foreach ($this->results as $keyRow => $result) {
+            ?>
+            <tr>
+                <?php
+                foreach ($this->fields as $key => $field) {
+                    if ($field['list'] == true) {
+                        if ($field['type'] == 'image') {
+                            if ($field['link']):
+                                $result[$field["field"]] = "<a href='" . $field['link'] . "/id/" . $result[$this->fields[0]["field"]] . "' title='" . $field['title'] . "' target='" . $field['target'] . "'><img src='" . $this->baseUrl() . "/files/" . $result[$field["field"]] . "' class='img-thumbnail cut' width='" . $field["width"] . "'></a>";
+                            else:
+                                $result[$field["field"]] = "<img src='" . $this->baseUrl() . "/files/" . $result[$field["field"]] . "' class='img-thumbnail cut' width='" . $field["width"] . "'>";
+                            endif;
+                        }
+                        if ($field['type'] == 'email') {
+                            $result[$field["field"]] = "<a href='mailto:" . $result[$field["field"]] . "'>" . $result[$field["field"]] . "</a>";
+                        }
+                        if ($field['type'] == 'money') {
+                            $result[$field["field"]] = "$ " . number_format($result[$field["field"]], 2, ",", ".");
+                        }
+                        if ($field['type'] == 'date') {
+                            $result[$field["field"]] = invertDate($result[$field["field"]], '-');
+                        }
+                        if ($field['list-edit'] == true):
+                            echo '<td class="' . $field["class"] . '" ' . $field["nowrap"] . ' style="text-align:' . $field["align"] . '"><input name="' . $field["field"] . '[' . $result[$this->fields[0]["field"]] . ']" style="width:' . $field["width"] . '" type="text" class="form-control" value="' . $result[$field["field"]] . '"></td>';
+                        else:
+                            echo '<td class="' . $field["class"] . '" ' . $field["nowrap"] . ' style="text-align:' . $field["align"] . '">' . $result[$field["field"]] . '</td>';
+                        endif;
+                    }
+                }
+                ?>          
+            </tr>
+            <?php
+        }
+    }
+    ?>
+</table>

@@ -1,0 +1,286 @@
+<?php if ($this->item["si_status"] == 4):?>
+    <div class="panel panel-primary">
+        <div class="panel-heading">Entregado</div>
+        <div class="panel-body">
+            <p>Observaciones: <?php echo $this->item['si_finish_description']; ?></p>
+        </div>
+    </div>
+<?php elseif ($this->item["si_status"] == 5): ?>
+    <div class="panel panel-success">
+        <div class="panel-heading">Facturado</div>
+        <div class="panel-body">
+            <p>Nº de Factura: <?php echo $this->item['si_finish_payment']; ?></p>
+        </div>
+    </div>
+<?php endif; ?>
+<?php if ($this->item['si_observation_loan']): ?>
+    <div class="row">
+        <div class="col-xs-12">
+            <label>Observaciones</label>
+            <p><?php echo $this->item['si_observation_loan'] ?></p>
+        </div>
+    </div>
+<?php endif ?>
+<?php if ($this->item['si_loan']): ?>
+    <div class="row">
+        <div class="col-xs-12">
+            <label>Préstamos</label>
+            <p><?php echo $this->item['si_loan'] ?></p>
+        </div>
+    </div>
+<?php endif ?>
+<div class="panel panel-default">
+    <div class="panel-heading">Repuestos</div>
+    <div class="panel-body">
+        <?php if ($this->item['si_tamount_au'] > 0): ?>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group col-xs-9">
+                            <label>LLANTA DE AUXILIO</label>
+                            <input type="text" class="form-control" disabled="disabled" value="<?php echo $this->item['tb_name_au']; ?>">
+                        </div>
+                        <div class="form-group col-xs-1">
+                            <label>Cantidad</label>
+                            <input type="text" class="form-control" disabled="disabled" value="<?php echo $this->item['si_tamount_au']; ?>">
+                        </div>
+                        <div class="form-group col-xs-2">
+                            <label>Stock</label>
+                            <select class="form-control" name="si_stock_au" disabled="disabled">
+                                <option value="1" <?php echo ($this->item['si_stock_au'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                <option value="0" <?php echo ($this->item['si_stock_au'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                            </select>
+                        </div>
+                    </div>
+                    <?php if ($this->item['si_stock_au'] == 0): ?>
+                        <div class="row">
+                            <div class="form-group col-xs-5">
+                                <label>Proveedor</label>
+                                <select class="form-control" disabled="disabled">
+                                    <?php
+                                    foreach ($this->providers as $company):
+                                        $select = ($company['pr_id'] == $this->item['si_au_pr_id']) ? "selected='selected'" : "";
+                                        ?>
+                                        <option value="<?php echo $company['pr_id'] ?>" <?php echo $select; ?>><?php echo $company['pr_name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group col-xs-2">
+                                <label>Fecha Pedido</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo invertDate($this->item['si_au_date_from'], '-'); ?>">
+                            </div>
+                            <div class="form-group col-xs-2">
+                                <label>Fecha llegada</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo invertDate($this->item['si_au_date'], '-'); ?>">
+                            </div>
+                            <div class="form-group col-xs-3">
+                                <label>Medio</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo $this->item['si_au_transport']; ?>">
+                            </div>
+                        </div>
+                    <?php endif ?>
+                </div>
+            </div>
+        <?php endif ?>
+        <?php if ($this->item['si_amount_po'] > 0): ?>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group col-xs-9">
+                            <label>LLANTA DE POSICIÓN</label>
+                            <input type="text" class="form-control" disabled="disabled" value="<?php echo $this->item['tb_name_po']; ?>">
+                        </div>
+                        <div class="form-group col-xs-1">
+                            <label>Cantidad</label>
+                            <input type="text" class="form-control" disabled="disabled" value="<?php echo $this->item['si_amount_po']; ?>">
+                        </div>
+                        <div class="form-group col-xs-2">
+                            <label>Stock</label>
+                            <select class="form-control" name="si_stock_po" disabled="disabled">
+                                <option value="1" <?php echo ($this->item['si_stock_po'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                <option value="0" <?php echo ($this->item['si_stock_po'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                            </select>
+                        </div>
+                    </div>
+                    <?php if ($this->item['si_stock_po'] == 0): ?>
+                        <div class="row">
+                            <div class="form-group col-xs-5">
+                                <label>Proveedor</label>
+                                <select class="form-control" disabled="disabled">
+                                    <?php
+                                    foreach ($this->providers as $company):
+                                        $select = ($company['pr_id'] == $this->item['si_po_pr_id']) ? "selected='selected'" : "";
+                                        ?>
+                                        <option value="<?php echo $company['pr_id'] ?>" <?php echo $select; ?>><?php echo $company['pr_name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group col-xs-2">
+                                <label>Fecha Pedido</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo invertDate($this->item['si_po_date_from'], '-'); ?>">
+                            </div>
+                            <div class="form-group col-xs-2">
+                                <label>Fecha llegada</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo invertDate($this->item['si_po_date'], '-'); ?>">
+                            </div>
+                            <div class="form-group col-xs-3">
+                                <label>Medio</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo $this->item['si_po_transport']; ?>">
+                            </div>
+                        </div>
+                    <?php endif ?>
+                </div>
+            </div>
+        <?php endif ?>
+        <?php if ($this->item['si_amount_co'] > 0): ?>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group col-xs-9">
+                            <label>NEUMÁTICO</label>
+                            <input type="text" class="form-control" disabled="disabled" value="<?php echo $this->item['cb_name']; ?>">
+                        </div>
+                        <div class="form-group col-xs-1">
+                            <label>Cantidad</label>
+                            <input type="text" class="form-control" disabled="disabled" value="<?php echo $this->item['si_amount_co']; ?>">
+                        </div>
+                        <div class="form-group col-xs-2">
+                            <label>Stock</label>
+                            <select class="form-control" name="si_stock_co" disabled="disabled">
+                                <option value="1" <?php echo ($this->item['si_stock_co'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                <option value="0" <?php echo ($this->item['si_stock_co'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                            </select>
+                        </div>
+                    </div>
+                    <?php if ($this->item['si_stock_co'] == 0): ?>
+                        <div class="row">
+                            <div class="form-group col-xs-5">
+                                <label>Proveedor</label>
+                                <select class="form-control" disabled="disabled">
+                                    <?php
+                                    foreach ($this->providers as $company):
+                                        $select = ($company['pr_id'] == $this->item['si_co_pr_id']) ? "selected='selected'" : "";
+                                        ?>
+                                        <option value="<?php echo $company['pr_id'] ?>" <?php echo $select; ?>><?php echo $company['pr_name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group col-xs-2">
+                                <label>Fecha Pedido</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo invertDate($this->item['si_co_date_from'], '-'); ?>">
+                            </div>
+                            <div class="form-group col-xs-2">
+                                <label>Fecha llegada</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo invertDate($this->item['si_co_date'], '-'); ?>">
+                            </div>
+                            <div class="form-group col-xs-3">
+                                <label>Medio</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo $this->item['si_co_transport']; ?>">
+                            </div>
+                        </div>
+                    <?php endif ?>
+                </div>
+            </div>
+        <?php endif ?>
+        <?php if ($this->item['si_amount_ba'] > 0): ?>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group col-xs-9">
+                            <label>BATERÍA</label>
+                            <input type="text" class="form-control" disabled="disabled" value="<?php echo $this->item['bb_name']; ?>">
+                        </div>
+                        <div class="form-group col-xs-1">
+                            <label>Cantidad</label>
+                            <input type="text" class="form-control" disabled="disabled" value="<?php echo $this->item['si_amount_ba']; ?>">
+                        </div>
+                        <div class="form-group col-xs-2">
+                            <label>Stock</label>
+                            <select class="form-control" name="si_stock_ba" disabled="disabled">
+                                <option value="1" <?php echo ($this->item['si_stock_ba'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                <option value="0" <?php echo ($this->item['si_stock_ba'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                            </select>
+                        </div>
+                    </div>
+                    <?php if ($this->item['si_stock_ba'] == 0): ?>
+                        <div class="row">
+                            <div class="form-group col-xs-5">
+                                <label>Proveedor</label>
+                                <select class="form-control" disabled="disabled">
+                                    <?php
+                                    foreach ($this->providers as $company):
+                                        $select = ($company['pr_id'] == $this->item['si_ba_pr_id']) ? "selected='selected'" : "";
+                                        ?>
+                                        <option value="<?php echo $company['pr_id'] ?>" <?php echo $select; ?>><?php echo $company['pr_name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group col-xs-2">
+                                <label>Fecha Pedido</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo invertDate($this->item['si_ba_date_from'], '-'); ?>">
+                            </div>
+                            <div class="form-group col-xs-2">
+                                <label>Fecha llegada</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo invertDate($this->item['si_ba_date'], '-'); ?>">
+                            </div>
+                            <div class="form-group col-xs-3">
+                                <label>Medio</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo $this->item['si_ba_transport']; ?>">
+                            </div>
+                        </div>
+                    <?php endif ?>
+                </div>
+            </div>
+        <?php endif ?>
+        <?php  foreach ($this->accesory as $si_ac): ?>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="form-group col-xs-9">
+                            <label>ACCESORIOS</label>
+                            <input type="text" class="form-control" disabled="disabled" value="<?php echo $si_ac["ac_name"]; ?>">
+                        </div>
+                        <div class="form-group col-xs-1">
+                            <label>Cantidad</label>
+                            <input type="text" class="form-control" disabled="disabled" value="<?php echo $si_ac["sa_count"]; ?>">
+                        </div>
+                        <div class="form-group col-xs-2">
+                            <label>Stock</label>
+                            <select class="form-control" name="si_stock_ba" disabled="disabled">
+                                <option value="1" <?php echo ($si_ac['sa_in_stock'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                <option value="0" <?php echo ($si_ac['sa_in_stock'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                            </select>
+                        </div>
+                    </div>
+                    <?php if ($si_ac['sa_in_stock'] == 0): ?>
+                        <div class="row">
+                            <div class="form-group col-xs-5">
+                                <label>Proveedor</label>
+                                <select class="form-control" disabled="disabled">
+                                    <?php
+                                    foreach ($this->providers as $company):
+                                        $select = ($company['pr_id'] == $si_ac['sa_pr_id']) ? "selected='selected'" : "";
+                                        ?>
+                                        <option value="<?php echo $company['pr_id'] ?>" <?php echo $select; ?>><?php echo $company['pr_name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group col-xs-2">
+                                <label>Fecha Pedido</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo invertDate($si_ac['sa_date_from'], '-'); ?>">
+                            </div>
+                            <div class="form-group col-xs-2">
+                                <label>Fecha llegada</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo invertDate($si_ac['sa_date'], '-'); ?>">
+                            </div>
+                            <div class="form-group col-xs-3">
+                                <label>Medio</label>
+                                <input type="text" class="form-control" disabled="disabled" value="<?php echo $si_ac['sa_transport']; ?>">
+                            </div>
+                        </div>
+                    <?php endif ?>
+                </div>
+            </div>
+        <?php endforeach ?>
+    </div>
+</div>

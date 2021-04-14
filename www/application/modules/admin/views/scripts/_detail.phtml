@@ -1,0 +1,227 @@
+<div class="form-container">
+    <form id="form" method="post" novalidate enctype="multipart/form-data">
+        <input type="hidden" name="token" value="<?php echo $this->token; ?>">
+        <div class="row">
+            <?php
+            $c = 0;
+            foreach ($this->fields as $key => $field):
+                $c++;
+                if ($key == 0 || $field["notdisplay"] == true || $field["type"] == "hidden")
+                    continue;
+                switch ($field["type"]):
+                    case "image":
+                        echo '<div class="clearfix"></div>';
+                        ?>
+                        <div class="form-group col-lg-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <?php echo $this->fields[$key]["label"] ?> 
+                                </div>
+                                <div class="panel-body">
+                                    <div class="col-xs-6">
+                                        <label>Vista Previa</label>
+                                        <br/>
+                                        <?php if (!empty($this->result[$this->fields[$key]["field"]]) && file_exists(PATH_IMG . $this->result[$this->fields[$key]["field"]])): ?>
+                                            <img class="thumbnail" style="max-width:100%;" src="<?php echo $this->baseUrl() . URL_IMG . $this->result[$this->fields[$key]["field"]]; ?>"/>
+                                        <?php else: ?>
+                                            <img class="thumbnail" width="100%" data-src="holder.js/<?php echo $this->fields[$key]["x"] ?>x<?php echo $this->fields[$key]["y"] ?>?auto=yes">
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <label>Reemplazar</label>
+                                        <br/>
+                                        <input <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> type="file" id="<?php echo $this->fields[$key]["field"] ?>" name="<?php echo $this->fields[$key]["field"] ?>" class="form-control">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> <?php if (empty($this->result[$this->fields[$key]["field"]]) || !file_exists(PATH_IMG . $this->result[$this->fields[$key]["field"]])): ?> disabled="disabled" checked="checked" <?php endif; ?> type="checkbox" name="remove_<?php echo $this->fields[$key]["field"] ?>" value="1"> Quitar
+                                            </label>
+                                        </div>
+                                        <div class="checkbox">
+                                            Tamaño recomendado: <?php echo $this->fields[$key]["x"] ?>x<?php echo $this->fields[$key]["y"] ?> px 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <?php
+                        break;
+                    case "divider":
+                        echo '<div class="clearfix"></div>';
+
+                        break;
+                    case "partial-view":
+//                        echo '<div class="clearfix"></div>';
+//                        echo $this->render($this->fields[$key]["file"]);
+                        break;
+                    case "gallery":
+                        echo '<div class="clearfix"></div>';
+                        ?>
+                        <div class="form-group col-lg-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <?php echo $this->fields[$key]["label"] ?> 
+                                    <?php if ($this->formDisabled != true): ?>
+                                        <button type="button" onclick="openModalScript('iframe', '<b>Subir imagen</b>', '', '<?php
+                                        echo $this->url(array(
+                                            'module' => 'admin',
+                                            'controller' => 'gallery',
+                                            'action' => 'upload',
+                                            'popup' => true,
+                                            'resize' => $field["resize"],
+                                            'cut' => $field["cut"],
+                                            'field' => $this->fields[$key]["field"]
+                                                ), null, true);
+                                        ?>', '1024px', '700px');" class="btn btn-sm btn-success pull-right">Agregar Imagen</button>
+                                        <div class="clearfix"></div>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="panel-body sortable" id="<?php echo $this->fields[$key]["field"] ?>">
+                                    <?php
+                                    if ($this->fields[$key]["data"]):
+                                        foreach ($this->fields[$key]["data"] as $item):
+                                            if ($item["ga_type"] == 'photo'):
+                                                ?>
+                                                <div class='col-lg-3 col-md-4 col-sm-6 col-xs-12 remove' id='<?php echo $item["ga_id"] ?>'>
+                                                    <img class='thumbnail' style='max-width:100%;' src='<?php echo $this->baseUrl() . URL_IMG . $item["ga_name"]; ?>'/>
+                                                    <?php if ($this->formDisabled != true): ?>
+                                                        <button class="btn btn-xs btn-danger" onclick='removeDiv("<?php echo $item["ga_id"] ?>")'>
+                                                            <span class='glyphicon glyphicon-trash'></span> Quitar
+                                                        </button>
+                                                        <input type='hidden' name='<?php echo $this->fields[$key]["field"] ?>[]' value='<?php echo $item["ga_name"] ?>'>
+                                                        <input type='hidden' name='type_<?php echo $this->fields[$key]["field"] ?>[]' value='<?php echo $item["ga_type"] ?>'>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <?php
+                                            elseif ($item["ga_type"] == 'video'):
+                                                ?>
+                                                <div class='col-lg-3 col-md-4 col-sm-6 col-xs-12 remove' id='<?php echo $item["ga_id"] ?>'>
+                                                    <iframe class='thumbnail' width='100%' src='<?php echo $item["ga_name"] ?>' frameborder='0' allowfullscreen></iframe>
+                                                    <?php if ($this->formDisabled != true): ?>
+                                                        <button class="btn btn-xs btn-danger" onclick='removeDiv("<?php echo $item["ga_id"] ?>")'>
+                                                            <span class='glyphicon glyphicon-trash'></span> Quitar
+                                                        </button>
+                                                        <input type='hidden' name='<?php echo $this->fields[$key]["field"] ?>[]' value='<?php echo $item["ga_id"] ?>'>
+                                                        <input type='hidden' name='type_<?php echo $this->fields[$key]["field"] ?>[]' value='<?php echo $item["ga_type"] ?>'>
+                                                    <?php endif; ?>
+                                                </div>
+                                                <?php
+                                            endif;
+                                        endforeach;
+                                    endif;
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <?php
+                        break;
+                    case "checkbox":
+                        ?>
+                        <div class="form-group col-lg-6 col-md-6 col-sm-6 colxs-12">
+                            <div class="checkbox" >
+                                <label >
+                                    <input type="checkbox" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> <?php echo ($this->result[$this->fields[$key]["field"]] == 1) ? "checked='checked'" : ""; ?> name="<?php echo $this->fields[$key]["field"] ?>" value="1"> <b><?php echo $this->fields[$key]["label"] ?></b>
+                                </label>
+                            </div>
+                        </div>
+                        <?php
+                        break;
+                    case "combo":
+                        ?>
+                        <div class="form-group col-lg-4 col-md-4 col-sm-6 colxs-12">
+                            <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> </label>
+
+                            <?php foreach ($this->fields[$key]["data"] as $index => $value): ?>
+                                <?php
+                                if ($this->result[$this->fields[$key]["field"]] == $index):
+                                    ?><label class="detail"><?php echo $value ?></label><?php
+                                endif;
+                            endforeach;
+                            ?>
+                        </div>
+                        <?php
+                        break;
+                    case "textarea":
+                        ?>
+                        <div class="form-group col-lg-12">
+                            <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> </label>
+                            <label class="detail"><p><?php echo $this->result[$this->fields[$key]["field"]] ?></p></label>
+                            <div class="clearfix"></div>
+                        </div>
+                        <?php
+                        break;
+                    case "password":
+                        ?>
+                        <div class="form-group col-lg-4 col-md-4 col-sm-6 colxs-12">
+                            <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> </label>
+                            <label class="detail">******</label>
+                        </div>
+                        <?php
+                        break;
+                    case "money":
+                        ?>
+                        <div class="form-group col-lg-2 col-md-3 col-sm-6 col-xs-6">
+                            <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> </label>
+                            <label class="detail">$ <?php echo number_format($this->result[$this->fields[$key]["field"]], 2, ",", ".") ?></label>
+                        </div>
+                        <?php
+                        break;
+                    case "number":
+                        ?>
+                        <div class="form-group col-lg-2 col-md-3 col-sm-6 col-xs-6">
+                            <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> </label>
+                            <label class="detail"><?php echo $this->result[$this->fields[$key]["field"]] ?></label>
+                        </div>
+                        <?php
+                        break;
+                    default:
+                        ?>
+                        <div class="form-group col-lg-4 col-md-4 col-sm-6 colxs-12">
+                            <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> </label>
+                            <label class="detail"><?php echo $this->result[$this->fields[$key]["field"]] ?></label>
+                        </div>
+                        <?php
+                        break;
+                endswitch;
+                if (count($this->fields) <= $c):
+                    echo '<div class="clearfix"></div>';
+                endif;
+            endforeach;
+            ?>
+        </div>
+        <div class="btn-group">
+            <?php if ($this->parameters["action"] == "detail") { ?>
+                <button type="button" class="btn btn-info" onclick="location.href = '<?php echo $this->url(array('module' => $this->parameters['module'], 'controller' => $this->parameters['controller'], 'action' => 'edit', 'id' => $this->result[$this->fields[0]["field"]]), '', true) ?>'" >Editar</button>
+            <?php } else { ?>
+                <button type="submit" name="submit" class="btn btn-info" data-loading-text="Validando...">Guardar</button>
+                <button type="button" class="btn btn-default" onclick='location.href = "<?php echo $this->url(array('module' => $this->parameters["module"], 'controller' => $this->parameters["controller"], 'action' => 'index'), null, true) ?>"'>Cancelar</button>
+            <?php } ?>
+        </div>
+    </form>
+</div>
+<script>
+    function returnGallery(field, image) {
+        date = new Date();
+        id = date.getTime();
+        $("#" + field).append("<div class='col-lg-3 col-md-4 col-sm-6 col-xs-12 remove' id='" + id + "'>\n\
+<img class='thumbnail' style='max-width:100%;' src='<?php echo $this->baseUrl() . URL_IMG; ?>" + image + "'/>\n\
+<button class='btn btn-xs btn-danger' onclick='removeDiv(" + id + ")'><span class='glyphicon glyphicon-trash'></span> Quitar</button><input type='hidden' name='" + field + "[]' value='" + image + "'>\n\
+</div>");
+    }
+<?php if ($this->parameters["action"] != "detail") { ?>
+        $(function () {
+            var count = 0;
+            $(".sortable").sortable({
+                stop: function (event, ui) {
+                }
+            });
+            $(".sortable").disableSelection();
+        });
+<?php } ?>
+<?php
+if ($this->js) {
+    echo $this->js;
+}
+?>
+</script>

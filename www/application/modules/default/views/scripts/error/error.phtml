@@ -1,0 +1,20 @@
+<p style="color: #DDD; text-align: center; font-size: 16px; margin: 2%; font-family: 'Orbitron', sans-serif;">Ocurri&oacute; un error</p>
+<p style="color: #999; text-align: center; font-size: 12px; font-family: 'Orbitron', sans-serif;">
+    <?php echo $this->exception->getMessage() ?>
+</p>
+<div class="page page-404">
+    <div class="container" id="container">
+        <div class='fallback fillParent vAligner text-center'>
+            <div class="vItem">
+                <h1>404</h1>
+                <p>Page not found</p>
+            </div>
+        </div>
+    </div>
+    <?php
+    echo $this->headScript()
+            ->prependFile($this->baseUrl() . '/js/404.js', 'text/javascript')
+            ->prependFile($this->baseUrl() . '/js/independent/three.min_r56.js', 'text/javascript')
+            ->prependFile($this->baseUrl() . '/js/base.js', 'text/javascript');
+    ?>
+</div>

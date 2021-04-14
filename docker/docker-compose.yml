@@ -1,0 +1,41 @@
+version: "3"
+services:
+    proneumaticos_apache:
+        build: .
+        image: php:5.6-apache
+        container_name: proneumaticos_apache
+        extra_hosts:
+            - "www.eidicom.local:127.0.0.1"
+            - "ceol.eidicom.local:127.0.0.1"
+        volumes:
+            - ".:/app:cached"
+            - ../www/:/var/www/html/dev.proneumaticos.com.ar
+            - ./config/php.ini:/usr/local/etc/php/conf.d/php.ini
+            - ./config/dev.proneumaticos.com.ar.conf:/etc/apache2/sites-enabled/dev.proneumaticos.com.ar.conf
+        expose:
+            - 80
+        ports:
+            - 80:80
+        links: 
+            - proneumaticos_mysql
+            - proneumaticos_memcached
+
+    proneumaticos_mysql:
+        image: mysql:5.7
+        container_name: proneumaticos_mysql
+        ports:
+            - 3306:3306
+        expose:
+            - 3306
+        volumes:
+            - ../db/working:/var/lib/mysql
+            - ../db/backups:/var/db/backups
+        environment:
+            - MYSQL_DATABASE=proneumaticos
+            - MYSQL_ROOT_PASSWORD=Secreta007
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD=Secreta007
+        command: mysqld --sql_mode=""
+    proneumaticos_memcached:
+        image: memcached:latest
+        container_name: proneumaticos_memcached

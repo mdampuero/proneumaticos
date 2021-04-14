@@ -1,0 +1,26 @@
+<?php echo $this->doctype() . "\n"; ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+    <head>
+        <meta charset="utf-8">
+            <title><?php echo $this->setting["se_title"]; ?></title>
+            <?php
+            echo $this->headMeta()
+                    ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+                    ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+            ?>
+            <?php
+            echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->baseUrl() . '/imgs/favicon.png'))
+                    ->prependStylesheet($this->baseUrl() . '/css/style.css')
+                    ->prependStylesheet($this->baseUrl() . '/css/bootstrap.css');
+            echo $this->headScript()
+                    ->prependFile($this->baseUrl() . '/js/bootstrap.min.js', 'text/javascript')
+                    ->prependFile($this->baseUrl() . '/js/bootstrap.validate.en.js', 'text/javascript')
+                    ->prependFile($this->baseUrl() . '/js/bootstrap.validate.js', 'text/javascript')
+                    ->prependFile($this->baseUrl() . '/js/jquery-1.9.1.js', 'text/javascript');
+            ?>
+    </head>
+    <body style="background: #F0F0F0;">
+        <?php // echo $this->render('_alert.phtml', array('messages' => $this->messages)); ?>
+        <?php echo $this->layout()->content; ?> 
+    </body>
+</html>

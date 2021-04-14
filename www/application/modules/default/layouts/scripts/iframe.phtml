@@ -1,0 +1,38 @@
+<?php echo $this->doctype() . "\n"; ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+    <head>
+        <meta charset="utf-8">
+           <title><?php echo $this->setting["se_title"]; ?></title>
+            <?php
+            echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->baseUrl() . '/imgs/favicon.png'))
+                    //->prependStylesheet($this->baseUrl() . '/css/bootstrap.css')
+                    ->prependStylesheet($this->baseUrl() . '/css/cms.css')
+                    ->prependStylesheet($this->baseUrl() . '/css/plus.css')
+                    ->prependStylesheet($this->baseUrl() . '/css/jquery-ui.css')
+                    ->prependStylesheet($this->baseUrl() . '/css/bootstrap-rta.min.css')
+                    ->prependStylesheet($this->baseUrl() . '/css/imgareaselect-default.css')
+            ?>
+            <link href="<?php echo $this->baseUrl() . '/css/bootstrap.css'; ?>" rel="stylesheet" media="all" />
+            <?php
+            echo $this->headScript()
+                    ->prependFile($this->baseUrl() . '/js/jquery.form.js', 'text/javascript')
+                    ->prependFile($this->baseUrl() . '/ckeditor/adapters/jquery.js', 'text/javascript')
+                    ->prependFile($this->baseUrl() . '/js/bootstrap.validate.en.js', 'text/javascript')
+                    ->prependFile($this->baseUrl() . '/js/bootstrap.validate.js', 'text/javascript')
+                    ->prependFile($this->baseUrl() . '/js/bootstrap-rta.min.js', 'text/javascript')
+                    ->prependFile($this->baseUrl() . '/js/popover.js', 'text/javascript')
+                    ->prependFile($this->baseUrl() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                    ->prependFile($this->baseUrl() . '/js/html5shiv.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                    ->prependFile($this->baseUrl() . '/js/bootstrap.min.js', 'text/javascript')
+                    ->prependFile($this->baseUrl() . '/js/jquery-ui.js', 'text/javascript')
+                    ->prependFile($this->baseUrl() . '/js/jquery.imgareaselect.pack.js', 'text/javascript')
+                    ->prependFile($this->baseUrl() . '/js/jquery-1.9.1.js', 'text/javascript')
+                    ->prependFile($this->baseUrl() . '/ckeditor/ckeditor.js', 'text/javascript')
+            ;
+            ?>
+    </head>
+    <body>
+        <?php // echo $this->render('_alert.phtml', array('messages' => $this->messages)); ?>
+        <?php echo $this->layout()->content; ?> 
+    </body>
+</html>

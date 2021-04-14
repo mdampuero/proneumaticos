@@ -1,0 +1,51 @@
+<div class="form-container">
+    <blockquote>
+        <?php if ($this->title) { ?>
+            <p class="text-primary"><?php echo ($this->icon) ? '<label class="glyphicon glyphicon-' . $this->icon . '"></label> ' : ''; ?> <?php echo $this->title ?></p>
+        <?php } ?>
+        <?php if ($this->description) { ?>
+            <small><?php echo $this->description ?></small>
+        <?php } ?>
+    </blockquote>
+    <?php
+    $cut=explode('|',$this->parameters["cut"]);
+    ?>
+    <form id="form" method="post" novalidate enctype="multipart/form-data">
+        <input type="hidden" name="image" value="<?php echo $this->parameters["name_file"]?>" />
+        <input type="hidden" name="x1" value="0" />
+        <input type="hidden" name="y1" value="0" />
+        <input type="hidden" name="x2" value="<?php echo $cut[0];?>" />
+        <input type="hidden" name="y2" value="<?php echo $cut[1];?>" />
+        <input type="hidden" name="w" value="<?php echo $cut[0];?>" />
+        <input type="hidden" name="h" value="<?php echo $cut[1];?>" />
+        <div class="row">
+            <div class="form-group col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-body text-center">
+                        <div class="btn-group">
+                            <button type="submit" name="submit" class="btn btn-info" data-loading-text="Validando...">Aceptar</button>
+                            <button type="button" class="btn btn-default" onclick='location.href="<?php echo $this->url(array('action'=>'upload'));?>"'>Cancelar</button>
+                        </div>
+                        <div class="clearfix"></div><br/>
+                        <img id="photo" src="<?php echo $this->baseUrl() . URL_IMG . $this->parameters["name_file"]; ?>"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </form>
+</div>
+<script>
+    $(function() {
+        $('#photo').imgAreaSelect({aspectRatio: '<?php echo $cut[0];?>:<?php echo $cut[1];?>', handles: true, x1: 0, y1: 0, x2: <?php echo $cut[0];?>, y2: <?php echo $cut[1];?>, minWidth: <?php echo $cut[0];?>, persistent: true,
+            onSelectEnd: function(image, selection) {
+                $('input[name=x1]').val(selection.x1);
+                $('input[name=y1]').val(selection.y1);
+                $('input[name=x2]').val(selection.x2);
+                $('input[name=y2]').val(selection.y2);
+                $('input[name=w]').val(selection.width);
+                $('input[name=h]').val(selection.height);
+            }
+        });
+    });
+</script>

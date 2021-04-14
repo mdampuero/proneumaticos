@@ -1,0 +1,60 @@
+<?php if ($this->parameters["popup"] == false) : ?>
+    <ol class="breadcrumb">
+        <li><a href="<?php echo $this->url(array('controller' => 'index', 'action' => 'index'), null, true); ?>">Inicio</a></li>
+        <li class="active">Iniciar Sesi&oacute;n</li>
+    </ol>
+<?php endif; ?>
+<?php if ($this->response) { ?>
+    <p class="text-danger text-center"><?php echo $this->response ?></p>
+<?php } ?>
+<?php if ($this->parameters["popup"] == true): ?>
+    <div class="col-xs-12">
+    <?php else: ?>
+        <div class="col-lg-4 col-lg-offset-4 col-xs-12">
+        <?php endif; ?>
+        <div class="alert alert-danger" style="display: none;"></div>
+        <div class="alert alert-success" style="display: none;"></div>
+        <?php echo ($this->setting["se_code_block_message"]) ? "<p class='text-muted'>" . $this->setting["se_code_block_message"] . "</p>" : ""; ?>
+        <div class="form-group">
+            <input type="password" class="form-control" id="code" name="code" autocomplete="off" value="<?php echo $this->parameters["code"] ?>" placeholder="Código de Acceso">
+        </div>
+        <button type="button" onclick="login();" class="btn btn-primary">Ingresar</button> 
+    </div>
+    <script>
+        $('#code').keyup(function(e) {
+            if (e.keyCode == 13)
+            {
+                login();
+            }
+        });
+        function login() {
+            $(".alert.alert-danger").slideUp('fast');
+            $(".alert.alert-success").slideUp('fast');
+            $.post("<?php echo $this->url(array('controller' => 'login', 'action' => 'access')); ?>",
+                    {
+                        token: "<?php echo $this->token ?>",
+                        code: $("#code").val(),
+                    })
+                    .done(function(data) {
+                        //alert(data);
+                        if (data.length > 0) {
+                            result = jQuery.parseJSON(data);
+                            if (result.response == false) {
+                                $(".alert.alert-danger").slideDown('fast', function(index) {
+                                    $(".alert.alert-danger").html(result.message);
+                                });
+                            } else {
+                                $(".alert.alert-success").slideDown('fast', function(index) {
+                                    $(".alert.alert-success").html(result.message);
+                                    if (result.goback == "" || result.goback == "null" || result.goback == null || result.goback == undefined) {
+                                        location.reload();
+                                    } else {
+                                        location.href = result.goback;
+                                    }
+                                });
+                            }
+                        }
+                    });
+            $("#password").val("");
+        }
+    </script>

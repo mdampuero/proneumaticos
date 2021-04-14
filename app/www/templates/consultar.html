@@ -1,0 +1,34 @@
+<ion-view view-title="Consultar siniestros">
+    <ion-content ng-init="init();">
+        <ion-refresher
+            pulling-text="Actualizar..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+        <div class="list ">
+            <div class="item item-input-inset">
+                <label class="item-input-wrapper">
+                    <input ng-model="data.consulta" type="text" style="width: 100%;" placeholder="Nº Sinisestro, Domionio, Asegurado...">
+                </label>
+                <button class="button button-small" ng-click="buscar();">
+                    Buscar
+                </button>
+            </div>
+        </div>
+        <div class="card" ng-repeat="(key, reciente) in resultados" ng-click="goto({{reciente.si_id}})">
+            <div class="item item-divider">
+                <span>Nº {{reciente.si_number}}</span>
+                <span class="pull-right" ng-bind-html="reciente.status_label"></span>
+            </div>
+            <div class="item item-text-wrap">
+                <div class="row">
+                    <div class="col-67"><b>{{reciente.si_fullname}}</b></div>
+                    <div class="col-33"><b>Dominio:</b>{{reciente.si_domain}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-67"><b>Marca: </b>{{reciente.br_name}}</div>
+                    <div class="col-33"><b>Modelo </b>{{reciente.mo_name}}</div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

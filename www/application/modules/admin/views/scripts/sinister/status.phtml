@@ -1,0 +1,100 @@
+<div class="clearfix"></div>
+<div class="col-xs-12">
+    <div class="btn-group pull-right">
+        <button class="hidden-print  btn btn-sm btn-default" type="button" onclick="window.print();"><span class="glyphicon glyphicon-print"></span> Imprimir ficha completa</button>
+    </div>
+    <div class="clearfix"></div>
+    <br/>
+    <?php
+    if ($this->result["si_status"] == 1) {
+        ?>
+        <div class="alert alert-danger">
+            Faltan Definir Repuestos
+        </div>
+        <?php
+    } elseif ($this->result["si_status"] == 2) {
+        ?>
+        <div class="alert alert-warning">
+            En espera de repuestos
+        </div>
+        <?php
+    } elseif ($this->result["si_status"] == 4) {
+        ?>
+        <div class="alert alert-warning h5">
+            Entregado
+            <button class="btn btn-default pull-right btn-sm hidden-xs" style="margin-top: -8px;" type="button" onclick="openPayment()">Marcar como Facturado</button>
+        </div>
+        <div class="panel panel-success">
+            <div class="panel-heading">Entregado</div>
+            <div class="panel-body">
+                <?php
+                $last = $this->sinister_activities[count($this->sinister_activities) - 1];
+                ?>
+                <blockquote>
+                    <p>Entregado</p>
+                    <p><small class="text-muted">Fecha: <?php echo date("d-m-Y H:i", $last['act_created']); ?></small></p>
+                    <p><small class="text-muted">Usuario: <?php echo $last['ad_name'] . " " . $last['ad_last']; ?></small></p>
+                    <p><small class="text-muted">Observaciones: <?php echo $this->result['si_finish_description']; ?></small></p>
+                </blockquote>
+            </div>
+        </div>
+        <?php
+    } elseif ($this->result["si_status"] == 3) {
+        ?>
+        <div class="alert alert-warning h5">
+            Ingresado sin entregar
+            <button class="btn btn-default pull-right btn-sm hidden-xs" style="margin-top: -8px;" type="button" onclick="openChange()">Marcar como Entregado</button>
+        </div>
+        <?php
+    } elseif ($this->result["si_status"] == 5) {
+        ?>
+        <div class="panel panel-success">
+            <div class="panel-heading">Facturado</div>
+            <div class="panel-body">
+                <?php
+                $last = $this->sinister_activities[count($this->sinister_activities) - 1];
+                ?>
+                <blockquote>
+                    <p>Facturado</p>
+                    <p><small class="text-muted">Fecha: <?php echo date("d-m-Y H:i", $last['act_created']); ?></small></p>
+                    <p><small class="text-muted">Usuario: <?php echo $last['ad_name'] . " " . $last['ad_last']; ?></small></p>
+                    <p><small class="text-muted">Nº de Factura: <?php echo $this->result['si_finish_payment']; ?></small></p>
+                </blockquote>
+            </div>
+        </div>
+        <?php
+    }elseif ($this->result["si_status"] == 60) {
+        ?>
+        <div class="alert alert-warning">
+            Dado de baja
+        </div>
+        <?php
+    }
+    ?>
+</div>
+<div class="clearfix"></div>
+<script>
+    function openChange() {
+
+        var type = 'ajax';
+        var title = 'Cambiar de estado';
+        var footer = 'false';
+        var url = '<?php echo $this->url(array('action' => 'change')); ?>';
+        var w = '50%';
+        var h = '350px';
+        openModalScript(type, title, footer, url, w, h);
+
+    }
+    function openPayment() {
+
+        var type = 'ajax';
+        var title = 'Cambiar de estado';
+        var footer = 'false';
+        var url = '<?php echo $this->url(array('action' => 'payment')); ?>';
+        var w = '50%';
+        var h = '350px';
+        openModalScript(type, title, footer, url, w, h);
+
+    }
+
+</script>

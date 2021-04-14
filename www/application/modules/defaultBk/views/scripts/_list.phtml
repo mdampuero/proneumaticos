@@ -1,0 +1,191 @@
+<ol class="breadcrumb">
+    <li><a href="<?php echo $this->url(array('controller' => 'sinister', 'action' => 'index'), NULL, TRUE); ?>">Siniestros</a></li>
+</ol>
+<?php if (count($this->news)): ?>
+    <div id="myCarousel" class="carousel slide" data-ride="carousel" >
+        <!-- Wrapper for carousel items -->
+        <div class="carousel-inner">
+            <?php foreach ($this->news as $i => $news): ?>
+                <div class="item <?php echo($i == 0) ? "active" : "" ?>">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="img" style="background-image:url('<?php echo HOST . $this->baseUrl() . URL_IMG . $news["ne_picture"]; ?>');">
+                                <div class="box visible-xs">
+                                    <h1><?php echo $news["ne_title"]; ?></h1>
+                                    <?php echo ($news["ne_subtitle"]) ? "<h3>" . $news["ne_subtitle"] . "</h3>" : ""; ?>
+                                    <a href="<?php echo $this->url(array('controller' => 'news', 'action' => 'view', 'id' => $news["ne_id"]), NULL, TRUE); ?>" class="btn btn-primary">Ver más</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 hidden-xs">
+                            <div class="box">
+                                <h1 class="text-primary"><?php echo $news["ne_title"]; ?></h1>
+                                <?php echo ($news["ne_subtitle"]) ? "<h3 class='text-primary'>" . $news["ne_subtitle"] . "</h3>" : ""; ?>
+                                <p><?php echo CutText(nl2br(strip_tags($news["ne_content"])), 40); ?> </p>
+                                <a class="btn btn-primary" href="<?php echo $this->url(array('controller' => 'news', 'action' => 'view', 'id' => $news["ne_id"]), NULL, TRUE); ?>">Ver más</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <!-- Carousel controls -->
+        <a class="carousel-control left" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="carousel-control right" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
+<?php endif; ?>
+<?php
+if ($this->filter):
+    ?>
+    <div class="panel panel-default" >
+        <div class="panel-heading">Filtrar
+            <a href="javascript:openFilter();" class="pull-right"><span class="glyphicon glyphicon-chevron-down"></span></a>
+        </div>
+        <div class="panel-body filter row" id="filter" <?php echo ($this->parameters["filter"] == true) ? "style='display:block'" : "style='display:none'"; ?>><?php
+            if (!empty($this->filter['partial-view'])):
+                echo $this->render($this->filter['partial-view']);
+            else:
+                foreach ($this->filter as $name => $f):
+                    ?>
+                    <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                        <label><?php echo $f["label"] ?></label>
+                        <?php if ($name == 'date_from' || $name == 'date_to'): ?>
+                            <input class="form-control calendar" name="<?php echo $name; ?>" id="<?php echo $name; ?>">
+                        <?php else: ?>
+                            <select class="form-control" name="<?php echo $name; ?>" id="<?php echo $name ?>">
+                                <option value=""></option>
+                                <?php
+                                if ($f["data"]):
+                                    foreach ($f["data"] as $d):
+                                        ?>
+                                        <option value="<?php echo $d[$f["id"]] ?>" <?php echo ($this->parameters[$name] == $d[$f["id"]] && $this->parameters[$name] != "") ? "selected='selected'" : ""; ?>><?php echo $d[$f["value"]] ?></option>
+                                        <?php
+                                    endforeach;
+                                endif;
+                                ?>
+                            </select>
+                        <?php endif; ?>
+                    </div>
+                    <?php
+                endforeach;
+            endif;
+            ?>
+            <div class="form-group col-lg-2  col-md-3  col-sm-4 col-xs-6">
+                <label>&nbsp; </label>
+                <button type="button" name="filter" value="1" class="btn btn-default form-control" onclick="sendFilter();">Filtrar</button>
+            </div>
+        </div>
+    </div>
+    <?php
+endif;
+?>
+<form method="POST">
+    <?php if ($display_form): ?>
+        <input type="hidden" name="token" value="<?php echo $this->token; ?>">
+        <button class="btn btn-primary pull-right" name="save" value="1" type="submit">Guardar Cambios</button>
+        <div class="clearfix"></div>
+        <br/>
+    <?php endif; ?>
+    <table class="table table-striped table-hover" style="border:#EEE solid 1px; font-size: 13px;">
+        <tr>
+            <?php
+            foreach ($this->fields as $key => $field) {
+                if ($field['list'] == true) {
+                    echo '<th width="' . $field["width"] . '" ';
+                    if ($field["class"]):
+                        echo 'class="' . $field["class"] . '"';
+                    endif;
+                    echo '><a href="';
+                    if ($field['order'] == true) {
+                        echo $this->url(array('module' => $this->parameters['module'],
+                            'controller' => $this->parameters['controller'],
+                            'action' => $this->parameters['action'],
+                            'sort' => $field["field"],
+                            'page' => 1,
+                            'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) . '';
+                    } else
+                        echo '#';
+                    echo '">' . $field["label"] . '</a></th>';
+                }
+            }
+            ?>
+        </tr>
+        <?php
+        if (count($this->results) > 0) {
+            foreach ($this->results as $keyRow => $result) {
+                if ($result["si_status"] == 1) {
+                    $status = '<span class="text-danger">Faltan definir repuestos</span>';
+                } elseif ($result["si_status"] == 2) {
+                    $status = '<span class="text-warning">En espera de repuestos</span>';
+                } elseif ($result["si_status"] == 3) {
+                    $status = '<span class="text-warning"> Ingresado sin entregar</span>';
+                }
+                ?>
+                <tr class="<?php echo $class; ?>" style="cursor: pointer;" id='row_<?php echo $keyRow ?>' onclick="location.href = '<?php echo $this->url(array('controller' => 'sinister', 'action' => 'view', 'id' => $result[$this->fields[0]["field"]]), NULL, TRUE); ?>'">
+
+                    <?php
+                    foreach ($this->fields as $key => $field) {
+                        if ($field['list'] == true) {
+                            if ($field['type'] == 'image') {
+                                if ($field['link']):
+                                    $result[$field["field"]] = "<a href='" . $field['link'] . "/id/" . $result[$this->fields[0]["field"]] . "' title='" . $field['title'] . "' target='" . $field['target'] . "'><img src='" . $this->baseUrl() . "/files/" . $result[$field["field"]] . "' class='img-thumbnail cut' width='" . $field["width"] . "'></a>";
+                                else:
+                                    $result[$field["field"]] = "<img src='" . $this->baseUrl() . "/files/" . $result[$field["field"]] . "' class='img-thumbnail cut' width='" . $field["width"] . "'>";
+                                endif;
+                            }
+                            if ($field['type'] == 'email') {
+                                $result[$field["field"]] = "<a href='mailto:" . $result[$field["field"]] . "'>" . $result[$field["field"]] . "</a>";
+                            }
+                            if ($field['type'] == 'money') {
+                                $result[$field["field"]] = "$ " . number_format($result[$field["field"]], 2, ",", ".");
+                            }
+                            if ($field['type'] == 'date') {
+                                $result[$field["field"]] = date("d-m-Y H:i", $result[$field["field"]]);
+                            }
+                            if ($field['list-edit'] == true):
+                                echo '<td class="' . $field["class"] . '" ' . $field["nowrap"] . ' style="text-align:' . $field["align"] . '"><input name="' . $field["field"] . '[' . $result[$this->fields[0]["field"]] . ']" style="width:' . $field["width"] . '" type="text" class="form-control" value="' . $result[$field["field"]] . '"></td>';
+                            else:
+                                echo '<td class="' . $field["class"] . '" ' . $field["nowrap"] . ' style="text-align:' . $field["align"] . '">' . $result[$field["field"]] . '</td>';
+                            endif;
+                        }
+                    }
+                    ?>   
+                </tr>
+                <?php
+            }
+        } else {
+            ?>
+            <tr>
+                <td colspan="<?php echo count($this->fields) + 1 ?>">
+                    <div class="alert alert-info"><b>No se encontraron resultados</b> <?php echo ($this->search) ? '- Intente con otro criterio de busqueda' : ''; ?></div>
+                </td>
+            </tr>  
+        <?php } ?>
+    </table>
+</form>
+<div class="text-center">
+    <?php echo $this->paginationControl($this->results, 'Sliding', 'paginationControl.phtml'); ?>
+</div>
+<script>
+    function openFilter() {
+        $("#filter").slideToggle('fast');
+    }
+    function deleteRow(row, id) {
+
+        $.post("<?php echo $this->url(array('module' => 'admin', 'controller' => $this->parameters["controller"], 'action' => 'delete'), '', true); ?>",
+                {
+                    id: id,
+                })
+                .done(function(data) {
+                    //                    if (data != "") {
+                    //                        openDialog(data, 'closeModal();', true);
+                    //                    }else{
+                    $("#row_" + row).slideUp("fast");
+                    //                    }
+                });
+    }
+</script>

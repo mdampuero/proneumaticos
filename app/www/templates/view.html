@@ -1,0 +1,160 @@
+<ion-view view-title="Siniestro ID #{{si_id}}">
+    <ion-content ng-init="init()">
+        <ion-refresher
+            pulling-text="Actualizar..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+        <ion-list>
+            <ion-item class='text-center' style='background: #444444;color: #FFF;'>Datos Generales</ion-item>
+        </ion-list>
+        <div class="card">
+            <div class="item item-text-wrap text-center">
+                <b>ESTADO</b><br/>
+                {{sinister.status_label}}
+            </div>
+        </div>
+        <div class="view-data">
+            <div class="row">
+                <div class="col col-20"><b>Nº Sin.</b></div>        
+                <div class="col col-40">{{sinister.si_number}}</div>
+                <div class="col col-40"><b>Fecha</b> {{sinister.si_date}}</div>
+            </div>
+            <div class="row">
+                <div class="col col-20"><b>Compañia</b></div>
+                <div class="col col-80">{{sinister.co_name}}</div>
+            </div>
+            <div class="row">
+                <div class="col col-20"><b>Vehículo</b></div>        
+                <div class="col col-40">{{sinister.br_name}} {{sinister.mo_name}} {{sinister.si_version}}</div>
+                <div class="col col-40"><b>Dominio</b> {{sinister.si_domain}}</div>  
+            </div>
+            <div class="row">
+                <div class="col col-20"><b>Asegurado</b></div>        
+                <div class="col col-80">{{sinister.si_fullname}}</div>
+            </div>
+            <div class="row">
+                <div class="col col-20"><b>Teléfonos</b></div>        
+                <div class="col col-80">{{sinister.si_phone}}</div>
+            </div>
+            <div class="row">
+                <div class="col col-20"><b>E-Mail</b></div>        
+                <div class="col col-80">{{sinister.si_email}}</div>
+            </div>
+            <div class="row">
+                <div class="col col-20"><b>Dirección</b></div>        
+                <div class="col col-80">{{sinister.si_customer_address}}</div>
+            </div>
+            <div class="row" ng-if="sinister.si_observation_loan">
+                <div class="col">
+                    <p><b>Observaciones:</b> {{sinister.si_observation_loan}}</p>
+                </div>
+            </div>
+            <div class="row" ng-if="sinister.si_loan">
+                <div class="col">
+                    <p><b>Préstamos:</b> {{sinister.si_loan}}</p>
+                </div>
+            </div>
+        </div>
+        <ion-list>
+            <ion-item class='text-center' style='background: #444444;color: #FFF;'>Repuestos</ion-item>
+        </ion-list>
+        <div class="view-data">
+            <div class="row" ng-click="show_detail(sinister.si_stock_au, sinister.pr_au_name, sinister.si_au_date, sinister.si_au_date_from, sinister.si_au_transport)" ng-if="sinister.si_tamount_au > 0">
+                <div class="col col-10"><b>{{sinister.si_tamount_au}}</b></div>        
+                <div class="col col-80">LLANTA AUXILIO<br/>
+                    <span style="font-size: 10px;">{{sinister.tb_name_au}}</span>
+                </div>
+                <div class="col col-10" ng-if="sinister.si_stock_au == '1'">
+                    <i class="icon ion-checkmark-round balanced"> </i>
+                </div>
+                <div class="col col-10" ng-if="sinister.si_stock_au == '0'">
+                    <i class="icon ion-alert-circled energized"> </i>
+                </div>
+            </div>
+            <div class="row" ng-click="show_detail(sinister.si_stock_po, sinister.pr_po_name, sinister.si_po_date, sinister.si_po_date_from, sinister.si_po_transport)" ng-if="sinister.si_amount_po > 0">
+                <div class="col col-10"><b>{{sinister.si_amount_po}}</b></div>        
+                <div class="col col-80">LLANTA POSICIÓN<br/>
+                    <span style="font-size: 10px;">{{sinister.tb_name_po}}</span>
+                </div>
+                <div class="col col-10" ng-if="sinister.si_stock_po == '1'">
+                    <i class="icon ion-checkmark-round balanced"> </i>
+                </div>
+                <div class="col col-10" ng-if="sinister.si_stock_po == '0'">
+                    <i class="icon ion-alert-circled energized"> </i>
+                </div>
+            </div>
+            <div class="row" ng-click="show_detail(sinister.si_stock_co, sinister.pr_co_name, sinister.si_co_date, sinister.si_co_date_from, sinister.si_co_transport)" ng-if="sinister.si_amount_co > 0">
+                <div class="col col-10"><b>{{sinister.si_amount_co}}</b></div>        
+                <div class="col col-80">NEUMÁTICO<br/>
+                    <span style="font-size: 10px;">{{sinister.cb_name}}</span>
+                </div>
+                <div class="col col-10" ng-if="sinister.si_stock_co == '1'">
+                    <i class="icon ion-checkmark-round balanced"> </i>
+                </div>
+                <div class="col col-10" ng-if="sinister.si_stock_co == '0'">
+                    <i class="icon ion-alert-circled energized"> </i>
+                </div>
+            </div>
+            <div class="row" ng-click="show_detail(sinister.si_stock_ba, sinister.pr_ba_name, sinister.si_ba_date, sinister.si_ba_date_from, sinister.si_ba_transport)" ng-if="sinister.si_amount_ba > 0">
+                <div class="col col-10"><b>{{sinister.si_amount_ba}}</b></div>        
+                <div class="col col-80">BATRERÍA<br/>
+                    <span style="font-size: 10px;">{{sinister.bb_name}}</span>
+                </div>
+                <div class="col col-10" ng-if="sinister.si_stock_ba == 1">
+                    <i class="icon ion-checkmark-round balanced"> </i>
+                </div>
+                <div class="col col-10" ng-if="sinister.si_stock_ba == 0">
+                    <i class="icon ion-alert-circled energized"> </i>
+                </div>
+            </div>
+
+            <div class="row" ng-repeat="ac in sinister.accesories" ng-click="show_detail(ac.sa_in_stock, ac.pr_name, ac.sa_date, ac.sa_date_from, ac.sa_transport)">
+                <div class="col col-10"><b>{{ac.sa_count}}</b></div>        
+                <div class="col col-80">{{ac.ac_name}}</div>
+                <div class="col col-10" ng-if="ac.sa_in_stock == 1">
+                    <i class="icon ion-checkmark-round balanced"> </i>
+                </div>
+                <div class="col col-10" ng-if="ac.sa_in_stock == '0'">
+                    <i class="icon ion-alert-circled energized"> </i>
+                </div>
+            </div>
+        </div>
+        <!--        <div class="bar bar-dark">
+                    <h1 class="title">Actividades</h1>
+                </div>-->
+        <ion-list>
+            <ion-item class='text-center' style='background: #444444;color: #FFF;'>Actividades</ion-item>
+        </ion-list>
+        <ion-list>
+            <ion-item ng-repeat="activity in sinister.activities">
+                <div class="col col-100" style="font-size: 12px;"><b>{{activity.act_observation}}</b><br>        
+                    <span style="color: #666;">Por {{activity.ad_name}} {{activity.ad_last}} el 
+                        {{activity.act_created * 1000| date:'dd-MM-yy'}} a las {{activity.act_created * 1000| date:'HH:mm'}}</span></div>
+            </ion-item>
+            <ion-list>
+
+                <div class="row">
+                    <div class="col col-100 text-center" ng-if="sinister.activities.length < 1">
+                        No se han actividades
+                    </div> 
+                </div>
+                <div class="bar bar-dark">
+                    <a class="button button-clear button-icon button-clear ion-refresh" ng-click="init()"></a>
+                    <h1 class="title">Fotos</h1>
+                    <a class="button button-clear button-icon button-clear ion-plus-circled" ng-click="take()"></a>
+                </div>
+                <div class="view-data" style="margin-top:50px;">
+                    <div style="width: 48%; float: left; border: #CCC solid 1px; padding: 2px; margin: 2px;" ng-repeat="pi in sinister.pictures">
+                        <img src="{{sinister.base_url}}files/x/{{pi.ga_name}}" style="width: 100%;">
+                    </div>
+                    <div class="row">
+                        <div class="col col-100 text-center" ng-if="sinister.pictures.length < 1">
+                            No se han cargado fotos
+                        </div> 
+                    </div>
+                </div>
+            </ion-list>
+        </ion-list>
+    </ion-content>
+</ion-view>
+

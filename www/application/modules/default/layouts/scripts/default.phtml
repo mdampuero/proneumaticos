@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title><?php echo $this->setting["se_title"]; ?></title>
+        <?php
+        echo $this->headMeta()
+                ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+                ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+        <?php
+        echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->baseUrl() . '/imgs/favicon.png'))
+                ->prependStylesheet($this->baseUrl() . '/css/default.css')
+                ->prependStylesheet($this->baseUrl() . '/css/bootstrap-theme.css')
+                ->prependStylesheet($this->baseUrl() . '/css/bootstrap.css')
+                ->prependStylesheet($this->baseUrl() . '/css/jquery-ui.css');
+        echo $this->headScript()
+                ->prependFile($this->baseUrl() . '/js/bootstrap.min.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/bootstrap.validate.en.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/bootstrap.validate.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/jquery-ui.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/jquery-1.9.1.js', 'text/javascript');
+        ?>
+        <link rel="stylesheet" type="text/css" media="print" href="<?php echo $this->baseUrl() . "/css/bootstrap.css"; ?>">
+    </head>
+    <body style="
+          background: url(<?php echo HOST . $this->baseUrl() . URL_IMG . $this->setting['se_img_bg'] ?>) no-repeat center center fixed;
+          -webkit-background-size: cover;
+          -moz-background-size: cover;
+          -o-background-size: cover;
+          background-size: cover;">
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <form class="pull-right visible-xs" action="<?php echo $this->url(array('controller' => 'sinister', 'action' => 'index'), NULL, TRUE); ?>">
+                        <div class="form-group" style="margin-top: 7px; margin-bottom: 0; margin-right: 20px;">
+                            <input type="text" id="search" name="search" value="<?php echo $this->parameters["search"] ?>" class="form-control" placeholder="Buscador..." onkeyup="is_enter_search(event);" />
+                        </div>
+                    </form>
+                    <a href="<?php echo $this->url(array('controller' => 'sinister', 'action' => 'index'), NULL, TRUE); ?>">
+                        <img src="<?php echo HOST . $this->baseUrl() . "/imgs/icon.png" ?>" class="visible-xs img-brand">
+                        <img src="<?php echo HOST . $this->baseUrl() . "/imgs/brand.png" ?>" class="hidden-xs img-brand">
+                    </a>
+                    <!--<a  class="navbar-brand" href="<?php echo $this->url(array('controller' => 'sinister', 'action' => 'index'), NULL, TRUE); ?>">ProNeumáticos</a>-->
+                </div>
+                <?php if ($this->login) : ?>
+                    <div id="navbar" class="navbar-collapse collapse">
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <!--                        <li class="active"><a href="#">Home</a></li>
+                                                    <li><a href="#about">About</a></li>
+                                                    <li><a href="#contact">Contact</a></li>-->
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <span class="glyphicon glyphicon-user"></span> <?php echo $this->login["co_user"]; ?><span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo $this->url(array('controller' => 'sinister', 'action' => 'account'), NULL, TRUE); ?>"><span class="glyphicon glyphicon-pencil"></span> Mi perfil</a></li>
+                                    <li><a href="<?php echo $this->url(array('controller' => 'login', 'action' => 'logout'), NULL, TRUE); ?>"><span class="glyphicon glyphicon-log-out"></span> Salir</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <form class="pull-right hidden-xs" action="<?php echo $this->url(array('controller' => 'sinister', 'action' => 'index'), NULL, TRUE); ?>">
+                            <div class="form-group" style="margin-top: 7px; margin-bottom: 0; margin-right: 20px;">
+                                <input type="text" id="search" name="search" value="<?php echo $this->parameters["search"] ?>" class="form-control" placeholder="Buscador..." onkeyup="is_enter_search(event);" />
+                            </div>
+                        </form>
+                        <!--                    <ul class="nav navbar-nav navbar-right">
+                                                <li><a href="../navbar/">Default</a></li>
+                                                <li><a href="../navbar-static-top/">Static top</a></li>
+                                                <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li>
+                                            </ul>-->
+                    </div><!--/.nav-collapse -->
+                <?php endif; ?>
+            </div>
+        </nav>
+        <div class="spacer"></div>
+        <div class="container" style="background: rgba(255,255,255,0.7)">
+            <?php echo $this->layout()->content; ?>
+        </div>
+        <?php
+        echo $this->render('_modal.phtml');
+        ?>
+    </body>
+    <script>
+        function sendFilter() {
+            var url = '<?php
+        echo $this->url(array(
+            'module' => $this->parameters["module"],
+            'controller' => $this->parameters["controller"],
+            'action' => $this->parameters["action"],
+            'page' => $this->parameters["page"],
+            'order' => $this->parameters["order"],
+            'sort' => $this->parameters["sort"],
+            'filter' => 1,
+                ), NULL, TRUE);
+        ?>';
+            var param = '/';
+            $(".filter select").each(function(index) {
+                if ($(this).val()) {
+                    param = param + $(this).attr("name") + '/' + $(this).val() + '/';
+                }
+            });
+            location.href = url + param;
+        }
+        $(function() {
+            $("#myCarousel").carousel({
+                interval: 5000,
+                pause: false
+            });
+            $('form.validate').bt_validate();
+            $('.tooltipon').tooltip();
+            $.datepicker.regional['es'] = {
+                closeText: 'Cerrar',
+                prevText: '&#x3c;Ant',
+                nextText: 'Sig&#x3e;',
+                currentText: 'Hoy',
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Mi&eacute;rcoles', 'Jueves', 'Viernes', 'S&aacute;bado'],
+                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mi&eacute;', 'Juv', 'Vie', 'S&aacute;b'],
+                dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'S&aacute;'],
+                weekHeader: 'Sm',
+                dateFormat: 'dd-mm-yy',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''};
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+            $(".calendar").datepicker({changeMonth: true, changeYear: true});
+        });
+    </script>
+</html>

@@ -1,0 +1,27 @@
+<ion-view view-title="Siniestros recientes">
+    <ion-content ng-init="init();">
+        <ion-refresher
+            pulling-text="Actualizar..."
+            on-refresh="doRefresh()">
+        </ion-refresher>
+        <div class="card" ng-repeat="(key, reciente) in recientes" ng-click="goto({{reciente.si_id}})">
+            <div class="item item-divider">
+                <span>Nº {{reciente.si_number}}</span>
+                <span class="pull-right" ng-bind-html="reciente.status_label"></span>
+            </div>
+            <div class="item item-text-wrap">
+                <div class="row">
+                    <div class="col-67"><b>{{reciente.si_fullname}}</b></div>
+                    <div class="col-33"><b>Dominio:</b>{{reciente.si_domain}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-67"><b>Marca: </b>{{reciente.br_name}}</div>
+                    <div class="col-33"><b>Modelo </b>{{reciente.mo_name}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-100"><b>{{reciente.co_name}}</b></div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

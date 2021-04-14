@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="shortcut icon" href="<?php echo $this->baseUrl() ?>/imgs/favicon.png">
+        <title><?php echo $this->setting["se_title"]; ?></title>
+        <!-- Bootstrap core CSS -->
+        <link href="<?php echo $this->baseUrl() ?>/css/bootstrap.css" rel="stylesheet">
+        <link href="<?php echo $this->baseUrl() ?>/css/usina.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <div class="login-container">
+                <div id="output"></div>
+                <label class="glyphicon glyphicon-cloud-upload text-info"></label> <b class="text-info"><?php echo $this->setting["se_title"]; ?></b>
+                <div class="avatar"><span class="glyphicon glyphicon-user text-info"></span></div>
+                <div class="form-box">
+                    <?php if ($this->messages) { ?>
+                        <?php foreach ($this->messages as $message) { ?>
+                            <div class="alert alert-danger"><?php echo $message['message'] ?></div>
+                        <?php } ?>
+                    <?php } ?>
+                    <form action="" method="POST">
+                        <input type="hidden" name="token" value="<?php echo $this->token; ?>">
+                        <input type="text" autocomplete="off" name="ad_user" class="form-control" placeholder="Nombre de usuario" autofocus>
+                        <input type="password" name="ad_password" class="form-control" placeholder="Contraseña">
+                        <button class="btn btn-info btn-block login" type="submit">Ingresar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

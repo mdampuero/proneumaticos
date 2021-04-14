@@ -1,0 +1,95 @@
+<ion-modal-view>
+    <ion-header-bar>
+        <h1 class="title">Agregar Repuesto</h1>
+        <div class="buttons">
+            <button class="button button-clear" ng-click="close()"><i class="icon ion-ios-close-empty"></i></button>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <div class="list">
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Tipo
+                </div>
+                <select ng-model="modalform.type" ng-change="changeType()">
+                    <option value=""></option>
+                    <optgroup label="Repuestos" style="text-align: left;">
+                        <option value="LLANTA AUXILIAR" >LLANTA AUXILIAR</option>
+                        <option value="LLANTA DE POSICIÓN" >LLANTA DE POSICIÓN</option>
+                        <option value="NEUMÁTICO" >NEUMÁTICO</option>
+                        <option value="BATERÍA" >BATERÍA</option>
+                    </optgroup>
+                    <optgroup label="Accesorios o Servicios">
+                        <option value="{{key}}" ng-repeat="(key, ac) in form.accesories">{{ac}}</option>
+                    </optgroup>
+                </select>
+            </label>
+            <label class="item item-input item-select" ng-if="tires">
+                <div class="input-label">
+                    Modelo
+                </div>
+                <select name="tires" id="tires"
+                        ng-options="option.tb_name for option in modalform.option_tires track by option.tb_id"
+                        ng-model="modalform.tires">
+                </select>
+            </label>
+            <label class="item item-input item-select" ng-if="cover">
+                <div class="input-label">
+                    Modelo
+                </div>
+                <select name="tires" id="tires"
+                        ng-options="option.cb_name for option in modalform.option_cover track by option.cb_id"
+                        ng-model="modalform.covers">
+                </select>
+            </label>
+            <label class="item item-input item-select" ng-if="bat">
+                <div class="input-label">
+                    Modelo
+                </div>
+                <select name="tires" id="tires"
+                        ng-options="option.bb_name for option in modalform.option_bat track by option.bb_id"
+                        ng-model="modalform.bats">
+                </select>
+            </label>
+            <label class="item item-input item-select" ng-if="select_amount">
+                <div class="input-label">
+                    Cantidad
+                </div>
+                <select name="amount" id="amount"
+                        ng-options="option.name for option in modalform.option_amount track by option.id"
+                        ng-model="modalform.amount">
+                </select>
+            </label>
+            <label class="item item-input item-select" ng-if="select_stock">
+                <div class="input-label">
+                    Stock
+                </div>
+                <select name="stock" id="stock" ng-change="changeStock()"
+                        ng-options="option.name for option in modalform.option_stock track by option.id"
+                        ng-model="modalform.stock"></select>
+            </label>
+            <label class="item item-input item-select" ng-if="no_stock">
+                <div class="input-label">
+                    Proveedor
+                </div>
+                <select ng-model="modalform.provider">
+                    <option value="{{key}}" ng-repeat="(key, pr) in form.providers">{{pr}}</option>
+                </select>
+            </label>
+            <label class="item item-input" ng-if="no_stock">
+                <input type="date" placeholder="Fecha de Pedido" ng-model="modalform.from">
+            </label>
+            <label class="item item-input" ng-if="no_stock">
+                <input type="date" placeholder="Fecha de Llegada" ng-model="modalform.to">
+            </label>
+            <label class="item item-input" ng-if="no_stock">
+                <input type="text" placeholder="Medio de Transporte" ng-model="modalform.transport">
+            </label>
+            <div class="padding" ng-if="select_amount">
+                <button class="button button-block button-dark" ng-click="addRepuesto()">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

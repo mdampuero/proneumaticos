@@ -1,0 +1,368 @@
+<div class="clearfix"></div>
+<div class="col-xs-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Repuestos
+            <?php if ($this->formDisabled != true): ?><a href="javascript:openReplacement()"><span class="glyphicon glyphicon-plus pull-right"></span></a><?php endif; ?>
+        </div>
+        <div class="panel-body">
+
+            <div  >
+                <table class="table table-bordered table-condensed replacement">
+                    <thead>
+                        <tr>
+                            <!--<th class="text-center">Item</th>-->
+                            <th>Descripción</th>
+                            <th class="text-center">Cantidad</th>
+                            <th>Stock</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div id="selecteds_id">
+                    <?php
+                    $count_stock = 0;
+                    if ($this->result['si_tamount_au'] > 0):
+                        $count_stock++;
+                        ?>
+                        <div class="panel panel-default" id='<?php echo $count_stock; ?>'>
+                            <div class="panel-body relative">
+                                <div class="row">
+                                    <input type="hidden" name="si_tb_id_au" value="<?php echo $this->result['si_tb_id_au']; ?>">
+                                    <input type="hidden" name="si_tm_id_au" value="<?php echo $this->result['si_tm_id_au']; ?>">
+                                    <input type="hidden" name="si_ts_id_au" value="<?php echo $this->result['si_ts_id_au']; ?>">
+                                    <input type="hidden" name="si_tamount_au" value="<?php echo $this->result['si_tamount_au']; ?>">
+                                    <?php if ($this->formDisabled == true): ?>
+                                        <a href="javascript:void(0);">
+                                            <span class="glyphicon glyphicon-minus-sign"></span>
+                                        </a>
+                                    <?php else: ?>
+                                        <a class="icon-remove" href="javascript:removeReplacement('<?php echo $count_stock; ?>')">
+                                            <span class="glyphicon glyphicon-minus-sign text-danger"></span>
+                                        </a>
+                                    <?php endif; ?>
+                                    <div class="form-group-sm col-xs-9">
+                                        <label>LLANTA DE AUXILIO</label>
+                                        <label class="detail"><?php echo $this->result['tb_name_au']; ?> / <?php echo $this->result['tm_name_au']; ?> / <?php echo $this->result['ts_name_au']; ?></label>
+                                    </div>
+                                    <div class="form-group-sm col-xs-1">
+                                        <label>Cantidad</label>
+                                        <label class="detail text-center"><b><?php echo $this->result['si_tamount_au']; ?></b></label>
+                                    </div>
+                                    <div class="form-group-sm col-xs-2">
+                                        <label>Stock</label>
+                                        <select class="form-control" onchange="showDiv(this.value, '#nostock<?php echo $count_stock; ?>');" name="si_stock_au" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?>>
+                                            <option value="1" <?php echo ($this->result['si_stock_au'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                            <option value="0" <?php echo ($this->result['si_stock_au'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" id="nostock<?php echo $count_stock; ?>" style="display: none;">
+                                    <div class="form-group-sm col-xs-5">
+                                        <label>Proveedor</label>
+                                        <select class="form-control" name="si_au_pr_id" >
+                                            <?php foreach ($this->providers as $company): ?>
+                                                <option value="<?php echo $company['pr_id'] ?>"><?php echo $company['pr_name'] ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-sm col-xs-2">
+                                        <label>Fecha Pedido</label>
+                                        <input type="text" class="form-control calendar" name="si_au_date_from">
+                                    </div>
+                                    <div class="form-group-sm col-xs-2">
+                                        <label>Fecha llegada</label>
+                                        <input type="text" class="form-control calendar" name="si_au_date">
+                                    </div>
+                                    <div class="form-group-sm col-xs-3">
+                                        <label>Medio</label>
+                                        <input type="text" class="form-control" name="si_au_transport">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    <!--                        <tr id='<?php echo $count_stock; ?>'>
+                            <td>LLANTA DE AUXILIO<br/>
+                                <input type="hidden" name="si_tb_id_au" value="<?php echo $this->result['si_tb_id_au']; ?>">
+                                <input type="hidden" name="si_tm_id_au" value="<?php echo $this->result['si_tm_id_au']; ?>">
+                                <input type="hidden" name="si_ts_id_au" value="<?php echo $this->result['si_ts_id_au']; ?>">
+                                <span class="text-muted"><?php echo $this->result['tb_name_au']; ?> / <?php echo $this->result['tm_name_au']; ?> / <?php echo $this->result['ts_name_au']; ?></span>
+                            </td>
+                            <td style="line-height: 33px;" class="text-center">
+                                <input type="hidden" name="si_tamount_au" value="<?php echo $this->result['si_tamount_au']; ?>">
+                                <b><?php echo $this->result['si_tamount_au']; ?></b>
+                            </td>
+                            <td style="line-height: 33px;">
+                                <select class="form-control" onchange="showDiv(this.value, '#nostock<?php echo $count_stock; ?>');" name="si_stock_au" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?>>
+                                    <option value="1" <?php echo ($this->result['si_stock_au'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                    <option value="0" <?php echo ($this->result['si_stock_au'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                                </select>
+                            </td>
+                            <td style="line-height: 33px;" class="text-center">
+                        <?php if ($this->formDisabled == true): ?>
+                                        <a href="javascript:void(0);">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </a>
+                        <?php else: ?>
+                                        <a href="javascript:removeReplacement('<?php echo $count_stock; ?>')">
+                                            <span class="glyphicon glyphicon-trash text-danger"></span>
+                                        </a>
+                        <?php endif; ?>
+                            </td>
+                        </tr>
+                        <tr id="nostock<?php echo $count_stock; ?>" style="display: none;">
+                            <td colspan="4">
+                                <div class="row">
+                                    <div class="form-group-sm col-xs-3">
+                                        <label>Proveedor</label>
+                                        <select class="form-control" name="si_au_pr_id" >
+                        <?php foreach ($this->providers as $company): ?>
+                                                    <option value="<?php echo $company['pr_id'] ?>"><?php echo $company['pr_name'] ?></option>
+                        <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-sm col-xs-3">
+                                        <label>Fecha llegada</label>
+                                        <input type="text" class="form-control calendar" name="si_au_date">
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </td>
+                        </tr>-->
+                        <?php
+                    endif;
+                    if ($this->result['si_amount_po'] > 0):
+                        $count_stock++;
+                        ?>
+                        <tr id='<?php echo $count_stock; ?>'>
+                            <td>LLANTA DE POSICIÓN<br/>
+                                <input type="hidden" name="si_tb_id_po" value="<?php echo $this->result['si_tb_id_po']; ?>">
+                                <input type="hidden" name="si_tm_id_po" value="<?php echo $this->result['si_tm_id_po']; ?>">
+                                <input type="hidden" name="si_ts_id_po" value="<?php echo $this->result['si_ts_id_po']; ?>">
+                                <span class="text-muted"><?php echo $this->result['tb_name_po']; ?> / <?php echo $this->result['tm_name_po']; ?> / <?php echo $this->result['ts_name_po']; ?></span>
+                            </td>
+                            <td style="line-height: 33px;" class="text-center">
+                                <input type="hidden" name="si_amount_po" value="<?php echo $this->result['si_amount_po']; ?>">
+                                <b><?php echo $this->result['si_amount_po']; ?></b>
+                            </td>
+                            <td style="line-height: 33px;">
+                                <select class="form-control" name="si_stock_po" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?>> 
+                                    <option value="1" <?php echo ($this->result['si_stock_po'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                    <option value="0" <?php echo ($this->result['si_stock_po'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                                </select>
+                            </td>
+                            <td style="line-height: 33px;" class="text-center">
+                                <?php if ($this->formDisabled == true): ?>
+                                    <a href="javascript:void(0);">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                <?php else: ?>
+                                    <a href="javascript:removeReplacement('<?php echo $count_stock; ?>')">
+                                        <span class="glyphicon glyphicon-trash text-danger"></span>
+                                    </a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <?php
+                    endif;
+                    if ($this->result['si_amount_co'] > 0):
+                        $count_stock++;
+                        ?>
+                        <tr id='<?php echo $count_stock; ?>'>
+                            <td>NEUMÁTICO<br/>
+                                <input type="hidden" name="si_cb_id" value="<?php echo $this->result['si_cb_id']; ?>">
+                                <input type="hidden" name="si_cm_id" value="<?php echo $this->result['si_cm_id']; ?>">
+                                <span class="text-muted"><?php echo $this->result['cb_name']; ?> / <?php echo $this->result['cm_name']; ?> / <?php echo $this->result['cm_size']; ?></span>
+                            </td>
+                            <td style="line-height: 33px;" class="text-center">
+                                <input type="hidden" name="si_amount_co" value="<?php echo $this->result['si_amount_co']; ?>">
+                                <b><?php echo $this->result['si_amount_co']; ?></b>
+                            </td>
+                            <td style="line-height: 33px;">
+                                <select class="form-control" name="si_stock_co" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?>>
+                                    <option value="1" <?php echo ($this->result['si_stock_co'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                    <option value="0" <?php echo ($this->result['si_stock_co'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                                </select>
+                            </td>
+                            <td style="line-height: 33px;" class="text-center">
+                                <?php if ($this->formDisabled == true): ?>
+                                    <a href="javascript:void(0);">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                <?php else: ?>
+                                    <a href="javascript:removeReplacement('<?php echo $count_stock; ?>')">
+                                        <span class="glyphicon glyphicon-trash text-danger"></span>
+                                    </a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <?php
+                    endif;
+                    if ($this->result['si_amount_ba'] > 0):
+                        $count_stock++;
+                        ?>
+                        <tr id='<?php echo $count_stock; ?>'>
+                            <td>BATERÍA<br/>
+                                <input type="hidden" name="si_bb_id" value="<?php echo $this->result['si_bb_id']; ?>">
+                                <input type="hidden" name="si_bm_id" value="<?php echo $this->result['si_bm_id']; ?>">
+                                <span class="text-muted"><?php echo $this->result['bb_name']; ?> / <?php echo $this->result['bm_name']; ?></span>
+                            </td>
+                            <td style="line-height: 33px;" class="text-center">
+                                <input type="hidden" name="si_amount_ba" value="<?php echo $this->result['si_amount_ba']; ?>">
+                                <b><?php echo $this->result['si_amount_ba']; ?></b>
+                            </td>
+                            <td style="line-height: 33px;">
+                                <select class="form-control" name="si_stock_ba" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?>>
+                                    <option value="1" <?php echo ($this->result['si_stock_ba'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                    <option value="0" <?php echo ($this->result['si_stock_ba'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                                </select>
+                            </td>
+                            <td style="line-height: 33px;" class="text-center">
+                                <?php if ($this->formDisabled == true): ?>
+                                    <a href="javascript:void(0);">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                <?php else: ?>
+                                    <a href="javascript:removeReplacement('<?php echo $count_stock; ?>')">
+                                        <span class="glyphicon glyphicon-trash text-danger"></span>
+                                    </a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <?php
+                    endif;
+                    foreach ($this->sinister_accesory as $si_ac):
+                        $count_stock++;
+                        ?>
+                        <tr id='<?php echo $count_stock; ?>'>
+                            <td style="line-height: 33px;"><?php echo $si_ac["ac_name"]; ?></td>
+                            <td style="line-height: 33px;" class="text-center"><input type="hidden" name="amount[<?php echo $si_ac["ac_id"]; ?>]" value="<?php echo $si_ac["sa_count"]; ?>"><b><?php echo $si_ac["sa_count"]; ?></b></td>
+                            <td style="line-height: 33px;">
+                                <select class="form-control" name="stock[<?php echo $si_ac["ac_id"]; ?>]" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?>>
+                                    <option value="1" <?php echo ($si_ac['sa_in_stock'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                    <option value="0" <?php echo ($si_ac['sa_in_stock'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                                </select>
+                            </td>
+                            <td style="line-height: 33px;" class="text-center">
+                                <?php if ($this->formDisabled == true): ?>
+                                    <a href="javascript:void(0);">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                <?php else: ?>
+                                    <a href="javascript:removeReplacement('<?php echo $count_stock; ?>')">
+                                        <span class="glyphicon glyphicon-trash text-danger"></span>
+                                    </a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+    <script>
+        var count = 0;
+        function addReplacement(string_json) {
+            var timestamp = new Date().getTime();
+            count++;
+            var obj = jQuery.parseJSON(string_json);
+            var item;
+            var description;
+            var amount;
+            var stock;
+            if (obj.type === "au") {
+                var branch = (obj.si_tb_id_au !== null) ? obj.si_tb_id_au.tb_name + ' / ' + '<input type="hidden" name="si_tb_id_au" value="' + obj.si_tb_id_au.tb_id + '">' : '';
+                var model = (obj.si_tm_id_au !== null) ? obj.si_tm_id_au.tm_name + ' / ' + '<input type="hidden" name="si_tm_id_au" value="' + obj.si_tm_id_au.tm_id + '">' : '';
+                var size = (obj.si_ts_id_au !== null) ? obj.si_ts_id_au.ts_name + '<input type="hidden" name="si_ts_id_au" value="' + obj.si_ts_id_au.ts_id + '">' : '';
+                item = '<td style="line-height: 33px;" class="text-center"><b>' + count + '</b></td>';
+                description = '<td>LLANTA DE AUXILIO<br/><span class="text-muted">' + branch + model + size + '</span></td>';
+                amount = '<td style="line-height: 33px;" class="text-center"><input type="hidden" name="si_tamount_au" value="' + obj.si_tamount_au + '"><b>' + obj.si_tamount_au + '</b></td>';
+                stock = '<td style="line-height: 33px;"><select class="form-control" name="si_stock_au"><option value="1">SI</option><option value="0">NO</option></select></td>';
+            } else if (obj.type === "po") {
+                var branch = (obj.si_tb_id_po !== null) ? obj.si_tb_id_po.tb_name + ' / ' + '<input type="hidden" name="si_tb_id_po" value="' + obj.si_tb_id_po.tb_id + '">' : '';
+                var model = (obj.si_tm_id_po !== null) ? obj.si_tm_id_po.tm_name + ' / ' + '<input type="hidden" name="si_tm_id_po" value="' + obj.si_tm_id_po.tm_id + '">' : '';
+                var size = (obj.si_ts_id_po !== null) ? obj.si_ts_id_po.ts_name + '<input type="hidden" name="si_ts_id_po" value="' + obj.si_ts_id_po.ts_id + '">' : '';
+                item = '<td style="line-height: 33px;" class="text-center"><b>' + count + '</b></td>';
+                description = '<td>LLANTA DE POSICIÓN<br/><span class="text-muted">' + branch + model + size + '</span></td>';
+                amount = '<td style="line-height: 33px;" class="text-center"><input type="hidden" name="si_amount_po" value="' + obj.si_tamount_po + '"><b>' + obj.si_tamount_po + '</b></td>';
+                stock = '<td style="line-height: 33px;"><select class="form-control" name="si_stock_po"><option value="1">SI</option><option value="0">NO</option></select></td>';
+            } else if (obj.type === "co") {
+                var branch = (obj.si_cb_id !== null) ? obj.si_cb_id.cb_name + ' / ' + '<input type="hidden" name="si_cb_id" value="' + obj.si_cb_id.cb_id + '">' : '';
+                var model = (obj.si_cm_id !== null) ? obj.si_cm_id.cm_name + ' / ' + '<input type="hidden" name="si_cm_id" value="' + obj.si_cm_id.cm_id + '">' : '';
+                var size = (obj.size !== null || obj.size !== "") ? obj.size : '';
+                item = '<td style="line-height: 33px;" class="text-center"><b>' + count + '</b></td>';
+                description = '<td>NEUMÁTICO<br/><span class="text-muted">' + branch + model + size + '</span></td>';
+                amount = '<td style="line-height: 33px;" class="text-center"><input type="hidden" name="si_amount_co" value="' + obj.si_amount_co + '"><b>' + obj.si_amount_co + '</b></td>';
+                stock = '<td style="line-height: 33px;"><select class="form-control" name="si_stock_co"><option value="1">SI</option><option value="0">NO</option></select></td>';
+            } else if (obj.type === "ba") {
+                var branch = (obj.si_bb_id !== null) ? obj.si_bb_id.bb_name + ' / ' + '<input type="hidden" name="si_bb_id" value="' + obj.si_bb_id.bb_id + '">' : '';
+                var model = (obj.si_bm_id !== null) ? obj.si_bm_id.bm_name + '<input type="hidden" name="si_bm_id" value="' + obj.si_bm_id.bm_id + '">' : '';
+                item = '<td style="line-height: 33px;" class="text-center"><b>' + count + '</b></td>';
+                description = '<td>BATERÍA<br/><span class="text-muted">' + branch + model + '</span></td>';
+                amount = '<td style="line-height: 33px;" class="text-center"><input type="hidden" name="si_amount_ba" value="' + obj.si_amount_ba + '"><b>' + obj.si_amount_ba + '</b></td>';
+                stock = '<td style="line-height: 33px;"><select class="form-control" name="si_stock_ba"><option value="1">SI</option><option value="0">NO</option></select></td>';
+            } else {
+                item = '<td style="line-height: 33px;" class="text-center"><b>' + count + '</b></td>';
+                description = '<td style="line-height: 33px;">' + obj.accesory.ac_name + '</td>';
+                amount = '<td style="line-height: 33px;" class="text-center"><input type="hidden" name="amount[' + obj.accesory.ac_id + ']" value="' + obj.amount + '"><b>' + obj.amount + '</b></td>';
+                stock = '<td style="line-height: 33px;"><select class="form-control" name="stock[' + obj.accesory.ac_id + ']"><option value="1">SI</option><option value="0">NO</option></select></td>';
+            }
+            item = null;
+            console.log(obj);
+            $("#selecteds_id").append('<tr id="' + timestamp + '">' + item + description + amount + stock + '<td style="line-height: 33px;" class="text-center"><input type="hidden" name="count[]" value="1"><a href="javascript:removeReplacement(\'' + timestamp + '\')"><span class="glyphicon glyphicon-trash text-danger"></span></a></td></tr>');
+            closeModal();
+        }
+        function loadModel(id, selected) {
+            $.post("<?php echo $this->url(array('module' => 'admin', 'controller' => 'sinister', 'action' => 'loadmodel'), NULL, TRUE); ?>",
+                    {
+                        br_id: id,
+                        mo_id: selected,
+                    })
+                    .done(function(data) {
+                        if (data.length > 0) {
+                            $("#si_mo_id").html(data);
+                        }
+                    });
+        }
+        function openReplacement() {
+
+            var type = 'iframe';
+            var title = 'Repuestos';
+            var footer = 'false';
+            var url = '<?php echo $this->url(array('module' => 'admin', 'controller' => 'replacement', 'action' => 'add', 'popup' => 1, 'token' => $this->parameters["id"], 'call' => $this->parameters["controller"])); ?>';
+            var w = '80%';
+            var h = '450px';
+            var pr_ca_id = $("#pr_ca_id").val();
+            openModalScript(type, title, footer, url + '/pr_ca_id/' + pr_ca_id, w, h);
+
+        }
+        function removeReplacement(pr_id) {
+            var callback = 'removeDiv(' + pr_id + ');';
+            openDialog("¿Esta seguro que desea quitar este Repuesto?", callback);
+        }
+        $(function() {
+
+            $(".sortable").sortable({
+                update: function( ) {
+                    $(".sortable .box-sorteable span.badge").each(function(key, value) {
+                        $(value).html(key + 1);
+                    });
+                }
+            });
+            $(".sortable").disableSelection();
+            $("#pr_ca_id").change(function() {
+                $("#selecteds_id<?php echo $this->parameters["token"] ?>").html('');
+            });
+        });
+        function showDiv(val, id) {
+            if (val == 0) {
+                $(id).slideDown('fast');
+            } else {
+                $(id).slideUp('fast');
+            }
+        }
+    </script>

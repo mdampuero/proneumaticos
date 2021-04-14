@@ -1,0 +1,77 @@
+<div class="form-container">
+    <blockquote>
+        <?php if ($this->title) { ?>
+            <p class="text-primary"><?php echo ($this->icon) ? '<label class="glyphicon glyphicon-' . $this->icon . '"></label> ' : ''; ?> <?php echo $this->title ?></p>
+        <?php } ?>
+        <?php if ($this->description) { ?>
+            <small class="visible-lg visible-md visible-sm"><?php echo $this->description ?></small>
+        <?php } ?>
+    </blockquote>
+    <div role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="<?php echo(!$this->parameters["tab_video"])?"active":"";?>"><a href="#photo" aria-controls="photo" role="tab" data-toggle="tab">Fotos</a></li>
+            <!--<li role="presentation" class="<?php echo($this->parameters["tab_video"])?"active":"";?>"><a href="#video" aria-controls="video" role="tab" data-toggle="tab">Videos</a></li>-->
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content col-xs-12" style="border-right: #DDD solid 1px; border-left: #DDD solid 1px;border-bottom: #DDD solid 1px;">
+            <br/>
+            <div role="tabpanel" class="tab-pane <?php echo(!$this->parameters["tab_video"])?"active":"";?>" id="photo">
+                <form id="form" method="post" novalidate enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    Formato de imagen JPG,PNG o GIF.
+                                </div>
+                                <div class="panel-body">
+                                    <label>Archivo</label>
+                                    <br/>
+                                    <input type="file" id="file" name="file" class="form-control">
+                                    <?php if ($this->parameters["resize"]): ?>
+                                        <div class="checkbox">
+                                            <?php
+                                            $resize = explode('|', $this->parameters["resize"]);
+                                            ?>
+                                            Tamaño recomendado: <?php echo $resize[0] ?>x<?php echo $resize[1] ?> px 
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="btn-group">
+                                        <button type="submit" name="submit" value="photo" class="btn btn-info" data-loading-text="Validando...">Subir</button>
+                                        <button type="button" class="btn btn-default" onclick='window.parent.closeModal();'>Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+<!--            <div role="tabpanel" class="tab-pane <?php echo($this->parameters["tab_video"])?"active":"";?>" id="video">
+                <form id="form" method="post" novalidate enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    Link de Youtube
+                                </div>
+                                <div class="panel-body">
+                                    <label>Url:</label>
+                                    <br/>
+                                    <input type="text" value="<?php echo $this->result["url"];?>" id="url" name="url" class="form-control">
+                                    <br/>
+                                    <div class="btn-group">
+                                        <button type="submit" name="submit" value="video" class="btn btn-info" data-loading-text="Validando...">Guardar</button>
+                                        <button type="button" class="btn btn-default" onclick='window.parent.closeModal();'>Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+            </div>-->
+        </div>
+
+    </div>
+
+</div>

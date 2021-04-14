@@ -1,0 +1,41 @@
+.navbar{
+    display: none;
+}
+body {
+        margin: 0;
+        padding: 0;
+        line-height: 1.4em;
+        word-spacing: 1px;
+        letter-spacing: 0.2px;
+        font: 13px Arial, Helvetica,"Lucida Grande", serif;
+        color: #000;
+    }
+
+    #print-btn #update-btn #nav-left #nav-bar, #selectUnitContainer, .navbar, .sidebar-nav {
+        display: none;
+    }
+
+    #print-btn, #update-btn, #units {
+        display: none;
+    }
+
+    #nav-left {
+        display: none;
+    }
+
+    #report-container {
+        visibility: visible;
+    }
+
+    .well .span12{
+        width: 100%;
+        visibility: visible;
+    }
+
+    .navbar {
+        display: none;
+    }
+
+    .sidebar-nav {
+        display: none;
+    }

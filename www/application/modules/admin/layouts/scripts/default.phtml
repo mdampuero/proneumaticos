@@ -1,0 +1,445 @@
+<!DOCTYPE HTML>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title><?php echo $this->setting["se_title"]; ?></title>
+        <?php
+        echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->baseUrl() . '/imgs/favicon.png'))
+                ->prependStylesheet($this->baseUrl() . '/font-awesome-4.1.0/css/font-awesome.min.css')
+                ->prependStylesheet($this->baseUrl() . '/css/usina_v1.0.0.css')
+                ->prependStylesheet($this->baseUrl() . '/css/plugins/metisMenu/metisMenu.min.css')
+                ->prependStylesheet($this->baseUrl() . '/css/bootstrap-theme.css')
+                ->prependStylesheet($this->baseUrl() . '/css/bootstrap.css')
+                ->prependStylesheet($this->baseUrl() . '/css/jquery-ui.css')
+                ->prependStylesheet($this->baseUrl() . '/css/imgareaselect-default.css')
+                ->prependStylesheet($this->baseUrl() . '/extras/jQuery-File-Upload-9.21.0/css/jquery.fileupload.css')
+                ->prependStylesheet($this->baseUrl() . '/css/bootstrap-rta-1.0.1.min.css');
+//                ->prependStylesheet($this->baseUrl() . '/css/bootstrap-responsive-2.3.1.min.css');
+//                ->prependStylesheet($this->baseUrl() . '/css/bootstrap-2.3.1.min.css');
+        echo $this->headScript()
+//                ->prependFile($this->baseUrl() . '/js/jquery.nicescroll.min.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/extras/jQuery-File-Upload-9.21.0/js/jquery.fileupload.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/extras/jQuery-File-Upload-9.21.0/js/jquery.iframe-transport.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/extras/jQuery-File-Upload-9.21.0/js/vendor/jquery.ui.widget.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/Common.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/plugins/metisMenu/metisMenu.min.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/jquery.form.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/extras/ckeditor/adapters/jquery.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/bootstrap.validate.en.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/bootstrap.validate.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/bootstrap-rta.min.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/popover.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                ->prependFile($this->baseUrl() . '/js/html5shiv.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                ->prependFile($this->baseUrl() . '/js/bootstrap.min.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/jquery-ui.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/jquery.imgareaselect.pack.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/jquery-1.9.1.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/extras/ckeditor/ckeditor.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/js/holder.js', 'text/javascript')
+        ;
+        ?>
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" type="text/css" media="print" href="<?php echo $this->baseUrl() . "/css/bootstrap.css"; ?>">
+    </head>
+    <body>
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand " href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'index', 'action' => 'index'), '', true); ?>">
+                    <?php if (!empty($this->setting["se_img_logo_header"]) && file_exists(PATH_IMG . $this->setting["se_img_logo_header"])): ?>
+                        <img style="margin-top:-15px; max-width:200px;" src="<?php echo $this->baseUrl() . URL_IMG . $this->setting["se_img_logo_header"]; ?>"/>
+                    <?php else: ?>
+                        <span class="text-primary"> <?php echo $this->setting["se_title"]; ?> </span>
+                    <?php endif; ?>
+
+                </a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right hidden-xs">
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'edit', 'id' => $this->loginInfo["ad_id"]), '', true); ?>">
+                                <i class="fa fa-edit fa-fw"></i> Mi Perfil
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'login', 'action' => 'logout'), '', true); ?>">
+                                <i class="fa fa-sign-out fa-fw"></i> Salir
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <?php
+                    echo $this->render('menuAdmin.phtml');
+                    ?>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row hidden-print">
+                <?php if ($this->actions): ?>
+                    <div class="page-header">
+                        <nav class="navbar navbar-default menu-secondary">
+                            <?php
+                            foreach ($this->actions as $action) {
+                                if (($action["action"] == "excel" || $action['type'] != 'link') && ($this->parameters["action"] != "index") && ($this->parameters["action"] != "order")):
+                                    continue;
+                                endif;
+                                if ($action['type'] == 'link') {
+                                    ?>
+                                    <a title="<?php echo $action['label'] ?>" class="btn btn-info <?php echo $action['class'] ?> hidden-xs" href="<?php echo $this->url(array('module' => 'admin', 'controller' => $action['controller'], 'action' => $action['action']), '', true); ?>">
+                                        &nbsp;<span class="glyphicon glyphicon-<?php echo $action['icon'] ?>"></span>&nbsp; </a><?php
+                                    ?>
+                                    <a title="<?php echo $action['label'] ?>" class="search <?php echo $action['class'] ?> hidden-lg hidden-md hidden-sm" href="<?php echo $this->url(array('module' => 'admin', 'controller' => $action['controller'], 'action' => $action['action']), '', true); ?>">
+                                        &nbsp;<span class="glyphicon glyphicon-<?php echo $action['icon'] ?>"></span>&nbsp; </a><?php
+                                } else {
+                                    ?>
+                                    <a title="<?php echo $action['label'] ?>" class="btn btn-info <?php echo $action['class'] ?> hidden-xs" href="javascript:<?php echo $action["function"] ?>">
+                                        &nbsp;<span class="glyphicon glyphicon-<?php echo $action['icon'] ?>"></span>&nbsp; </a><?php
+                                    ?>
+                                    <a title="<?php echo $action['label'] ?>" class="search <?php echo $action['class'] ?> hidden-lg hidden-md hidden-sm" href="javascript:<?php echo $action["function"] ?>">
+                                        &nbsp;<span class="glyphicon glyphicon-<?php echo $action['icon'] ?>"></span>&nbsp; </a><?php
+                                }
+                            }
+                            if ($this->enableSearch) {
+                                ?>
+                                <div class="search-input pull-right" >
+                                    <input type="text" id="search" name="search" value="<?php echo str_replace("---","/",$this->parameters["search"]); ?>" class="form-control" placeholder="Buscador..." onkeyup="is_enter_search(event);" />
+                                </div>
+                            <?php }
+                            ?>
+                        </nav>
+                        <?php
+                        if ($this->filter):
+                            ?>
+                            <div class="panel panel-default" id="filter" <?php echo ($this->parameters["filter"] == true) ? "style='display:block'" : "style='display:none'"; ?>>
+                                <div class="panel-heading">Filtrar
+                                    <a href="javascript:openFilter();" class="pull-right"><span class="glyphicon glyphicon-remove"></span></a>
+                                </div>
+                                <div class="panel-body filter row"><?php
+                                    if (!empty($this->filter['partial-view'])):
+                                        echo $this->render($this->filter['partial-view']);
+                                    else:
+                                        foreach ($this->filter as $name => $f):
+                                            ?>
+                                            <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                                                <label><?php echo $f["label"] ?></label>
+                                                <?php if ($name == 'date_from' || $name == 'date_to'): ?>
+                                                    <input class="form-control calendar" name="<?php echo $name; ?>" id="<?php echo $name; ?>">
+                                                    <?php else: ?>
+                                                        <select class="form-control" name="<?php echo $name; ?>" id="<?php echo $name ?>">
+                                                            <option value=""></option>
+                                                            <?php
+                                                            if ($f["data"]):
+                                                                foreach ($f["data"] as $d):
+                                                                    ?>
+                                                                    <option value="<?php echo $d[$f["id"]] ?>" <?php echo ($this->parameters[$name] == $d[$f["id"]] && $this->parameters[$name] != "") ? "selected='selected'" : ""; ?>><?php echo $d[$f["value"]] ?></option>
+                                                                    <?php
+                                                                endforeach;
+                                                            endif;
+                                                            ?>
+                                                        </select>
+                                                    <?php endif; ?>
+                                            </div>
+                                            <?php
+                                        endforeach;
+                                    endif;
+                                    ?>
+                                    <div class="form-group col-lg-2  col-md-3  col-sm-4 col-xs-6">
+                                        <label>&nbsp; </label>
+                                        <button type="button" name="filter" value="1" class="btn btn-default form-control" onclick="sendFilter();">Filtrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        endif;
+                        ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <?php echo $this->render('messages.phtml', array('messages' => $this->messages)); ?>
+                <?php echo $this->layout()->content; ?>
+            </div>
+            <!-- /#page-wrapper -->
+        </div>
+        <!-- /#wrapper -->
+
+        <!-- jQuery -->
+        <?php
+        echo $this->render('modalWindow.phtml');
+        ?>
+    </body>
+    <script>
+        function is_enter_search(e) {
+            if (e.keyCode == 13) {
+                var str=$("#search").val();
+                str=str.replace("/","---");
+                str=str.replace("/","---");
+                str=str.replace("/","---");
+                str=str.replace("/","---");
+                str=str.replace("/","---");
+                str=str.replace("/","---");
+                location.href = '<?php echo $this->url(array('search' => '')); ?>' + str;
+            }
+        }
+        function removeDiv(id) {
+            $("#" + id).remove();
+        }
+        (function($) {
+            $.widget("custom.combobox", {
+                _create: function() {
+                    this.wrapper = $("<span>")
+                            .addClass("custom-combobox")
+                            .insertAfter(this.element);
+
+                    this.element.hide();
+                    this._createAutocomplete();
+                    this._createShowAllButton();
+                },
+                _createAutocomplete: function() {
+                    var selected = this.element.children(":selected"),
+                            value = selected.val() ? selected.text() : "";
+
+                    this.input = $("<input>")
+                            .appendTo(this.wrapper)
+                            .val(value)
+                            .attr("title", "")
+                            .attr("data-validate", "required")
+                            .addClass("custom-combobox-input form-control ui-widget ui-widget-content ui-state-default ui-corner-left")
+                            .autocomplete({
+                                delay: 0,
+                                minLength: 0,
+                                source: $.proxy(this, "_source")
+                            })
+                            .tooltip({
+                                tooltipClass: "ui-state-highlight"
+                            });
+
+                    this._on(this.input, {
+                        autocompleteselect: function(event, ui) {
+                            ui.item.option.selected = true;
+                            this._trigger("select", event, {
+                                item: ui.item.option
+                            });
+                        },
+                        autocompletechange: "_removeIfInvalid"
+                    });
+                },
+                _createShowAllButton: function() {
+                    var input = this.input,
+                            wasOpen = false;
+
+                    $("<a>")
+                            .attr("tabIndex", -1)
+                            .attr("title", "Show All Items")
+                            .tooltip()
+                            .appendTo(this.wrapper)
+                            .button({
+                                icons: {
+                                    primary: "ui-icon-triangle-1-s"
+                                },
+                                text: false
+                            })
+                            .removeClass("ui-corner-all")
+                            .addClass("custom-combobox-toggle ui-corner-right")
+                            .mousedown(function() {
+                                wasOpen = input.autocomplete("widget").is(":visible");
+                            })
+                            .click(function() {
+                                input.focus();
+
+                                // Close if already visible
+                                if (wasOpen) {
+                                    return;
+                                }
+
+                                // Pass empty string as value to search for, displaying all results
+                                input.autocomplete("search", "");
+                            });
+                },
+                _source: function(request, response) {
+                    var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                    response(this.element.children("option").map(function() {
+                        var text = $(this).text();
+                        if (this.value && (!request.term || matcher.test(text)))
+                            return {
+                                label: text,
+                                value: text,
+                                option: this
+                            };
+                    }));
+                },
+                _removeIfInvalid: function(event, ui) {
+
+                    // Selected an item, nothing to do
+                    if (ui.item) {
+                        return;
+                    }
+
+                    // Search for a match (case-insensitive)
+                    var value = this.input.val(),
+                            valueLowerCase = value.toLowerCase(),
+                            valid = false;
+                    this.element.children("option").each(function() {
+                        if ($(this).text().toLowerCase() === valueLowerCase) {
+                            this.selected = valid = true;
+                            return false;
+                        }
+                    });
+
+                    // Found a match, nothing to do
+                    if (valid) {
+                        return;
+                    }
+
+                    // Remove invalid value
+                    this.input
+                            .val("")
+                            .attr("title", value + " didn't match any item")
+                            .tooltip("open");
+                    this.element.val("");
+                    this._delay(function() {
+                        this.input.tooltip("close").attr("title", "");
+                    }, 2500);
+                    this.input.autocomplete("instance").term = "";
+                },
+                _destroy: function() {
+                    this.wrapper.remove();
+                    this.element.show();
+                }
+            });
+        })(jQuery);
+        function deleteById(id) {
+            $("#" + id).remove();
+        }
+
+        function openFilter() {
+            $("#filter").slideToggle('fast');
+        }
+
+        $(document).ready(function() {
+            // $('[data-toggle="tooltip"]').tooltip();
+            $(".calendar").datepicker({
+                changeMonth: true,
+                changeYear: true
+            });
+            CKEDITOR.disableAutoInline = true;
+            var urlModal;
+            $('#editor').ckeditor();
+            $('textarea.rta').rta('bold italic, ul ol');
+            $('textarea.rta').removeClass('rta');
+
+            $("[data-rel=tooltipTop]").tooltip({placement: 'top', delay: {show: 500, hide: 100}});
+            $("[data-rel=tooltipRight]").tooltip({placement: 'right', delay: {show: 500, hide: 100}});
+            $("[data-rel=tooltipLeft]").tooltip({placement: 'left', delay: {show: 500, hide: 100}});
+            $("[data-rel=tooltipBottom]").tooltip({placement: 'bottom', delay: {show: 500, hide: 100}});
+            $("[data-rel=popover]").popover({title: 'Informaci&oacute;n', placement: 'top', delay: {show: 100, hide: 100}});
+
+            $.datepicker.regional['es'] = {
+                closeText: 'Cerrar',
+                prevText: '&#x3c;Ant',
+                nextText: 'Sig&#x3e;',
+                currentText: 'Hoy',
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Mi&eacute;rcoles', 'Jueves', 'Viernes', 'S&aacute;bado'],
+                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mi&eacute;', 'Juv', 'Vie', 'S&aacute;b'],
+                dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'S&aacute;'],
+                weekHeader: 'Sm',
+                dateFormat: 'dd/mm/yy',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: ''};
+            $.datepicker.setDefaults($.datepicker.regional['es']);
+
+            $("[data-loading-text]").click(function() {
+                var btn = $(this);
+                btn.button('loading');
+                setTimeout(function() {
+                    btn.button('reset');
+                }, 2000);
+            });
+
+            $('#<?php echo ($this->formId) ? $this->formId : "form"; ?>').bt_validate();
+            $.bt_validate.method(
+                    'custom_pass_eq',
+                    function(value) {
+                        return ($('#password1').val() === $('#password2').val());
+                    },
+                    "Las contrase&ntilde;as no son iguales"
+                    );
+            $(".tooltipon").tooltip();
+            $(".hideTooltip").click(
+                    function() {
+                        $(".tooltip").slideUp(300);
+                    }
+            );
+
+        });
+<?php if (empty($this->filter['partial-view'])): ?>
+            function sendFilter() {
+                var url = '<?php
+    echo $this->url(array(
+        'module' => $this->parameters["module"],
+        'controller' => $this->parameters["controller"],
+        'action' => $this->parameters["action"],
+        'page' => $this->parameters["page"],
+        'order' => $this->parameters["order"],
+        'sort' => $this->parameters["sort"],
+        'filter' => 1,
+            ), NULL, TRUE);
+    ?>';
+                var param = '/';
+                $(".filter select").each(function(index) {
+                    if ($(this).val()) {
+                        param = param + $(this).attr("name") + '/' + $(this).val() + '/';
+                    }
+                });
+                location.href = url + param;
+            }
+<?php endif; ?>
+<?php
+if ($this->js) {
+    echo $this->js;
+}
+?>
+    </script> 
+</html>

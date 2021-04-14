@@ -1,0 +1,14 @@
+<ion-view view-title="Siniestro ID #{{si_id}} / Subir Foto">
+    <ion-content>
+        <ion-scroll zooming="true" direction="xy" style="width: 100%;">
+        <img src="{{picture}}" style="width: 100%;">
+        </ion-scroll>
+        <div class="bar bar-footer bar-dark">
+            <button class="button button-clear button-icon  ion-close-round " ng-click="cancel()"></button>
+<!--            <div class="title" style="margin-top: 5px;">
+                <button class="button button-clear button-icon button-clear ion-ios-camera" ng-click="take()"> Grabar</button>
+            </div>-->
+            <button class="button button-clear button-icon button-balanced ion-checkmark-round" ng-click="upload()"></button>
+        </div>
+    </ion-content>
+</ion-view>

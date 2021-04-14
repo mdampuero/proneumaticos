@@ -1,0 +1,409 @@
+<div class="clearfix"></div>
+<div class="col-xs-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Repuestos
+            <?php if ($this->formDisabled != true): ?><a href="javascript:openReplacement()"><span class="glyphicon glyphicon-plus pull-right"></span></a><?php endif; ?>
+        </div>
+        <div class="panel-body">
+            <div  >
+                <div id="selecteds_id">
+                    <?php
+                    $count_stock = 0;
+                    if ($this->result['si_tamount_au'] > 0):
+                        $count_stock++;
+                        ?>
+                        <div class="panel panel-default" id='<?php echo $count_stock; ?>'>
+                            <input type="hidden" name="count[]" value="1">
+                            <div class="panel-body relative">
+                                <div class="row">
+                                    <input type="hidden" name="si_tb_id_au" value="<?php echo $this->result['si_tb_id_au']; ?>">
+                                    <input type="hidden" name="si_tm_id_au" value="<?php echo $this->result['si_tm_id_au']; ?>">
+                                    <input type="hidden" name="si_ts_id_au" value="<?php echo $this->result['si_ts_id_au']; ?>">
+                                    <input type="hidden" name="si_tamount_au" value="<?php echo $this->result['si_tamount_au']; ?>">
+                                    <?php if ($this->formDisabled == true): ?>
+                                        <a href="javascript:void(0);" class="icon-remove hidden-print">
+                                            <span class="glyphicon glyphicon-minus-sign text-muted"></span>
+                                        </a>
+                                    <?php else: ?>
+                                        <a class="icon-remove hidden-print" href="javascript:removeReplacement('<?php echo $count_stock; ?>')">
+                                            <span class="glyphicon glyphicon-minus-sign text-danger"></span>
+                                        </a>
+                                    <?php endif; ?>
+                                    <div class="form-group-sm col-xs-9">
+                                        <label>LLANTA DE AUXILIO</label>
+                                        <label class="detail"><?php echo $this->result['tb_name_au']; ?></label>
+                                    </div>
+                                    <div class="form-group-sm col-xs-1">
+                                        <label>Cantidad</label>
+                                        <label class="detail text-center"><b><?php echo $this->result['si_tamount_au']; ?></b></label>
+                                    </div>
+                                    <div class="form-group-sm col-xs-2">
+                                        <label>Stock</label>
+                                        <select class="form-control" onchange="showDiv(this.value, '#nostock<?php echo $count_stock; ?>');" name="si_stock_au" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?>>
+                                            <option value="1" <?php echo ($this->result['si_stock_au'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                            <option value="0" <?php echo ($this->result['si_stock_au'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" id="nostock<?php echo $count_stock; ?>" style="<?php echo ($this->result['si_stock_au'] == 0) ? "" : "display:none;"; ?>">
+                                    <div class="form-group-sm col-xs-5">
+                                        <label>Proveedor</label>
+                                        <select class="form-control" name="si_au_pr_id" >
+                                            <?php
+                                            foreach ($this->providers as $company):
+                                                $select = ($company['pr_id'] == $this->result['si_au_pr_id']) ? "selected='selected'" : "";
+                                                ?>
+                                                <option value="<?php echo $company['pr_id'] ?>" <?php echo $select; ?>><?php echo $company['pr_name'] ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-sm col-xs-2">
+                                        <label>Fecha Pedido</label>
+                                        <input type="text" class="form-control calendar" readonly="readonly" name="si_au_date_from" value="<?php echo invertDate($this->result['si_au_date_from'], '-'); ?>">
+                                    </div>
+                                    <div class="form-group-sm col-xs-2">
+                                        <label>Fecha llegada</label>
+                                        <input type="text" class="form-control calendar" readonly="readonly" name="si_au_date" value="<?php echo invertDate($this->result['si_au_date'], '-'); ?>">
+                                    </div>
+                                    <div class="form-group-sm col-xs-3">
+                                        <label>Medio</label>
+                                        <input type="text" class="form-control" name="si_au_transport" value="<?php echo $this->result['si_au_transport']; ?>">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    endif;
+                    if ($this->result['si_amount_po'] > 0):
+                        $count_stock++;
+                        ?><a href="javascript:void(0);">
+                            <div class="panel panel-default" id='<?php echo $count_stock; ?>'>
+                                <input type="hidden" name="count[]" value="1">
+                                <div class="panel-body relative">
+                                    <div class="row">
+                                        <input type="hidden" name="si_tb_id_po" value="<?php echo $this->result['si_tb_id_po']; ?>">
+                                        <input type="hidden" name="si_tm_id_po" value="<?php echo $this->result['si_tm_id_po']; ?>">
+                                        <input type="hidden" name="si_ts_id_po" value="<?php echo $this->result['si_ts_id_po']; ?>">
+                                        <input type="hidden" name="si_amount_po" value="<?php echo $this->result['si_amount_po']; ?>">
+                                        <?php if ($this->formDisabled == true): ?>
+                                            <a href="javascript:void(0);" class="icon-remove hidden-print">
+                                                <span class="glyphicon glyphicon-minus-sign text-muted"></span>
+                                            </a>
+                                        <?php else: ?>
+                                            <a class="icon-remove hidden-print" href="javascript:removeReplacement('<?php echo $count_stock; ?>')">
+                                                <span class="glyphicon glyphicon-minus-sign text-danger"></span>
+                                            </a>
+                                        <?php endif; ?>
+                                        <div class="form-group-sm col-xs-9">
+                                            <label>LLANTA DE POSICIÓN</label>
+                                            <label class="detail"><?php echo $this->result['tb_name_po']; ?></label>
+                                        </div>
+                                        <div class="form-group-sm col-xs-1">
+                                            <label>Cantidad</label>
+                                            <label class="detail text-center"><b><?php echo $this->result['si_amount_po']; ?></b></label>
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Stock</label>
+                                            <select class="form-control" onchange="showDiv(this.value, '#nostock<?php echo $count_stock; ?>');" name="si_stock_po" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?>>
+                                                <option value="1" <?php echo ($this->result['si_stock_po'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                                <option value="0" <?php echo ($this->result['si_stock_po'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="nostock<?php echo $count_stock; ?>" style="<?php echo ($this->result['si_stock_po'] == 0) ? "" : "display:none;"; ?>">
+                                        <div class="form-group-sm col-xs-5">
+                                            <label>Proveedor</label>
+                                            <select class="form-control" name="si_po_pr_id" >
+                                                <?php
+                                                foreach ($this->providers as $company):
+                                                    $select = ($company['pr_id'] == $this->result['si_po_pr_id']) ? "selected='selected'" : "";
+                                                    ?>
+                                                    <option value="<?php echo $company['pr_id'] ?>" <?php echo $select; ?>><?php echo $company['pr_name'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Fecha Pedido</label>
+                                            <input type="text" class="form-control calendar" readonly="readonly" name="si_po_date_from" value="<?php echo invertDate($this->result['si_po_date_from'], '-'); ?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Fecha llegada</label>
+                                            <input type="text" class="form-control calendar" readonly="readonly" name="si_po_date" value="<?php echo invertDate($this->result['si_po_date'], '-'); ?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-3">
+                                            <label>Medio</label>
+                                            <input type="text" class="form-control" name="si_po_transport" value="<?php echo $this->result['si_po_transport']; ?>">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        endif;
+                        if ($this->result['si_amount_co'] > 0):
+                            $count_stock++;
+                            ?>
+                            <div class="panel panel-default" id='<?php echo $count_stock; ?>'>
+                                <input type="hidden" name="count[]" value="1">
+                                <div class="panel-body relative">
+                                    <div class="row">
+                                        <input type="hidden" name="si_cb_id" value="<?php echo $this->result['si_cb_id']; ?>">
+                                        <input type="hidden" name="si_cm_id" value="<?php echo $this->result['si_cm_id']; ?>">
+                                        <input type="hidden" name="si_amount_co" value="<?php echo $this->result['si_amount_co']; ?>">
+                                        <?php if ($this->formDisabled == true): ?>
+                                            <a href="javascript:void(0);" class="icon-remove hidden-print hidden-print">
+                                                <span class="glyphicon glyphicon-minus-sign text-muted"></span>
+                                            </a>
+                                        <?php else: ?>
+                                            <a class="icon-remove hidden-print hidden-print" href="javascript:removeReplacement('<?php echo $count_stock; ?>')">
+                                                <span class="glyphicon glyphicon-minus-sign text-danger"></span>
+                                            </a>
+                                        <?php endif; ?>
+                                        <div class="form-group-sm col-xs-9">
+                                            <label>NEUMÁTICO</label>
+                                            <label class="detail"><?php echo $this->result['cb_name']; ?></label>
+                                        </div>
+                                        <div class="form-group-sm col-xs-1">
+                                            <label>Cantidad</label>
+                                            <label class="detail text-center"><b><?php echo $this->result['si_amount_co']; ?></b></label>
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Stock</label>
+                                            <select class="form-control" onchange="showDiv(this.value, '#nostock<?php echo $count_stock; ?>');" name="si_stock_co" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?>>
+                                                <option value="1" <?php echo ($this->result['si_stock_co'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                                <option value="0" <?php echo ($this->result['si_stock_co'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="nostock<?php echo $count_stock; ?>" style="<?php echo ($this->result['si_stock_co'] == 0) ? "" : "display:none;"; ?>">
+                                        <div class="form-group-sm col-xs-5">
+                                            <label>Proveedor</label>
+                                            <select class="form-control" name="si_co_pr_id" >
+                                                <?php
+                                                foreach ($this->providers as $company):
+                                                    $select = ($company['pr_id'] == $this->result['si_co_pr_id']) ? "selected='selected'" : "";
+                                                    ?>
+                                                    <option value="<?php echo $company['pr_id'] ?>" <?php echo $select; ?>><?php echo $company['pr_name'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Fecha Pedido</label>
+                                            <input type="text" class="form-control calendar" readonly="readonly" name="si_co_date_from" value="<?php echo invertDate($this->result['si_co_date_from'], '-'); ?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Fecha llegada</label>
+                                            <input type="text" class="form-control calendar" readonly="readonly" name="si_co_date" value="<?php echo invertDate($this->result['si_co_date'], '-'); ?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-3">
+                                            <label>Medio</label>
+                                            <input type="text" class="form-control" name="si_co_transport" value="<?php echo $this->result['si_co_transport']; ?>">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                        
+                            <?php
+                        endif;
+                        if ($this->result['si_amount_ba'] > 0):
+                            $count_stock++;
+                            ?>
+                            <div class="panel panel-default" id='<?php echo $count_stock; ?>'>
+                                <input type="hidden" name="count[]" value="1">
+                                <div class="panel-body relative">
+                                    <div class="row">
+                                        <input type="hidden" name="si_bb_id" value="<?php echo $this->result['si_bb_id']; ?>">
+                                        <input type="hidden" name="si_bm_id" value="<?php echo $this->result['si_bm_id']; ?>">
+                                        <input type="hidden" name="si_amount_ba" value="<?php echo $this->result['si_amount_ba']; ?>">
+                                        <?php if ($this->formDisabled == true): ?>
+                                            <a href="javascript:void(0);" class="icon-remove hidden-print">
+                                                <span class="glyphicon glyphicon-minus-sign text-muted"></span>
+                                            </a>
+                                        <?php else: ?>
+                                            <a class="icon-remove hidden-print" href="javascript:removeReplacement('<?php echo $count_stock; ?>')">
+                                                <span class="glyphicon glyphicon-minus-sign text-danger"></span>
+                                            </a>
+                                        <?php endif; ?>
+                                        <div class="form-group-sm col-xs-9">
+                                            <label>BATERÍA</label>
+                                            <label class="detail"><?php echo $this->result['bb_name']; ?></label>
+                                        </div>
+                                        <div class="form-group-sm col-xs-1">
+                                            <label>Cantidad</label>
+                                            <label class="detail text-center"><b><?php echo $this->result['si_amount_ba']; ?></b></label>
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Stock</label>
+                                            <select class="form-control" onchange="showDiv(this.value, '#nostock<?php echo $count_stock; ?>');" name="si_stock_ba" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?>>
+                                                <option value="1" <?php echo ($this->result['si_stock_ba'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                                <option value="0" <?php echo ($this->result['si_stock_ba'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="nostock<?php echo $count_stock; ?>" style="<?php echo ($this->result['si_stock_ba'] == 0) ? "" : "display:none;"; ?>">
+                                        <div class="form-group-sm col-xs-5">
+                                            <label>Proveedor</label>
+                                            <select class="form-control" name="si_ba_pr_id" >
+                                                <?php
+                                                foreach ($this->providers as $company):
+                                                    $select = ($company['pr_id'] == $this->result['si_ba_pr_id']) ? "selected='selected'" : "";
+                                                    ?>
+                                                    <option value="<?php echo $company['pr_id'] ?>" <?php echo $select; ?>><?php echo $company['pr_name'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Fecha Pedido</label>
+                                            <input type="text" class="form-control calendar" readonly="readonly" name="si_ba_date_from" value="<?php echo invertDate($this->result['si_ba_date_from'], '-'); ?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Fecha llegada</label>
+                                            <input type="text" class="form-control calendar" readonly="readonly" name="si_ba_date" value="<?php echo invertDate($this->result['si_ba_date'], '-'); ?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-3">
+                                            <label>Medio</label>
+                                            <input type="text" class="form-control" name="si_ba_transport" value="<?php echo $this->result['si_ba_transport']; ?>">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                        endif;
+                        foreach ($this->sinister_accesory as $si_ac):
+                            $count_stock++;
+                            ?>
+                            <div class="panel panel-default" id='<?php echo $count_stock; ?>'>
+                                <input type="hidden" name="count[]" value="1">
+                                <div class="panel-body relative">
+                                    <div class="row">
+                                        <input type="hidden" name="amount[<?php echo $si_ac["ac_id"]; ?>]" value="<?php echo $si_ac["sa_count"]; ?>">
+                                        <?php if ($this->formDisabled == true): ?>
+                                            <a href="javascript:void(0);" class="icon-remove hidden-print">
+                                                <span class="glyphicon glyphicon-minus-sign text-muted"></span>
+                                            </a>
+                                        <?php else: ?>
+                                            <a class="icon-remove hidden-print" href="javascript:removeReplacement('<?php echo $count_stock; ?>')">
+                                                <span class="glyphicon glyphicon-minus-sign text-danger"></span>
+                                            </a>
+                                        <?php endif; ?>
+                                        <div class="form-group-sm col-xs-9">
+                                            <label>ACCESORIOS</label>
+                                            <label class="detail"><?php echo $si_ac["ac_name"]; ?></label>
+                                        </div>
+                                        <div class="form-group-sm col-xs-1">
+                                            <label>Cantidad</label>
+                                            <label class="detail text-center"><b><?php echo $si_ac["sa_count"]; ?></b></label>
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Stock</label>
+                                            <select class="form-control" onchange="showDiv(this.value, '#nostock<?php echo $count_stock; ?>');" name="stock[<?php echo $si_ac["ac_id"]; ?>]" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?>>
+                                                <option value="1" <?php echo ($si_ac['sa_in_stock'] == 1) ? "selected='selected'" : ""; ?>>SI</option>
+                                                <option value="0" <?php echo ($si_ac['sa_in_stock'] == 0) ? "selected='selected'" : ""; ?>>NO</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="nostock<?php echo $count_stock; ?>" style="<?php echo ($si_ac['sa_in_stock'] == 0) ? "" : "display:none;"; ?>">
+                                        <div class="form-group-sm col-xs-5">
+                                            <label>Proveedor</label>
+                                            <select class="form-control" name="sa_pr_id[<?php echo $si_ac["ac_id"]; ?>]">
+                                                <?php
+                                                foreach ($this->providers as $company):
+                                                    $select = ($company['pr_id'] == $si_ac['sa_pr_id']) ? "selected='selected'" : "";
+                                                    ?>
+                                                    <option value="<?php echo $company['pr_id'] ?>" <?php echo $select; ?>><?php echo $company['pr_name'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Fecha Pedido</label>
+                                            <input type="text" class="form-control calendar" readonly="readonly" name="sa_date_from[<?php echo $si_ac["ac_id"]; ?>]" value="<?php echo invertDate($si_ac['sa_date_from'], '-'); ?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Fecha llegada</label>
+                                            <input type="text" class="form-control calendar" readonly="readonly" name="sa_date[<?php echo $si_ac["ac_id"]; ?>]" value="<?php echo invertDate($si_ac['sa_date'], '-'); ?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-3">
+                                            <label>Medio</label>
+                                            <input type="text" class="form-control" name="sa_transport[<?php echo $si_ac["ac_id"]; ?>]"  value="<?php echo $si_ac['sa_transport']; ?>">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<script>
+    var count = 0;
+    function addReplacement(html) {
+        $("#selecteds_id").append(html);
+        $(".calendar").datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
+    }
+
+    function loadModel(id, selected) {
+        $.post("<?php echo $this->url(array('module' => 'admin', 'controller' => 'sinister', 'action' => 'loadmodel'), NULL, TRUE); ?>",
+                {
+                    br_id: id,
+                    mo_id: selected,
+                })
+                .done(function(data) {
+                    if (data.length > 0) {
+                        $("#si_mo_id").html(data);
+                    }
+                });
+    }
+    function openReplacement() {
+
+        var type = 'iframe';
+        var title = 'Repuestos';
+        var footer = 'false';
+        var url = '<?php echo $this->url(array('module' => 'admin', 'controller' => 'replacement', 'action' => 'add', 'popup' => 1, 'token' => $this->parameters["id"], 'call' => $this->parameters["controller"])); ?>';
+        var w = '80%';
+        var h = '450px';
+        var pr_ca_id = $("#pr_ca_id").val();
+        openModalScript(type, title, footer, url + '/pr_ca_id/' + pr_ca_id, w, h);
+
+    }
+    function removeReplacement(pr_id) {
+        var callback = 'removeDiv(' + pr_id + ');';
+        openDialog("¿Esta seguro que desea quitar este Repuesto?", callback);
+    }
+    $(function() {
+        var co_message = [];
+        <?php foreach($this->companies as $key=>$value): ?>
+                co_message[<?php echo $value["co_id"];?>]={
+                    co_name:<?php echo str_replace("\\r\\n","<br/>",json_encode($value["co_name"]));?>,
+                    co_observation:<?php echo str_replace("\\r\\n","<br/>",json_encode($value["co_observation"]));?>
+                };
+        <?php endforeach; ?>
+        $("#si_co_id").change(function() {
+            if(co_message[$(this).val()].co_observation!=""){
+               openDialog("<b>Recuerda que la companía '"+co_message[$(this).val()].co_name+"' requiere esta documentación:</b><br/><br/><p class='text-left'>"+co_message[$(this).val()].co_observation+"</p>",void(0),true);
+            }
+            
+        });
+        $(".sortable").sortable({
+            update: function( ) {
+                $(".sortable .box-sorteable span.badge").each(function(key, value) {
+                    $(value).html(key + 1);
+                });
+            }
+        });
+        $(".sortable").disableSelection();
+        $("#pr_ca_id").change(function() {
+            $("#selecteds_id<?php echo $this->parameters["token"] ?>").html('');
+        });
+    });
+    function showDiv(val, id) {
+        if (val == 0) {
+            $(id).slideDown('fast');
+        } else {
+            $(id).slideUp('fast');
+        }
+    }
+</script>

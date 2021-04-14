@@ -1,0 +1,148 @@
+.container{
+   width: 960px !Important;
+}
+.well, .form-control, .btn{
+    border-radius: 0;
+    font-size: 12px;
+}
+p{
+    font-size: 12px;
+}
+.menu a{
+    font-size: 12px;
+    color: #CCC;
+}
+.menuItem{
+    display: block;
+    font-size: 14px;
+    line-height: 30px;
+    color:#EFEFEF;
+    padding: 10px;
+    background-color: #2D2D2D;
+    border-bottom: #222 solid 1px;
+}
+.menuItem.active{
+    background-color: #141414;
+}
+.menuItem a{
+    
+    color:#DDD;
+/*   font-size: 12px;
+   color: #EFEFEF; */
+}
+.menuItem a:hover{
+    text-decoration: none;
+    color:#FFF;
+/*   font-size: 12px;
+   color: #EFEFEF; */
+}
+.nav-stacked{
+    font-size:12px;
+    color: #FFF;
+}
+.nav-stacked li{
+    background-color: #2D2D2D;
+}
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    background-color: #141414;
+}
+.nav-stacked li a{
+    color: #EFEFEF;
+}
+.nav-stacked:hover{
+    color: #F00;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+   background-color: #444; 
+}
+.nav-pills > li > a {
+  border-radius: 0px;
+}
+form table {
+    font-size: 12px;
+}
+
+.alert-course {
+    color: #3a87ad;
+    background-color: #22CACB;
+    border-color: #189E9F;
+}
+.alert-course a{
+    color: #FFF;
+    font-size: 16px;
+}
+.alert-course a:hover{
+    text-decoration: none;
+    /*font-weight: bold;*/
+
+}
+
+.title-modules {
+    padding: 10px;
+    margin: 0px;
+    color: #3a87ad;
+    background-color: #3179B5;
+    border-color: #189E9F;
+}
+.title-modules {
+    cursor: pointer;
+    color: #FFF;
+    font-size: 14px;
+}
+.title-modules:hover{
+    text-decoration: none;
+    /*font-weight: bold;*/
+
+}
+
+table.view-course a{
+    font-size: 12px;
+    color: #FFF;
+}
+
+.title-content {
+    padding: 10px;
+    margin: 0px;
+    color: #3a87ad;
+    background-color: #3179B5;
+    border-color: #189E9F;
+}
+.title-content {
+   
+    color: #FFF;
+    font-size: 14px;
+}
+table.small-text{
+    font-size: 13px;
+}
+table.small-text th{
+    padding: 8px;
+    background-color: #666;
+    color: #FFF;
+}
+table.small-text td{
+    padding: 8px;
+    border-bottom: #ccc solid 1px;
+    background-color: #FFF;
+    
+}
+.btn{
+    cursor: pointer;
+}
+.blockblog{
+    
+    background-color: #FFF;
+}
+.listblog{
+    cursor: pointer;
+}
+.blockblog.view{
+    padding: 15px;
+}
+.blockblog hr{
+    padding: 0px;
+    margin: 0px;
+}
+.blockblog .text-muted{
+    font-style: italic;
+}

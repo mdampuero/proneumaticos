@@ -1,0 +1,90 @@
+<div class="form-container">
+    <blockquote>
+        <?php if ($this->title) { ?>
+            <p class="text-primary"><?php echo ($this->icon) ? '<label class="glyphicon glyphicon-' . $this->icon . '"></label> ' : ''; ?> <?php echo $this->title ?></p>
+        <?php } ?>
+        <?php if ($this->description) { ?>
+            <small class="visible-lg visible-md visible-sm"><?php echo $this->description ?></small>
+        <?php } ?>
+    </blockquote>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            Listado de <?php echo $this->currentTitle; ?>
+        </div>
+        <div class="panel-body col-lg-12">
+            <form method="POST">
+                <input type="hidden" name="token" value="<?php echo $this->token; ?>">
+                <div class="order">
+                    <?php
+                    if (count($this->results) > 0):
+                        foreach ($this->results as $key => $result):
+                            ?>
+                            <div id="<?php echo $result[$this->orderFields["id"]] ?>"  class="order-item">
+                                <input type="hidden" name="Order[]" value="<?php echo $result[$this->orderFields["id"]] ?>">
+                                <span class="col-lg-1">
+                                    <?php echo $key + 1; ?>
+                                </span>
+                                <span class="col-lg-8">
+                                    <?php echo $result[$this->orderFields["label"]] ?>
+                                </span>
+                                <span class="col-lg-3 text-right">
+                                    <button type="button" onclick="down(<?php echo $result[$this->orderFields["id"]] ?>)" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-down"></span></button>
+                                    <button type="button" onclick="up(<?php echo $result[$this->orderFields["id"]] ?>)"  class="btn btn-primary"><span class="glyphicon glyphicon-arrow-up"></span></button>
+                                </span>
+                                <div class="clearfix"></div>
+                                <br>
+                            </div>
+                            <?php
+                        endforeach;
+                    endif;
+                    ?>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" name="submit" class="btn btn-info" data-loading-text="Validando...">Guardar</button>
+                    <button type="button" class="btn btn-default" onclick='location.href = "<?php echo $this->url(array('module' => $this->parameters["module"], 'controller' => $this->parameters["controller"], 'action' => 'index'), null, true) ?>"'>Cancelar</button>
+                </div>
+            </form>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<script>
+    function up(id) {
+        var count = $('.order').find('div').length;
+        if (count > 1) {
+            var id_prev = ($('#' + id).prev().attr("id"));
+            if (id_prev == undefined) {
+                $('#' + id).slideUp("fast", function() {
+                    $('#' + id).insertAfter($(".order-item").last());
+                });
+                $('#' + id).slideDown("fast");
+
+            } else {
+                $('#' + id).slideUp("fast", function() {
+                    $('#' + id).insertBefore('#' + id_prev);
+                });
+                $('#' + id).slideDown("fast");
+            }
+        }
+    }
+    function down(id) {
+        var count = $('.order').find('div').length;
+        if (count > 1) {
+            var id_next = ($('#' + id).next().attr("id"));
+            if (id_next == undefined) {
+                $('#' + id).slideUp("fast", function() {
+                    $('#' + id).insertBefore($(".order-item").first());
+                });
+                $('#' + id).slideDown("fast");
+            } else {
+                $('#' + id).slideUp("fast", function() {
+                    $('#' + id).insertAfter('#' + id_next);
+                });
+                $('#' + id).slideDown("fast");
+
+            }
+        }
+    }
+
+</script>

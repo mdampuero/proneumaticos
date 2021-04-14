@@ -1,0 +1,3 @@
+/www/public/files/*
+.DS_Store
+/db/working/*
