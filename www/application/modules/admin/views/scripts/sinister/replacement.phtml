@@ -71,6 +71,20 @@
                                         <input type="text" class="form-control" name="si_au_transport" value="<?php echo $this->result['si_au_transport']; ?>">
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="form-group-sm col-xs-5">
+                                        <label>Nº Remito</label>
+                                        <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="si_au_number" value="<?php echo $this->result["si_au_number"];?>">
+                                    </div>
+                                    <div class="form-group-sm col-xs-2">
+                                        <label>Precio Costo</label>
+                                        <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="si_au_price_cost" value="<?php echo $this->result["si_au_price_cost"];?>">
+                                    </div>
+                                    <div class="form-group-sm col-xs-2">
+                                        <label>Precio Venta</label>
+                                        <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="si_au_price_sale" value="<?php echo $this->result["si_au_price_sale"];?>">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <?php
@@ -134,6 +148,20 @@
                                         <div class="form-group-sm col-xs-3">
                                             <label>Medio</label>
                                             <input type="text" class="form-control" name="si_po_transport" value="<?php echo $this->result['si_po_transport']; ?>">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group-sm col-xs-5">
+                                            <label>Nº Remito</label>
+                                            <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="si_po_number" value="<?php echo $this->result["si_po_number"];?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Precio Costo</label>
+                                            <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="si_po_price_cost" value="<?php echo $this->result["si_po_price_cost"];?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Precio Venta</label>
+                                            <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="si_po_price_sale" value="<?php echo $this->result["si_po_price_sale"];?>">
                                         </div>
                                     </div>
                                 </div>
@@ -200,6 +228,20 @@
                                             <input type="text" class="form-control" name="si_co_transport" value="<?php echo $this->result['si_co_transport']; ?>">
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="form-group-sm col-xs-5">
+                                            <label>Nº Remito</label>
+                                            <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="si_co_number" value="<?php echo $this->result["si_co_number"];?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Precio Costo</label>
+                                            <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="si_co_price_cost" value="<?php echo $this->result["si_co_price_cost"];?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Precio Venta</label>
+                                            <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="si_co_price_sale" value="<?php echo $this->result["si_co_price_sale"];?>">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>                        
                             <?php
@@ -264,6 +306,20 @@
                                             <input type="text" class="form-control" name="si_ba_transport" value="<?php echo $this->result['si_ba_transport']; ?>">
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="form-group-sm col-xs-5">
+                                            <label>Nº Remito</label>
+                                            <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="si_ba_number" value="<?php echo $this->result["si_ba_number"];?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Precio Costo</label>
+                                            <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="si_ba_price_cost" value="<?php echo $this->result["si_ba_price_cost"];?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Precio Venta</label>
+                                            <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="si_ba_price_sale" value="<?php echo $this->result["si_ba_price_sale"];?>">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <?php
@@ -287,7 +343,7 @@
                                         <?php endif; ?>
                                         <div class="form-group-sm col-xs-9">
                                             <label>ACCESORIOS</label>
-                                            <label class="detail"><?php echo $si_ac["ac_name"]; ?></label>
+                                            <label class="detail">[<?php echo $si_ac["ac_code"]; ?>] - <?php echo $si_ac["ac_name"]; ?></label>
                                         </div>
                                         <div class="form-group-sm col-xs-1">
                                             <label>Cantidad</label>
@@ -326,9 +382,27 @@
                                             <input type="text" class="form-control" name="sa_transport[<?php echo $si_ac["ac_id"]; ?>]"  value="<?php echo $si_ac['sa_transport']; ?>">
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="form-group-sm col-xs-5">
+                                            <label>Nº Remito</label>
+                                            <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="sa_number[<?php echo $si_ac["ac_id"]; ?>]"  value="<?php echo $si_ac['sa_number']; ?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Precio Costo</label>
+                                            <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="sa_price_cost[<?php echo $si_ac["ac_id"]; ?>]"  value="<?php echo $si_ac['sa_price_cost']; ?>">
+                                        </div>
+                                        <div class="form-group-sm col-xs-2">
+                                            <label>Precio Venta</label>
+                                            <input type="text" class="form-control" <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> name="sa_price_sale[<?php echo $si_ac["ac_id"]; ?>]"  value="<?php echo $si_ac['sa_price_sale']; ?>">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
+                </div>
+                <div class="col-xs-12">
+                    <p><b>Total Costo: $ <?php echo $this->result["si_total_cost"];?></b></p>
+                    <p><b>Total Venta: $ <?php echo $this->result["si_total_sale"];?></b></p>
                 </div>
             </div>
         </div>

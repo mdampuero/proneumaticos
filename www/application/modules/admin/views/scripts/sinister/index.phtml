@@ -28,7 +28,7 @@
                 <th><a href='<?php echo $this->url(array('sort' => 'br_name', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Marca</a></th>
                 <th><a href='<?php echo $this->url(array('sort' => 'mo_name', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Modelo</a></th>
                 <th><a href='<?php echo $this->url(array('sort' => 'si_date', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>F.Ingreso</a></th>
-                <th><a href='<?php echo $this->url(array('sort' => 'days', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Días</a></th>
+                <th><a href='<?php echo $this->url(array('sort' => 'si_days', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Días</a></th>
                 <th><a href='<?php echo $this->url(array('sort' => 'co_name', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Compañía</a></th>
                 <th><a href='<?php echo $this->url(array('sort' => 'si_fullname', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Asegurado</a></th>
                 <th><a href='<?php echo $this->url(array('sort' => 'si_domain', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Dominio</a></th>
@@ -60,7 +60,7 @@
                             <span class="tooltipon" data-placement="left" title="<?php echo $result['mo_name'] ?>"><?php echo $result['mo_name'] ?></span>
                         </td>
                         <td><?php echo invertDate($result['si_date'], '-') ?></td>
-                        <td class="text-center"><?php echo $result['days'] ?></td>
+                        <td class="text-center"><?php echo $result['si_days'] ?></td>
                         <td class="trim-text">
                             <span class="tooltipon" data-placement="left" title="<?php echo $result['co_name'] ?>"><?php echo $result['co_name'] ?></span>
                         </td>

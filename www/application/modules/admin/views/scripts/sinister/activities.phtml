@@ -1,36 +1,36 @@
 <div class="clearfix"></div>
-<div class="row">
-    <div class="col-xs-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Actividades
-                <?php if ($this->formDisabled != true): ?><a href="javascript:openActivity();"><span class="glyphicon glyphicon-plus pull-right"></span></a><?php endif; ?>
-            </div>
-            <div class="panel-body">
-                <table class="table table-bordered table-condensed replacement">
-                    <thead>
+
+<div class="col-xs-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Actividades
+            <?php if ($this->formDisabled != true): ?><a href="javascript:openActivity();"><span class="glyphicon glyphicon-plus pull-right"></span></a><?php endif; ?>
+        </div>
+        <div class="panel-body">
+            <table class="table table-bordered table-condensed replacement">
+                <thead>
+                    <tr>
+                        <th>Descripción</th>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                    </tr>
+                </thead>
+                <tbody id="act_id">
+                    <?php
+                    foreach ($this->sinister_activities as $act):
+                        ?>
                         <tr>
-                            <th>Descripción</th>
-                            <th>Fecha</th>
-                            <th>Usuario</th>
+                            <td><?php echo $act["act_observation"]; ?></td>
+                            <td><?php echo date("d-m-Y H:i", $act["act_created"]); ?></td>
+                            <td><?php echo $act["ad_name"] . " " . $act["ad_last"]; ?></td>
                         </tr>
-                    </thead>
-                    <tbody id="act_id">
-                        <?php
-                        foreach ($this->sinister_activities as $act):
-                            ?>
-                            <tr>
-                                <td><?php echo $act["act_observation"]; ?></td>
-                                <td><?php echo date("d-m-Y H:i", $act["act_created"]); ?></td>
-                                <td><?php echo $act["ad_name"] . " " . $act["ad_last"]; ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
 <div class="clearfix"></div>
 <script>
     function openActivity() {

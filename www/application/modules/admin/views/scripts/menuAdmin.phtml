@@ -35,6 +35,13 @@
             </a>
         </li>
     <?php endif; ?>
+    <?php if (!@in_array('transport', $this->loginInfo["accessRestring"]["controllers"])): ?>
+        <li>
+            <a <?php echo("transport" == $this->parameters["controller"]) ? "class='active'" : ""; ?> href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'transport', 'action' => 'index'), '', true); ?>">
+                <i class="fa fa-truck fa-fw"></i> Transportes
+            </a>
+        </li>
+    <?php endif; ?>
     <?php if (!@in_array('provider', $this->loginInfo["accessRestring"]["controllers"])): ?>
         <li>
             <a <?php echo("provider" == $this->parameters["controller"]) ? "class='active'" : ""; ?> href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'provider', 'action' => 'index'), '', true); ?>">
@@ -113,17 +120,26 @@
             !@in_array('maintenance', $this->loginInfo["accessRestring"]["controllers"]) ||
             !@in_array('user', $this->loginInfo["accessRestring"]["controllers"]) ||
             !@in_array('roles', $this->loginInfo["accessRestring"]["controllers"]) ||
+            !@in_array('stats', $this->loginInfo["accessRestring"]["controllers"]) ||
             !@in_array('setting', $this->loginInfo["accessRestring"]["controllers"])
     ):
         ?>
         <li <?php
         echo("maintenance" == $this->parameters["controller"] ||
         "user" == $this->parameters["controller"] ||
+        "stats" == $this->parameters["controller"] ||
         "roles" == $this->parameters["controller"] ||
         "setting" == $this->parameters["controller"]) ? "class='active'" : "";
         ?>>
             <a href="#"><i class="fa fa-gears fa-fw"></i></i> Configuración<span class="fa arrow"></span></a>
             <ul class="nav nav-second-level">
+                <?php if (!@in_array('stats', $this->loginInfo["accessRestring"]["controllers"])): ?>
+                    <li>
+                        <a <?php echo("stats" == $this->parameters["controller"]) ? "class='active'" : ""; ?> href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'stats', 'action' => 'index'), '', true); ?>">
+                            <i class="fa fa-line-chart fa-fw"></i> Reportes
+                        </a>
+                    </li>
+                <?php endif; ?>
                 <?php if (!@in_array('roles', $this->loginInfo["accessRestring"]["controllers"])): ?>
                     <li>
                         <a <?php echo("roles" == $this->parameters["controller"]) ? "class='active'" : ""; ?> href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'roles', 'action' => 'index'), '', true); ?>">
@@ -145,13 +161,6 @@
                         </a>
                     </li>
                 <?php endif; ?>
-                <?php /*if (!@in_array('maintenance', $this->loginInfo["accessRestring"]["controllers"])): ?>
-                    <li>
-                        <a <?php echo("maintenance" == $this->parameters["controller"]) ? "class='active'" : ""; ?> href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'maintenance'), '', true); ?>">
-                            <i class="fa fa-flash fa-fw"></i> Mantenimiento
-                        </a>
-                    </li>
-                <?php endif; */?>
             </ul>
             <!-- /.nav-second-level -->
         </li>

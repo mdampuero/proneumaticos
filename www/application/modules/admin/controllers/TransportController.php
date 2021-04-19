@@ -6,30 +6,28 @@
  * E-Mail: mdampuero@gmail.com
  */
 
-require_once 'Accesory.php';
+require_once 'Transport.php';
 require_once 'Common.php';
 
-class Admin_AccesoryController extends Zend_Controller_Action {
+class Admin_TransportController extends Zend_Controller_Action {
 
     var $fields = array();
     var $actions = array();
     var $options = array();
-    var $singular = "Accesorio o Servicio";
-    var $plural = "todos los Accesorios o servicios";
-    var $messageDelete = "¿Esta seguro que desea eliminar este Accesorio o Servicio?";
-    var $title = "Repuestos / Accesorios o Servicios";
+    var $singular = "Transporte";
+    var $plural = "todos los Transportes";
+    var $messageDelete = "¿Esta seguro que desea eliminar este transporte?";
+    var $title = "Transportes";
 
     public function init() {
         try {
-
             $this->view->loginInfo = $this->_helper->Login->isLogin();
             $this->view->setting = $this->_helper->Setting->getSetting();
             $this->view->parameters = $this->_request->getParams();
             //SEND DATE VIEW
             $this->fields = array(
-                array('field' => 'ac_id', 'label' => 'ID', 'list' => true, 'class' => 'id', 'order' => true),
-                array('field' => 'ac_name', 'label' => 'Nombre', 'required' => 'required', 'search' => true, 'order' => true, 'list' => true),
-                array('field' => 'ac_code', 'label' => 'Código',  'search' => true, 'order' => true, 'list' => true),
+                array('field' => 'tr_id', 'label' => 'ID', 'list' => true, 'class' => 'id', 'order' => true),
+                array('field' => 'tr_transport', 'label' => 'Nombre', 'required' => 'required', 'search' => true, 'order' => true, 'list' => true)
             );
             $this->view->fields = $this->fields;
             $this->actions = array(
@@ -61,7 +59,7 @@ class Admin_AccesoryController extends Zend_Controller_Action {
 
             //MODELS   
             $this->view->title = $this->title;
-            $this->model = new Model_DBTable_Accesory();
+            $this->model = new Model_DBTable_Transport();
         } catch (Zend_Exception $exc) {
             throw new Exception($exc->getMessage());
         }
@@ -69,6 +67,7 @@ class Admin_AccesoryController extends Zend_Controller_Action {
 
     public function indexAction() {
         try {
+            //SAVE MASIVE
             //SAVE MASIVE
             if ($this->getRequest()->isPost()):
                 if ($_POST["save"] == 1):

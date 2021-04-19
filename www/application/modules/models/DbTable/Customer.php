@@ -5,17 +5,16 @@
  * Organization: Inamika Interactive
  * E-Mail: mdampuero@gmail.com
  */
+class Model_DBTable_Customer extends Zend_Db_Table_Abstract {
 
-class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
-
-    protected $_name = 'sg_cbranch';
-    protected $names = 'cb_name';
-    protected $primary = 'cb_id';
-    protected $deleted = 'cb_deleted';
-    protected $status = 'cb_status';
-    protected $modified = 'cb_modified';
-    protected $created = 'cb_created';
-    protected $defultSort = 'cb_name';
+    protected $_name = 'sg_customer';
+    protected $names = 'cu_name';
+    protected $primary = 'cu_id';
+    protected $deleted = 'cu_deleted';
+    protected $status = 'cu_status';
+    protected $modified = 'cu_modified';
+    protected $created = 'cu_created';
+    protected $defultSort = 'cu_name';
     protected $defultOrder = 'ASC';
 
     public function init() {
@@ -40,7 +39,16 @@ class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
         $result = $this->showAll($where, $sort, $order);
         if (count($result)):
             foreach ($result as $value):
-                $list[$value[$this->primary]]="[".$value["cb_code"]."] - ".$value["cb_name"];
+                foreach ($value as $key => $val):
+                    if ($key == $this->primary):
+                        $names = explode("|", $this->names);
+                        $contact = null;
+                        foreach ($names as $name):
+                            $contact.=$value[$name] . " ";
+                        endforeach;
+                        $list[$val] = trim($contact);
+                    endif;
+                endforeach;
             endforeach;
         else:
             $list = null;
@@ -51,12 +59,17 @@ class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
     public function add($parameters) {
         $parameters[$this->created] = time();
         $parameters[$this->modified] = $parameters[$this->created];
-        $id = $this->insert($parameters);
-        if ($id > 0) {
-            return $id;
-        } else {
-            return null;
-        }
+        $result = $this->showAll("cu_phone='" . $parameters["cu_phone"] . "'");
+        if (!$result):
+            $id = $this->insert($parameters);
+            if ($id > 0) {
+                return $id;
+            } else {
+                return null;
+            }
+        else:
+            return $result[0]["cu_id"];
+        endif;
     }
 
     public function edit($parameters, $id) {

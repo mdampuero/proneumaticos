@@ -6,16 +6,16 @@
  * E-Mail: mdampuero@gmail.com
  */
 
-class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
+class Model_DBTable_Tsize extends Zend_Db_Table_Abstract {
 
-    protected $_name = 'sg_cbranch';
-    protected $names = 'cb_name';
-    protected $primary = 'cb_id';
-    protected $deleted = 'cb_deleted';
-    protected $status = 'cb_status';
-    protected $modified = 'cb_modified';
-    protected $created = 'cb_created';
-    protected $defultSort = 'cb_name';
+    protected $_name = 'sg_tsize';
+    protected $names = 'ts_name';
+    protected $primary = 'ts_id';
+    protected $deleted = 'ts_deleted';
+    protected $status = 'ts_status';
+    protected $modified = 'ts_modified';
+    protected $created = 'ts_created';
+    protected $defultSort = 'ts_name';
     protected $defultOrder = 'ASC';
 
     public function init() {
@@ -30,6 +30,8 @@ class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
         $where = ($where == null) ? $this->deleted . "=0" : $this->deleted . "=0 AND " . $where;
         $sort = ($sort == null) ? $this->defultSort : $sort;
         $order = ($order == null) ? $this->defultOrder : $order;
+        $select->joinLeft("sg_tmodel as tm", "tm.tm_id=" . $this->_name . ".ts_tm_id");
+        $select->joinLeft("sg_tbranch as tb", "tb.tb_id=" . $this->_name . ".ts_tb_id");
         $select->where($where);
         $select->order($sort . ' ' . $order);
         $results = $this->fetchAll($select);
@@ -40,7 +42,16 @@ class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
         $result = $this->showAll($where, $sort, $order);
         if (count($result)):
             foreach ($result as $value):
-                $list[$value[$this->primary]]="[".$value["cb_code"]."] - ".$value["cb_name"];
+                foreach ($value as $key => $val):
+                    if ($key == $this->primary):
+                        $names = explode("|", $this->names);
+                        $contact = null;
+                        foreach ($names as $name):
+                            $contact.=$value[$name] . " ";
+                        endforeach;
+                        $list[$val] = trim($contact);
+                    endif;
+                endforeach;
             endforeach;
         else:
             $list = null;

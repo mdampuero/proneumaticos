@@ -1,0 +1,142 @@
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>N Siniestro</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>F.Ingreso</th>
+            <th>D&iacute;as</th>
+            <th>Compa&ntilde;&iacute;a</th>
+            <th>Asegurado</th>
+            <th>Dominio</th>
+            <th>Estado</th>
+            <th>Tipo de Repuesto</th>
+            <th>Repuesto</th>
+            <th>Cantidad</th>
+            <th>Stock</th>
+            <th>Proveedor</th>
+            <th>Fecha de pedido</th>
+            <th>Fecha de llegada</th>
+            <th>Transporte</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (count($this->results) > 0) :?>
+            <?php foreach ($this->results as $keyRow => $result): ?>
+                <?php if ($result['si_tamount_au'] > 0 && $result['si_stock_au'] == 0): ?>
+                <tr>
+                    <td><?php echo $result['si_id'] ?></td>
+                    <td><?php echo $result['si_number'] ?></td>
+                    <td><?php echo $result['br_name'] ?></td>
+                    <td><?php echo $result['mo_name'] ?></td>
+                    <td><?php echo invertDate($result['si_date'], '-') ?></td>
+                    <td><?php echo $result['si_days'] ?></td>
+                    <td><?php echo $result['co_name'] ?></td>
+                    <td><?php echo $result['si_fullname'] ?></td>
+                    <td><?php echo $result['si_domain'] ?></td>
+                    <td><?php echo $result['status_label'] ?></td>
+                    <td>LLANTA DE AUXILIO</td>
+                    <td><?php echo $result['tb_name_au']; ?></td>
+                    <td><?php echo $result['si_tamount_au']; ?></td>
+                    <td><?php echo ($result['si_stock_au'] == 1) ? "SI" : "NO"; ?></td>
+                    <td><?php echo $this->providers[$result['si_au_pr_id']] ?></td>
+                    <td><?php echo invertDate($result['si_au_date_from'], '-'); ?></td>
+                    <td><?php echo invertDate($result['si_au_date'], '-'); ?></td>
+                    <td><?php echo $result['si_au_transport']; ?></td>
+                </tr>
+                <?php endif ?>
+                <?php if ($result['si_amount_po'] > 0 && $result['si_stock_po'] == 0): ?>
+                <tr>
+                    <td><?php echo $result['si_id'] ?></td>
+                    <td><?php echo $result['si_number'] ?></td>
+                    <td><?php echo $result['br_name'] ?></td>
+                    <td><?php echo $result['mo_name'] ?></td>
+                    <td><?php echo invertDate($result['si_date'], '-') ?></td>
+                    <td><?php echo $result['si_days'] ?></td>
+                    <td><?php echo $result['co_name'] ?></td>
+                    <td><?php echo $result['si_fullname'] ?></td>
+                    <td><?php echo $result['si_domain'] ?></td>
+                    <td><?php echo $result['status_label'] ?></td>
+                    <td>LLANTA DE POSICI&Oacute;N</td>
+                    <td><?php echo $result['tb_name_po']; ?></td>
+                    <td><?php echo $result['si_amount_po']; ?></td>
+                    <td><?php echo ($result['si_stock_po'] == 1) ? "SI" : "NO"; ?></td>
+                    <td><?php echo $this->providers[$result['si_po_pr_id']] ?></td>
+                    <td><?php echo invertDate($result['si_po_date_from'], '-'); ?></td>
+                    <td><?php echo invertDate($result['si_po_date'], '-'); ?></td>
+                    <td><?php echo $result['si_po_transport']; ?></td>
+                </tr>
+                <?php endif ?>
+                <?php if ($result['si_amount_co'] > 0 && $result['si_stock_co'] == 0): ?>
+                <tr>
+                    <td><?php echo $result['si_id'] ?></td>
+                    <td><?php echo $result['si_number'] ?></td>
+                    <td><?php echo $result['br_name'] ?></td>
+                    <td><?php echo $result['mo_name'] ?></td>
+                    <td><?php echo invertDate($result['si_date'], '-') ?></td>
+                    <td><?php echo $result['si_days'] ?></td>
+                    <td><?php echo $result['co_name'] ?></td>
+                    <td><?php echo $result['si_fullname'] ?></td>
+                    <td><?php echo $result['si_domain'] ?></td>
+                    <td><?php echo $result['status_label'] ?></td>
+                    <td>NEUM&Aacute;TICO</td>
+                    <td><?php echo $result['cb_name']; ?></td>
+                    <td><?php echo $result['si_amount_co']; ?></td>
+                    <td><?php echo ($result['si_stock_co'] == 1) ? "SI" : "NO"; ?></td>
+                    <td><?php echo $this->providers[$result['si_co_pr_id']] ?></td>
+                    <td><?php echo invertDate($result['si_co_date_from'], '-'); ?></td>
+                    <td><?php echo invertDate($result['si_co_date'], '-'); ?></td>
+                    <td><?php echo $result['si_co_transport']; ?></td>
+                </tr>
+                <?php endif ?>
+                <?php if ($result['si_amount_ba'] > 0 && $result['si_stock_ba'] == 0): ?>
+                <tr>
+                    <td><?php echo $result['si_id'] ?></td>
+                    <td><?php echo $result['si_number'] ?></td>
+                    <td><?php echo $result['br_name'] ?></td>
+                    <td><?php echo $result['mo_name'] ?></td>
+                    <td><?php echo invertDate($result['si_date'], '-') ?></td>
+                    <td><?php echo $result['si_days'] ?></td>
+                    <td><?php echo $result['co_name'] ?></td>
+                    <td><?php echo $result['si_fullname'] ?></td>
+                    <td><?php echo $result['si_domain'] ?></td>
+                    <td><?php echo $result['status_label'] ?></td>
+                    <td>BATER&Iacute;A</td>
+                    <td><?php echo $result['bb_name']; ?></td>
+                    <td><?php echo $result['si_amount_ba']; ?></td>
+                    <td><?php echo ($result['si_stock_ba'] == 1) ? "SI" : "NO"; ?></td>
+                    <td><?php echo $this->providers[$result['si_ba_pr_id']] ?></td>
+                    <td><?php echo invertDate($result['si_ba_date_from'], '-'); ?></td>
+                    <td><?php echo invertDate($result['si_ba_date'], '-'); ?></td>
+                    <td><?php echo $result['si_ba_transport']; ?></td>
+                </tr>
+                <?php endif ?>
+                <?php foreach ($result["accesory"] as $si_ac): ?>
+                    <?php if($si_ac['sa_in_stock'] == 0):?>
+                        <tr>
+                            <td><?php echo $result['si_id'] ?></td>
+                            <td><?php echo $result['si_number'] ?></td>
+                            <td><?php echo $result['br_name'] ?></td>
+                            <td><?php echo $result['mo_name'] ?></td>
+                            <td><?php echo invertDate($result['si_date'], '-') ?></td>
+                            <td><?php echo $result['si_days'] ?></td>
+                            <td><?php echo $result['co_name'] ?></td>
+                            <td><?php echo $result['si_fullname'] ?></td>
+                            <td><?php echo $result['si_domain'] ?></td>
+                            <td><?php echo $result['status_label'] ?></td>
+                            <td>ACCESORIOS</td>
+                            <td><?php echo $si_ac["ac_name"]; ?></td>
+                            <td><?php echo $si_ac["sa_count"]; ?></td>
+                            <td><?php echo ($si_ac['sa_in_stock'] == 1) ? "SI" : "NO"; ?></td>
+                            <td><?php echo $this->providers[$si_ac['sa_pr_id']] ?></td>
+                            <td><?php echo invertDate($si_ac['sa_date_from'], '-'); ?></td>
+                            <td><?php echo invertDate($si_ac['sa_date'], '-'); ?></td>
+                            <td><?php echo $si_ac['sa_transport']; ?></td>
+                        </tr>
+                    <?php endif ?>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </tbody>
+</table>

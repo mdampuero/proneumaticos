@@ -6,16 +6,16 @@
  * E-Mail: mdampuero@gmail.com
  */
 
-class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
+class Model_DBTable_State extends Zend_Db_Table_Abstract {
 
-    protected $_name = 'sg_cbranch';
-    protected $names = 'cb_name';
-    protected $primary = 'cb_id';
-    protected $deleted = 'cb_deleted';
-    protected $status = 'cb_status';
-    protected $modified = 'cb_modified';
-    protected $created = 'cb_created';
-    protected $defultSort = 'cb_name';
+    protected $_name = 'sg_state';
+    protected $names = 'st_state';
+    protected $primary = 'st_id';
+    protected $deleted = 'st_deleted';
+    protected $status = 'st_status';
+    protected $modified = 'st_modified';
+    protected $created = 'st_created';
+    protected $defultSort = 'st_state';
     protected $defultOrder = 'ASC';
 
     public function init() {
@@ -40,7 +40,16 @@ class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
         $result = $this->showAll($where, $sort, $order);
         if (count($result)):
             foreach ($result as $value):
-                $list[$value[$this->primary]]="[".$value["cb_code"]."] - ".$value["cb_name"];
+                foreach ($value as $key => $val):
+                    if ($key == $this->primary):
+                        $names = explode("|", $this->names);
+                        $contact = null;
+                        foreach ($names as $name):
+                            $contact.=$value[$name] . " ";
+                        endforeach;
+                        $list[$val] = trim($contact);
+                    endif;
+                endforeach;
             endforeach;
         else:
             $list = null;
@@ -48,6 +57,27 @@ class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
         return $list;
     }
 
+    public function logIn($data) {
+        $row = $this->fetchRow("st_user='" . $data["user"] . "' and st_password='" . $data["password"] . "'");
+        if ($row)
+            return $row->toArray();
+        else
+            return null;
+    }
+    
+    public function isExist($st_user, $id = 0) {
+        if ($id == 0):
+            $row = $this->fetchRow("st_user='" . $st_user . "'");
+        else:
+            $row = $this->fetchRow("st_user='" . $st_user . "' AND " . $this->primary . "<>" . $id);
+        endif;
+        if ($row) :
+            return $row->toArray();
+        else:
+            return false;
+        endif;
+    }
+    
     public function add($parameters) {
         $parameters[$this->created] = time();
         $parameters[$this->modified] = $parameters[$this->created];

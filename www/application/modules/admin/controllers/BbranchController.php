@@ -29,6 +29,7 @@ class Admin_BbranchController extends Zend_Controller_Action {
             $this->fields = array(
                 array('field' => 'bb_id', 'label' => 'ID', 'list' => true, 'class' => 'id', 'order' => true),
                 array('field' => 'bb_name', 'label' => 'Nombre', 'required' => 'required', 'search' => true, 'order' => true, 'list' => true),
+                array('field' => 'bb_code', 'label' => 'Códgio', 'search' => true, 'order' => true, 'list' => true),
             );
             $this->view->fields = $this->fields;
             $this->actions = array(

@@ -13,7 +13,9 @@ require_once 'Sinisteraccesory.php';
 require_once 'Sinisteractivity.php';
 require_once 'Branch.php';
 require_once 'Model.php';
+require_once 'State.php';
 require_once 'Common.php';
+require_once 'Transport.php';
 
 class Admin_SinisterController extends Zend_Controller_Action {
 
@@ -32,9 +34,11 @@ class Admin_SinisterController extends Zend_Controller_Action {
             $this->view->setting = $this->_helper->Setting->getSetting();
             $this->view->parameters = $this->_request->getParams();
             $this->company = new Model_DBTable_Company();
+            $this->state = new Model_DBTable_State();
             $this->branch = new Model_DBTable_Branch();
             $this->gallery = new Model_DBTable_Gallery();
             $this->provider = new Model_DBTable_Provider();
+            $this->transport = new Model_DBTable_Transport();
             //SEND DATE VIEW
             $this->fields = array(
                 array('field' => 'si_id', 'label' => 'ID', 'list' => true, 'class' => 'id', 'order' => true),
@@ -42,26 +46,34 @@ class Admin_SinisterController extends Zend_Controller_Action {
                 array('field' => 'br_name', 'label' => 'Marca', 'notdisplay' => true, 'notsave' => true, 'list' => true, 'search' => true, 'order' => true),
                 array('field' => 'mo_name', 'label' => 'Modelo', 'notdisplay' => true, 'notsave' => true, 'list' => true, 'search' => true, 'order' => true),
                 array('field' => 'si_date', 'label' => 'Fecha de Ingreso', 'required' => 'required', 'search' => true, 'order' => true, 'list' => true, 'type' => 'date', 'calendar' => true),
-                array('field' => 'days', 'label' => 'Días', 'notdisplay' => true, 'notsave' => true, 'list' => true, 'search' => false, 'order' => true),
+                array('field' => 'si_days', 'label' => 'Días', 'notdisplay' => true, 'notsave' => true, 'list' => true, 'search' => false, 'order' => true),
                 array('field' => 'si_co_id', 'label' => 'Compañia', 'required' => 'required', 'type' => 'combo', 'data' => $this->company->listAll(), 'option-empy' => 'Seleccione una Compañia'),
                 array('field' => 'co_name', 'label' => 'Compañia', 'notdisplay' => true, 'notsave' => true, 'list' => true, 'search' => true, 'order' => true),
                 array('field' => 'si_fullname', 'label' => 'Asegurado', 'required' => '', 'search' => true, 'order' => true, 'list' => true),
                 array('field' => 'si_email', 'label' => 'E-Mail', 'required' => '', 'search' => true, 'order' => true, 'list' => false),
                 array('field' => 'si_phone', 'label' => 'Teléfono', 'required' => '', 'search' => true, 'order' => true, 'list' => false),
-                array('field' => 'si_domain', 'label' => 'Dominio', 'required' => 'required', 'search' => true, 'order' => true, 'list' => true,'attr'=>'maxlength="8"'),
+                array('field' => 'si_domain','notdisplay' => true, 'label' => 'Dominio', 'required' => 'required', 'search' => true, 'order' => true, 'list' => true,'attr'=>'maxlength="8"'),
                 array('field' => 'status_label', 'label' => 'Estado', 'notdisplay' => true, 'notsave' => true, 'list' => true,  'order' => true),
                 array('field' => 'si_data_complete', 'label' => 'Datos completos','class' => 'text-center', 'notdisplay' => true, 'notsave' => true, 'list' => true, 'search' => true, 'order' => true),
-                array('field' => 'divider', 'type' => 'divider', 'notsave' => true),
-                array('field' => 'si_br_id', 'label' => 'Marca', 'required' => '', 'type' => 'combo', 'data' => $this->branch->listAll(), 'option-empy' => 'Selecciona una Marca', 'attr' => 'onchange="loadModel(this.value,0);"'),
-                array('field' => 'si_mo_id', 'label' => 'Modelo', 'required' => '', 'type' => 'combo', 'data' => array(), 'option-empy' => 'Selecciona un Modelo'),
-                array('field' => 'si_version', 'label' => 'Versión/Año', 'search' => true),
-                array('field' => 'si_customer_address', 'label' => 'Dirección', 'search' => true, 'type' => 'textarea'),
+                array('field' => 'car', 'label' => 'car', 'type' => 'partial-view', 'file' => $this->view->parameters["controller"] . '/car.phtml', 'notsave' => true),
+                array('field' => 'si_br_id', 'label' => 'Marca','notdisplay' => true, 'required' => '', 'type' => 'combo', 'data' => $this->branch->listAll(), 'option-empy' => 'Selecciona una Marca', 'attr' => 'onchange="loadModel(this.value,0);"'),
+                array('field' => 'si_mo_id', 'label' => 'Modelo','notdisplay' => true, 'required' => '', 'type' => 'combo', 'data' => array(), 'option-empy' => 'Selecciona un Modelo'),
+                array('field' => 'si_version', 'label' => 'Versión/Año', 'notdisplay' => true, 'search' => true),
+                array('field' => 'si_st_id', 'label' => 'Provincia', 'notdisplay' => true, 'type' => 'combo', 'data' => $this->state->listAll(), 'option-empy' => 'Seleccione una Provincia'),
+                array('field' => 'si_city', 'label' => 'Localidad', 'notdisplay' => true, 'list'=>false),
+                array('field' => 'si_delivery', 'label' => 'Enviar por encomienda', 'notdisplay' => true, 'type' => 'combo', 'data' => ['0'=>'NO','1'=>'SI']),
+                array('field' => 'si_delivery_name', 'label' => 'Nombre de quien retira', 'notdisplay' => true, 'list'=>false),
+                array('field' => 'si_delivery_document', 'label' => 'DNI de quien retira', 'notdisplay' => true, 'list'=>false),
+                array('field' => 'address', 'label' => 'Address', 'type' => 'partial-view', 'file' => $this->view->parameters["controller"] . '/address.phtml', 'notsave' => true),
+                array('field' => 'si_customer_address', 'label' => 'Dirección','notdisplay' => true, 'search' => true, 'type' => 'textarea'),
                 array('field' => 'suggested', 'label' => 'Sugeridos', 'type' => 'partial-view', 'file' => $this->view->parameters["controller"] . '/replacement.phtml', 'notsave' => true),
                 array('field' => 'si_observation_loan', 'label' => 'Observaciones', 'search' => true, 'type' => 'textarea'),
                 array('field' => 'si_loan', 'label' => 'Préstamos', 'search' => true, 'type' => 'textarea'),
                 array('field' => 'activities', 'label' => 'Actividades', 'type' => 'partial-view', 'file' => $this->view->parameters["controller"] . '/activities.phtml', 'notsave' => true),
                 array('field' => 'qr', 'label' => 'Código QR', 'type' => 'partial-view', 'file' => $this->view->parameters["controller"] . '/qr.phtml', 'notsave' => true),
                 array('field' => 'ga_si_id', 'label' => 'Galería de Fotos', 'type' => 'gallery', 'data' => $this->gallery->showAll("ga_si_id='" . $this->_getParam("id", 0) . "'"), 'notsave' => true, 'resize' => '800|600'),
+                array('field' => 'si_tr_id', 'label' => 'Transporte', 'notdisplay' => true, 'type' => 'combo', 'data' => $this->transport->listAll(), 'option-empy' => 'Seleccione un Transporte'),
+                array('field' => 'si_track_id','notdisplay' => true, 'label' => 'Nº de Guía', 'search' => true, 'order' => true, 'list' => true,'attr'=>'maxlength="24"'),
             );
             $this->view->fields = $this->fields;
             $this->actions = array(
@@ -113,8 +125,11 @@ class Admin_SinisterController extends Zend_Controller_Action {
                 $status[]=array('id'=>$key,'name'=>$label);
             
             $this->view->filter = array(
+                'date_from' => array('label' => 'Fecha desde'),
+                'date_to' => array('label' => 'Fecha hasta'),
                 'si_co_id' => array('label' => 'Compañía Aseguradora', 'data' => $this->company->showAll(), 'id' => 'co_id', 'value' => 'co_name'),
-                'si_status' => array('label' => 'Estado', 'data' => $status, 'id' => 'id', 'value' => 'name')
+                'si_status' => array('label' => 'Estado', 'data' => $status, 'id' => 'id', 'value' => 'name'),
+                'si_st_id' => array('label' => 'Provincia', 'data' =>$this->state->showAll(), 'id' => 'st_id', 'value' => 'st_state')
             );
             //SAVE MASIVE
             if ($this->getRequest()->isPost()){
@@ -145,7 +160,15 @@ class Admin_SinisterController extends Zend_Controller_Action {
             if ($this->view->parameters["filter"] == 1){
                 foreach ($this->view->filter as $key => $f){
                     if ($this->view->parameters[$key] != ""){
-                        $where.=" " . $key . "='" . $this->view->parameters[$key] . "' AND";
+                        if($key=="date_from"){
+                            $dateArray=explode('-',$this->view->parameters[$key]);
+                            $where.=" si_date>='" . $dateArray[2]."-".$dateArray[1]."-".$dateArray[0] . "' AND";
+                        }elseif($key=="date_to"){
+                            $dateArray=explode('-',$this->view->parameters[$key]);
+                            $where.=" si_date<='" . $dateArray[2]."-".$dateArray[1]."-".$dateArray[0] . "' AND";
+                        }else{
+                            $where.=" " . $key . "='" . $this->view->parameters[$key] . "' AND";
+                        }
                     }
                 }
                 $where = substr($where, 0, -3);
@@ -174,6 +197,11 @@ class Admin_SinisterController extends Zend_Controller_Action {
             $this->view->enableSearch = true;
             // $this->renderScript('_list.phtml');
         } catch (Zend_Exception $exc) {
+
+            echo '<pre>';
+            print_r($exc->getMessage());
+            echo '</pre>';
+            exit();
             $this->_helper->flashMessenger->addMessage(array('type' => 'danger', 'message' => $exc->getMessage(), 'data' => $this->getRequest()->getPost()));
             $this->_helper->Redirector->gotoSimple('index');
         }
@@ -190,6 +218,9 @@ class Admin_SinisterController extends Zend_Controller_Action {
                 $sa_date_from = $_POST["sa_date_from"];
                 $sa_date = $_POST["sa_date"];
                 $sa_transport = $_POST["sa_transport"];
+                $sa_price_cost = $_POST["sa_price_cost"];
+                $sa_price_sale = $_POST["sa_price_sale"];
+                $sa_number = $_POST["sa_number"];
                 $ga_si_id = $_POST["ga_si_id"];
                 $type_ga_si_id = $_POST["type_ga_si_id"];
                 unset($_POST["ga_si_id"]);
@@ -204,6 +235,10 @@ class Admin_SinisterController extends Zend_Controller_Action {
                 unset($_POST["sa_date_from"]);
                 unset($_POST["sa_date"]);
                 unset($_POST["sa_transport"]);
+                unset($_POST["sa_price_cost"]);
+                unset($_POST["sa_price_sale"]);
+                unset($_POST["sa_number"]);
+                
                 foreach ($_POST as $key => $val){
                     $this->data[$key] = $val;
                 }
@@ -218,6 +253,8 @@ class Admin_SinisterController extends Zend_Controller_Action {
                 $this->data["si_au_date_from"] = $this->_helper->Date->getDateFormatted($this->data["si_au_date_from"]);
                 $sinister_id = $this->model->add($this->data);
                 $this->sinister_accesory->deleteBySinister($sinister_id);
+                $this->dataEdit["si_total_cost"]=0;
+                $this->dataEdit["si_total_sale"]=0;
                 foreach ($amount as $ac_id => $count){
                     if ($count > 0){
                         if ($stock[$ac_id] == 1)
@@ -231,7 +268,12 @@ class Admin_SinisterController extends Zend_Controller_Action {
                             'sa_date' => $this->_helper->Date->getDateFormatted($sa_date[$ac_id]),
                             'sa_date_from' => $this->_helper->Date->getDateFormatted($sa_date_from[$ac_id]),
                             'sa_transport' => $sa_transport[$ac_id],
+                            'sa_price_cost' => $sa_price_cost[$ac_id],
+                            'sa_price_sale' => $sa_price_sale[$ac_id],
+                            'sa_number' => $sa_number[$ac_id],
                         ));
+                        $this->dataEdit["si_total_cost"]+=$sa_price_cost[$ac_id];
+                        $this->dataEdit["si_total_sale"]+=$sa_price_sale[$ac_id];
                     }
                 }
                 //GALLERY
@@ -279,6 +321,8 @@ class Admin_SinisterController extends Zend_Controller_Action {
                 $this->dataEdit["si_number"]=$this->data["si_number"];
                 $this->dataEdit["si_domain"]=$this->data["si_domain"];
                 $this->dataEdit["si_qr"]=$this->_helper->Qr->generate($sinister_id);
+                $this->dataEdit["si_total_cost"]+=$_POST['si_au_price_cost']+$_POST['si_po_price_cost']+$_POST['si_co_price_cost']+$_POST['si_ba_price_cost'];
+                $this->dataEdit["si_total_sale"]+=$_POST['si_au_price_sale']+$_POST['si_po_price_sale']+$_POST['si_co_price_sale']+$_POST['si_ba_price_sale'];
                 $this->model->edit($this->dataEdit, $sinister_id);
                 $this->sinister_activity->add(array('act_si_id' => $sinister_id, 'act_observation' => "Creado", 'act_ad_id' => $this->view->loginInfo["ad_id"]));
                 if (count($new_activity)){
@@ -294,6 +338,7 @@ class Admin_SinisterController extends Zend_Controller_Action {
             }           
             $this->view->companies = $this->company->showAll();
             $this->view->providers = $this->provider->showAll();
+            $this->view->result=['si_st_id'=>14];
             $this->view->title = $this->title . ' / Nuevo';
             $this->view->token = $this->_helper->Form->setToken();
             $this->renderScript('_form.phtml');
@@ -334,6 +379,9 @@ class Admin_SinisterController extends Zend_Controller_Action {
                 $sa_date_from = $_POST["sa_date_from"];
                 $sa_date = $_POST["sa_date"];
                 $sa_transport = $_POST["sa_transport"];
+                $sa_price_cost = $_POST["sa_price_cost"];
+                $sa_price_sale = $_POST["sa_price_sale"];
+                $sa_number = $_POST["sa_number"];
                 $ga_si_id = $_POST["ga_si_id"];
                 $type_ga_si_id = $_POST["type_ga_si_id"];
                 unset($_POST["new_activity"]);
@@ -348,6 +396,9 @@ class Admin_SinisterController extends Zend_Controller_Action {
                 unset($_POST["sa_date_from"]);
                 unset($_POST["sa_date"]);
                 unset($_POST["sa_transport"]);
+                unset($_POST["sa_price_cost"]);
+                unset($_POST["sa_price_sale"]);
+                unset($_POST["sa_number"]);
                 foreach ($_POST as $key => $val){
                     $this->data[$key] = $val;
                 }
@@ -364,6 +415,8 @@ class Admin_SinisterController extends Zend_Controller_Action {
                 
                 $sinister_id = $this->view->parameters["id"];
                 $this->sinister_accesory->deleteBySinister($sinister_id);
+                $this->dataEdit["si_total_cost"]=0;
+                $this->dataEdit["si_total_sale"]=0;
                 foreach ($amount as $ac_id => $count){
                     if ($count > 0){
                         if ($stock[$ac_id] == 1)
@@ -377,7 +430,12 @@ class Admin_SinisterController extends Zend_Controller_Action {
                             'sa_date' => $this->_helper->Date->getDateFormatted($sa_date[$ac_id]),
                             'sa_date_from' => $this->_helper->Date->getDateFormatted($sa_date_from[$ac_id]),
                             'sa_transport' => $sa_transport[$ac_id],
+                            'sa_price_cost' => $sa_price_cost[$ac_id],
+                            'sa_price_sale' => $sa_price_sale[$ac_id],
+                            'sa_number' => $sa_number[$ac_id],
                         ));
+                        $this->dataEdit["si_total_cost"]+=$sa_price_cost[$ac_id];
+                        $this->dataEdit["si_total_sale"]+=$sa_price_sale[$ac_id];
                     }
                 }
                 //GALLERY
@@ -465,26 +523,48 @@ class Admin_SinisterController extends Zend_Controller_Action {
                 }
                 $this->dataEdit["si_number"]=$this->data["si_number"];
                 $this->dataEdit["si_domain"]=$this->data["si_domain"];
+                $this->dataEdit["si_total_cost"]+=$_POST['si_au_price_cost']+$_POST['si_po_price_cost']+$_POST['si_co_price_cost']+$_POST['si_ba_price_cost'];
+                $this->dataEdit["si_total_sale"]+=$_POST['si_au_price_sale']+$_POST['si_po_price_sale']+$_POST['si_co_price_sale']+$_POST['si_ba_price_sale'];
                 $this->model->edit($this->dataEdit, $sinister_id);
                 $this->_helper->flashMessenger->addMessage(array('type' => 'success', 'message' => MESSAGE_EDI));
                 $this->_helper->Redirector->gotoSimple('index', null, null);
             }
+
+            
             $this->view->partial = $this->view->parameters["controller"] . '/status.phtml';
             $this->view->providers = $this->provider->showAll();
             $this->view->title = $this->title . ' / Editar';
             $this->view->token = $this->_helper->Form->setToken();
             $this->view->result = $this->model->get($this->view->parameters["id"]);
+            
             if ($this->view->result['si_status'] > 3){
                 $this->view->formDisabled = true;
             }
             $this->view->sinister_activities = $this->sinister_activity->getBySinister($this->view->parameters["id"]);
             $this->view->sinister_accesory = $this->sinister_accesory->getBySinister($this->view->parameters["id"]);
+            $this->view->ready = $this->checkNumber($this->view->result,$this->view->sinister_accesory);
             $this->view->js = 'loadModel(' . $this->view->result["si_br_id"] . ',' . $this->view->result["si_mo_id"] . ')';
             $this->renderScript('_form.phtml');
         } catch (Zend_Exception $exc) {
             $this->_helper->flashMessenger->addMessage(array('type' => 'danger', 'message' => $exc->getMessage()));
             $this->_helper->Redirector->gotoSimple('edit', null, null, array('id' => $this->view->parameters["id"]));
         }
+    }
+
+    protected function checkNumber($result,$accesories){
+        if ($result["si_tamount_au"] > 0 && empty($result["si_au_number"]))
+            return ['ready'=>false,'message'=>'Existen algunos respuestos sin Nº de remito, por favor complételos.'];
+        if ($result["si_amount_po"] > 0 && empty($result["si_po_number"]))
+            return ['ready'=>false,'message'=>'Existen algunos respuestos sin Nº de remito, por favor complételos.'];
+        if ($result["si_amount_co"] > 0 && empty($result["si_co_number"]))
+            return ['ready'=>false,'message'=>'Existen algunos respuestos sin Nº de remito, por favor complételos.'];
+        if ($result["si_amount_ba"] > 0 && empty($result["si_ba_number"]))
+            return ['ready'=>false,'message'=>'Existen algunos respuestos sin Nº de remito, por favor complételos.'];
+        foreach($accesories as $key=>$accesory){
+            if(empty($accesory["sa_number"]))
+                return ['ready'=>false,'message'=>'Existen algunos respuestos sin Nº de remito, por favor complételos.'];
+        }
+        return ['ready'=>true,'message'=>''];
     }
 
     public function deleteAction() {
@@ -510,6 +590,7 @@ class Admin_SinisterController extends Zend_Controller_Action {
             $this->view->formDisabled = true;
             $this->view->js = 'loadModel(' . $this->view->result["si_br_id"] . ',' . $this->view->result["si_mo_id"] . ')';
             $this->view->description = 'Detalle de ' . $this->title . ' "' . $this->view->result[$this->view->fields[1]["field"]] . '"';
+            $this->view->ready = $this->checkNumber($this->view->result,$this->view->sinister_accesory);
             if ($this->getRequest()->isXmlHttpRequest()){
                 $this->renderScript('_detail.phtml');
             }else{
@@ -555,6 +636,10 @@ class Admin_SinisterController extends Zend_Controller_Action {
             $results = $this->session_excel->results_all;
             foreach ($results as $key => $result)
                 $results[$key]['accesory']=$this->sinister_accesory->getBySinister($result['si_id']);  
+                // echo '<pre>';
+                // print_r($results);
+                // echo '</pre>';
+                // exit();
             $this->view->results=$results;
             $this->view->providers = $this->provider->listAll();
             $this->getResponse()->setRawHeader("Content-Type: application/vnd.ms-excel; charset=UTF-8")
@@ -573,6 +658,7 @@ class Admin_SinisterController extends Zend_Controller_Action {
     public function changeAction() {
         try {
             if ($this->getRequest()->isPost()){
+                $this->view->result = $this->model->get($this->view->parameters["id"]);
                 $this->sinister_activity->add(array(
                     'act_si_id' => $this->view->parameters["id"],
                     'act_observation' => "De 'Ingresado sin entregar' a 'Entregado'",
