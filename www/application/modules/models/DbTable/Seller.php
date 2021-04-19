@@ -6,16 +6,16 @@
  * E-Mail: mdampuero@gmail.com
  */
 
-class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
+class Model_DBTable_Seller extends Zend_Db_Table_Abstract {
 
-    protected $_name = 'sg_cbranch';
-    protected $names = 'cb_name';
-    protected $primary = 'cb_id';
-    protected $deleted = 'cb_deleted';
-    protected $status = 'cb_status';
-    protected $modified = 'cb_modified';
-    protected $created = 'cb_created';
-    protected $defultSort = 'cb_name';
+    protected $_name = 'sg_seller';
+    protected $names = 'se_name';
+    protected $primary = 'se_id';
+    protected $deleted = 'se_deleted';
+    protected $status = 'se_status';
+    protected $modified = 'se_modified';
+    protected $created = 'se_created';
+    protected $defultSort = 'se_name';
     protected $defultOrder = 'ASC';
 
     public function init() {
@@ -36,11 +36,28 @@ class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
         return $results->toArray();
     }
 
+    public function logIn($data) {
+        $row = $this->fetchRow("se_id='" . $data["user"] . "' and se_pass='" . md5($data["password"]) . "'");
+        if ($row)
+            return $row->toArray();
+        else
+            return null;
+    }
+
     public function listAll($where = null, $sort = null, $order = null) {
         $result = $this->showAll($where, $sort, $order);
         if (count($result)):
             foreach ($result as $value):
-                $list[$value[$this->primary]]="[".$value["cb_code"]."] - ".$value["cb_name"];
+                foreach ($value as $key => $val):
+                    if ($key == $this->primary):
+                        $names = explode("|", $this->names);
+                        $contact = null;
+                        foreach ($names as $name):
+                            $contact.=$value[$name] . " ";
+                        endforeach;
+                        $list[$val] = trim($contact);
+                    endif;
+                endforeach;
             endforeach;
         else:
             $list = null;

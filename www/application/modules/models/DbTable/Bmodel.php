@@ -6,16 +6,16 @@
  * E-Mail: mdampuero@gmail.com
  */
 
-class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
+class Model_DBTable_Bmodel extends Zend_Db_Table_Abstract {
 
-    protected $_name = 'sg_cbranch';
-    protected $names = 'cb_name';
-    protected $primary = 'cb_id';
-    protected $deleted = 'cb_deleted';
-    protected $status = 'cb_status';
-    protected $modified = 'cb_modified';
-    protected $created = 'cb_created';
-    protected $defultSort = 'cb_name';
+    protected $_name = 'sg_bmodel';
+    protected $names = 'bm_name';
+    protected $primary = 'bm_id';
+    protected $deleted = 'bm_deleted';
+    protected $status = 'bm_status';
+    protected $modified = 'bm_modified';
+    protected $created = 'bm_created';
+    protected $defultSort = 'bm_id';
     protected $defultOrder = 'ASC';
 
     public function init() {
@@ -40,7 +40,16 @@ class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
         $result = $this->showAll($where, $sort, $order);
         if (count($result)):
             foreach ($result as $value):
-                $list[$value[$this->primary]]="[".$value["cb_code"]."] - ".$value["cb_name"];
+                foreach ($value as $key => $val):
+                    if ($key == $this->primary):
+                        $names = explode("|", $this->names);
+                        $contact = null;
+                        foreach ($names as $name):
+                            $contact.=$value[$name] . " ";
+                        endforeach;
+                        $list[$val] = trim($contact);
+                    endif;
+                endforeach;
             endforeach;
         else:
             $list = null;

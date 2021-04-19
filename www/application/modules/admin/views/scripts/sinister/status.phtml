@@ -75,7 +75,7 @@
 <div class="clearfix"></div>
 <script>
     function openChange() {
-
+        <?php if($this->ready["ready"]):?>
         var type = 'ajax';
         var title = 'Cambiar de estado';
         var footer = 'false';
@@ -83,6 +83,9 @@
         var w = '50%';
         var h = '350px';
         openModalScript(type, title, footer, url, w, h);
+        <?php else:?>
+        openDialog('<h5><?php echo $this->ready["message"];?></h5>','',true);
+        <?php endif?>
 
     }
     function openPayment() {

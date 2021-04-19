@@ -79,6 +79,20 @@
                             </div>
                         </div>
                     <?php endif ?>
+                    <div class="row">
+                        <div class="form-group-sm col-xs-5">
+                            <label>Nº Remito</label>
+                            <input type="text" class="form-control" disabled="disabled" name="si_au_number" value="<?php echo $this->item["si_au_number"];?>">
+                        </div>
+                        <div class="form-group-sm col-xs-2">
+                            <label>Precio Costo</label>
+                            <input type="text" class="form-control" disabled="disabled" name="si_au_price_cost" value="<?php echo $this->item["si_au_price_cost"];?>">
+                        </div>
+                        <div class="form-group-sm col-xs-2">
+                            <label>Precio Venta</label>
+                            <input type="text" class="form-control" disabled="disabled" name="si_au_price_sale" value="<?php echo $this->item["si_au_price_sale"];?>">
+                        </div>
+                    </div>
                 </div>
             </div>
         <?php endif ?>
@@ -129,6 +143,20 @@
                             </div>
                         </div>
                     <?php endif ?>
+                    <div class="row">
+                        <div class="form-group-sm col-xs-5">
+                            <label>Nº Remito</label>
+                            <input type="text" class="form-control" disabled="disabled" name="si_po_number" value="<?php echo $this->item["si_po_number"];?>">
+                        </div>
+                        <div class="form-group-sm col-xs-2">
+                            <label>Precio Costo</label>
+                            <input type="text" class="form-control" disabled="disabled" name="si_po_price_cost" value="<?php echo $this->item["si_po_price_cost"];?>">
+                        </div>
+                        <div class="form-group-sm col-xs-2">
+                            <label>Precio Venta</label>
+                            <input type="text" class="form-control" disabled="disabled" name="si_po_price_sale" value="<?php echo $this->item["si_po_price_sale"];?>">
+                        </div>
+                    </div>
                 </div>
             </div>
         <?php endif ?>
@@ -179,6 +207,20 @@
                             </div>
                         </div>
                     <?php endif ?>
+                    <div class="row">
+                        <div class="form-group-sm col-xs-5">
+                            <label>Nº Remito</label>
+                            <input type="text" class="form-control" disabled="disabled" name="si_co_number" value="<?php echo $this->item["si_co_number"];?>">
+                        </div>
+                        <div class="form-group-sm col-xs-2">
+                            <label>Precio Costo</label>
+                            <input type="text" class="form-control" disabled="disabled" name="si_co_price_cost" value="<?php echo $this->item["si_co_price_cost"];?>">
+                        </div>
+                        <div class="form-group-sm col-xs-2">
+                            <label>Precio Venta</label>
+                            <input type="text" class="form-control" disabled="disabled" name="si_co_price_sale" value="<?php echo $this->item["si_co_price_sale"];?>">
+                        </div>
+                    </div>
                 </div>
             </div>
         <?php endif ?>
@@ -229,6 +271,20 @@
                             </div>
                         </div>
                     <?php endif ?>
+                    <div class="row">
+                        <div class="form-group-sm col-xs-5">
+                            <label>Nº Remito</label>
+                            <input type="text" class="form-control" disabled="disabled" name="si_ba_number" value="<?php echo $this->item["si_ba_number"];?>">
+                        </div>
+                        <div class="form-group-sm col-xs-2">
+                            <label>Precio Costo</label>
+                            <input type="text" class="form-control" disabled="disabled" name="si_ba_price_cost" value="<?php echo $this->item["si_ba_price_cost"];?>">
+                        </div>
+                        <div class="form-group-sm col-xs-2">
+                            <label>Precio Venta</label>
+                            <input type="text" class="form-control" disabled="disabled" name="si_ba_price_sale" value="<?php echo $this->item["si_ba_price_sale"];?>">
+                        </div>
+                    </div>
                 </div>
             </div>
         <?php endif ?>
@@ -279,8 +335,26 @@
                             </div>
                         </div>
                     <?php endif ?>
+                    <div class="row">
+                        <div class="form-group-sm col-xs-5">
+                            <label>Nº Remito</label>
+                            <input type="text" class="form-control" disabled="disabled" name="sa_number[<?php echo $si_ac["ac_id"]; ?>]"  value="<?php echo $si_ac['sa_number']; ?>">
+                        </div>
+                        <div class="form-group-sm col-xs-2">
+                            <label>Precio Costo</label>
+                            <input type="text" class="form-control" disabled="disabled" name="sa_price_cost[<?php echo $si_ac["ac_id"]; ?>]"  value="<?php echo $si_ac['sa_price_cost']; ?>">
+                        </div>
+                        <div class="form-group-sm col-xs-2">
+                            <label>Precio Venta</label>
+                            <input type="text" class="form-control" disabled="disabled" name="sa_price_sale[<?php echo $si_ac["ac_id"]; ?>]"  value="<?php echo $si_ac['sa_price_sale']; ?>">
+                        </div>
+                    </div>
                 </div>
             </div>
         <?php endforeach ?>
+        <div class="col-xs-12">
+            <p><b>Total Costo: $ <?php echo $this->item["si_total_cost"];?></b></p>
+            <p><b>Total Venta: $ <?php echo $this->item["si_total_sale"];?></b></p>
+        </div>
     </div>
 </div>

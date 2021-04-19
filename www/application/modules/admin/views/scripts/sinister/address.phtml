@@ -1,0 +1,106 @@
+<div class="clearfix"></div>
+<div class="col-xs-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Datos postales
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                    <?php $key=18;?>
+                    <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> <?php echo ($this->fields[$key]["required"]) ? "*" : ""; ?></label>
+                    <select <?php echo ($this->fields[$key]["attr"]) ? $this->fields[$key]["attr"] : ""; ?> <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> class="form-control"  id="<?php echo $this->fields[$key]["field"] ?>" name="<?php echo $this->fields[$key]["field"] ?>" <?php echo ($this->fields[$key]["required"]) ? 'data-validate="' . $this->fields[$key]["required"] . '"' : ""; ?> >
+                        <?php if (!empty($this->fields[$key]["option-empy"])): ?>
+                            <option value=""><?php echo $this->fields[$key]["option-empy"] ?></option>
+                        <?php endif; ?>
+                        <?php foreach ($this->fields[$key]["data"] as $index => $value): ?>
+                            <option <?php echo ($this->result[$this->fields[$key]["field"]] == $index) ? 'selected="selected"' : ''; ?> value="<?php echo $index ?>"><?php echo $value; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php $key=19;?>
+                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                    <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> <?php echo ($this->fields[$key]["required"]) ? "*" : ""; ?></label>
+                    <input <?php echo ($this->fields[$key]["attr"]) ? $this->fields[$key]["attr"] : ""; ?> <?php echo $this->fields[$key]["attr"] ?> <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> 
+                    value="<?php echo $this->result[$this->fields[$key]["field"]] ?>" type="text" id="<?php echo $this->fields[$key]["field"] ?>" name="<?php echo $this->fields[$key]["field"] ?>" class="form-control" 
+                    placeholder="<?php echo $this->fields[$key]["label"] ?>" <?php echo ($this->fields[$key]["required"]) ? 'data-validate="' . $this->fields[$key]["required"] . '"' : ""; ?>>
+                </div>
+                <?php $key=24;?>
+                <div class="form-group col-xs-12">
+                    <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> <?php echo ($this->fields[$key]["required"]) ? "*" : ""; ?></label>
+                    <textarea <?php echo ($this->fields[$key]["attr"]) ? $this->fields[$key]["attr"] : ""; ?> <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?>
+                        name="<?php echo $this->fields[$key]["field"] ?>" class="form-control <?php echo ($this->fields[$key]["html"] == true) ? "rta" : ""; ?>" 
+                        placeholder="<?php echo $this->fields[$key]["label"] ?>"  <?php echo ($this->fields[$key]["required"]) ? 'data-validate="' . $this->fields[$key]["required"] . '"' : ""; ?>
+                        ><?php echo $this->result[$this->fields[$key]["field"]] ?></textarea>
+                </div>
+                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                    <?php $key=20;?>
+                    <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> <?php echo ($this->fields[$key]["required"]) ? "*" : ""; ?></label>
+                    <select <?php echo ($this->fields[$key]["attr"]) ? $this->fields[$key]["attr"] : ""; ?> <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> class="form-control"  id="<?php echo $this->fields[$key]["field"] ?>" name="<?php echo $this->fields[$key]["field"] ?>" <?php echo ($this->fields[$key]["required"]) ? 'data-validate="' . $this->fields[$key]["required"] . '"' : ""; ?> >
+                        <?php if (!empty($this->fields[$key]["option-empy"])): ?>
+                            <option value=""><?php echo $this->fields[$key]["option-empy"] ?></option>
+                        <?php endif; ?>
+                        <?php foreach ($this->fields[$key]["data"] as $index => $value): ?>
+                            <option <?php echo ($this->result[$this->fields[$key]["field"]] == $index) ? 'selected="selected"' : ''; ?> value="<?php echo $index ?>"><?php echo $value; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group delivery col-lg-4 col-md-4 col-sm-6 col-xs-6" style="display:none">
+                    <?php $key=31;?>
+                    <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> <?php echo ($this->fields[$key]["required"]) ? "*" : ""; ?></label>
+                    <select <?php echo ($this->fields[$key]["attr"]) ? $this->fields[$key]["attr"] : ""; ?> <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> class="form-control"  id="<?php echo $this->fields[$key]["field"] ?>" name="<?php echo $this->fields[$key]["field"] ?>" <?php echo ($this->fields[$key]["required"]) ? 'data-validate="' . $this->fields[$key]["required"] . '"' : ""; ?> >
+                        <?php if (!empty($this->fields[$key]["option-empy"])): ?>
+                            <option value=""><?php echo $this->fields[$key]["option-empy"] ?></option>
+                        <?php endif; ?>
+                        <?php foreach ($this->fields[$key]["data"] as $index => $value): ?>
+                            <option <?php echo ($this->result[$this->fields[$key]["field"]] == $index) ? 'selected="selected"' : ''; ?> value="<?php echo $index ?>"><?php echo $value; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php $key=32;?>
+                <div class="form-group delivery col-lg-4 col-md-4 col-sm-6 col-xs-6" style="display:none">
+                    <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> <?php echo ($this->fields[$key]["required"]) ? "*" : ""; ?></label>
+                    <input <?php echo ($this->fields[$key]["attr"]) ? $this->fields[$key]["attr"] : ""; ?> <?php echo $this->fields[$key]["attr"] ?> <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> 
+                    value="<?php echo $this->result[$this->fields[$key]["field"]] ?>" type="text" id="<?php echo $this->fields[$key]["field"] ?>" name="<?php echo $this->fields[$key]["field"] ?>" class="form-control" 
+                    placeholder="<?php echo $this->fields[$key]["label"] ?>" <?php echo ($this->fields[$key]["required"]) ? 'data-validate="' . $this->fields[$key]["required"] . '"' : ""; ?>>
+                </div>
+                <?php $key=21;?>
+                <div class="form-group delivery col-lg-4 col-md-4 col-sm-6 col-xs-6" style="display:none">
+                    <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> <?php echo ($this->fields[$key]["required"]) ? "*" : ""; ?></label>
+                    <input <?php echo ($this->fields[$key]["attr"]) ? $this->fields[$key]["attr"] : ""; ?> <?php echo $this->fields[$key]["attr"] ?> <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> 
+                    value="<?php echo $this->result[$this->fields[$key]["field"]] ?>" type="text" id="<?php echo $this->fields[$key]["field"] ?>" name="<?php echo $this->fields[$key]["field"] ?>" class="form-control" 
+                    placeholder="<?php echo $this->fields[$key]["label"] ?>" <?php echo ($this->fields[$key]["required"]) ? 'data-validate="' . $this->fields[$key]["required"] . '"' : ""; ?>>
+                </div>
+                <?php $key=22;?>
+                <div class="form-group delivery col-lg-4 col-md-4 col-sm-6 col-xs-6" style="display:none">
+                    <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> <?php echo ($this->fields[$key]["required"]) ? "*" : ""; ?></label>
+                    <input <?php echo ($this->fields[$key]["attr"]) ? $this->fields[$key]["attr"] : ""; ?> <?php echo $this->fields[$key]["attr"] ?> <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> 
+                    value="<?php echo $this->result[$this->fields[$key]["field"]] ?>" type="text" id="<?php echo $this->fields[$key]["field"] ?>" name="<?php echo $this->fields[$key]["field"] ?>" class="form-control" 
+                    placeholder="<?php echo $this->fields[$key]["label"] ?>" <?php echo ($this->fields[$key]["required"]) ? 'data-validate="' . $this->fields[$key]["required"] . '"' : ""; ?>>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<script>
+    $(function (){
+        $("#si_delivery").on('change',function(){
+            checkIsDelivery($(this).val());
+        });
+        <?php if($this->result["si_id"]):?>
+            checkIsDelivery(<?php echo $this->result["si_delivery"]?>);
+        <?php endif; ?>
+    });
+    function checkIsDelivery(val){
+        if(val==1){
+            $(".delivery").slideDown('fast');
+            if($("#si_delivery_name").val()==""){
+                $("#si_delivery_name").val($("#si_fullname").val());
+            }
+        }else{
+            $(".delivery").slideUp('fast');
+        }
+    }
+</script>

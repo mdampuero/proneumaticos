@@ -29,6 +29,7 @@ class Admin_CbranchController extends Zend_Controller_Action {
             $this->fields = array(
                 array('field' => 'cb_id', 'label' => 'ID', 'list' => true, 'class' => 'id', 'order' => true),
                 array('field' => 'cb_name', 'label' => 'Nombre', 'required' => 'required', 'search' => true, 'order' => true, 'list' => true),
+                array('field' => 'cb_code', 'label' => 'Código', 'search' => true, 'order' => true, 'list' => true),
             );
             $this->view->fields = $this->fields;
             $this->actions = array(

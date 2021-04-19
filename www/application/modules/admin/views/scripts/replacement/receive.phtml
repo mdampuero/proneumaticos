@@ -23,7 +23,7 @@
                     <div class="form-group-sm col-xs-9">
                         <label>LLANTA DE AUXILIO</label>
                         <label class="detail">
-                            <?php echo $this->result['si_tb_id_au']['tb_name']; ?>
+                            [<?php echo $this->result['si_tb_id_au']['tb_code']; ?>] - <?php echo $this->result['si_tb_id_au']['tb_name']; ?>
                         </label>
                     </div>
                     <div class="form-group-sm col-xs-1">
@@ -60,6 +60,20 @@
                         <input type="text" class="form-control" name="si_au_transport">
                     </div>
                 </div>
+                <div class="row" >
+                    <div class="form-group-sm col-xs-5">
+                        <label>Nº Remito</label>
+                        <input type="text" class="form-control" name="si_au_number">
+                    </div>
+                    <div class="form-group-sm col-xs-2">
+                        <label>Precio Costo</label>
+                        <input type="text" class="form-control" name="si_au_price_cost">
+                    </div>
+                    <div class="form-group-sm col-xs-2">
+                        <label>Precio Venta</label>
+                        <input type="text" class="form-control" name="si_au_price_sale">
+                    </div>
+                </div>
             </div>
         </div>
         <?php
@@ -86,7 +100,7 @@
                     <div class="form-group-sm col-xs-9">
                         <label>LLANTA DE POSICIÓN</label>
                         <label class="detail">
-                            <?php echo $this->result['si_tb_id_po']['tb_name']; ?>
+                        [<?php echo $this->result['si_tb_id_po']['tb_code']; ?>] - <?php echo $this->result['si_tb_id_po']['tb_name']; ?>
                         </label>
                     </div>
                     <div class="form-group-sm col-xs-1">
@@ -123,6 +137,20 @@
                         <input type="text" class="form-control" name="si_po_transport">
                     </div>
                 </div>
+                <div class="row" >
+                    <div class="form-group-sm col-xs-5">
+                        <label>Nº Remito</label>
+                        <input type="text" class="form-control" name="si_po_number">
+                    </div>
+                    <div class="form-group-sm col-xs-2">
+                        <label>Precio Costo</label>
+                        <input type="text" class="form-control" name="si_po_price_cost">
+                    </div>
+                    <div class="form-group-sm col-xs-2">
+                        <label>Precio Venta</label>
+                        <input type="text" class="form-control" name="si_po_price_sale">
+                    </div>
+                </div>
             </div>
         </div>
         <?php
@@ -148,7 +176,7 @@
                     <div class="form-group-sm col-xs-9">
                         <label>NEUMÁTICO</label>
                         <label class="detail">
-                            <?php echo $this->result['si_cb_id']['cb_name']; ?>
+                            [<?php echo $this->result['si_cb_id']['cb_code']; ?>] - <?php echo $this->result['si_cb_id']['cb_name']; ?>
                         </label>
                     </div>
                     <div class="form-group-sm col-xs-1">
@@ -185,6 +213,20 @@
                         <input type="text" class="form-control" name="si_co_transport">
                     </div>
                 </div>
+                <div class="row" >
+                    <div class="form-group-sm col-xs-5">
+                        <label>Nº Remito</label>
+                        <input type="text" class="form-control" name="si_co_number">
+                    </div>
+                    <div class="form-group-sm col-xs-2">
+                        <label>Precio Costo</label>
+                        <input type="text" class="form-control" name="si_co_price_cost">
+                    </div>
+                    <div class="form-group-sm col-xs-2">
+                        <label>Precio Venta</label>
+                        <input type="text" class="form-control" name="si_co_price_sale">
+                    </div>
+                </div>
             </div>
         </div>                        
         <?php
@@ -210,7 +252,8 @@
                     <div class="form-group-sm col-xs-9">
                         <label>BATERÍA</label>
                         <label class="detail">
-                            <?php echo $this->result['si_bb_id']['bb_name']; ?></label>
+                            [<?php echo $this->result['si_bb_id']['bb_code']; ?>] - <?php echo $this->result['si_bb_id']['bb_name']; ?>
+                        </label>
                     </div>
                     <div class="form-group-sm col-xs-1">
                         <label>Cantidad</label>
@@ -246,6 +289,20 @@
                         <input type="text" class="form-control" name="si_ba_transport">
                     </div>
                 </div>
+                <div class="row" >
+                    <div class="form-group-sm col-xs-5">
+                        <label>Nº Remito</label>
+                        <input type="text" class="form-control" name="si_ba_number">
+                    </div>
+                    <div class="form-group-sm col-xs-2">
+                        <label>Precio Costo</label>
+                        <input type="text" class="form-control" name="si_ba_price_cost">
+                    </div>
+                    <div class="form-group-sm col-xs-2">
+                        <label>Precio Venta</label>
+                        <input type="text" class="form-control" name="si_ba_price_sale">
+                    </div>
+                </div>
             </div>
         </div>
         <?php
@@ -268,7 +325,9 @@
                     <?php endif; ?>
                     <div class="form-group-sm col-xs-9">
                         <label>ACCESORIOS</label>
-                        <label class="detail"><?php echo $this->result['accesory']['ac_name']; ?></label>
+                        <label class="detail">
+                            [<?php echo $this->result['accesory']['ac_code']; ?>] - <?php echo $this->result['accesory']['ac_name']; ?>
+                        </label>
                     </div>
                     <div class="form-group-sm col-xs-1">
                         <label>Cantidad</label>
@@ -302,6 +361,20 @@
                     <div class="form-group-sm col-xs-3">
                         <label>Medio</label>
                         <input type="text" class="form-control" name="sa_transport[<?php echo $this->result['type']; ?>]">
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="form-group-sm col-xs-5">
+                        <label>Nº Remito</label>
+                        <input type="text" class="form-control" name="sa_number[<?php echo $this->result['type']; ?>]">
+                    </div>
+                    <div class="form-group-sm col-xs-2">
+                        <label>Precio Costo</label>
+                        <input type="text" class="form-control" name="sa_price_cost[<?php echo $this->result['type']; ?>]">
+                    </div>
+                    <div class="form-group-sm col-xs-2">
+                        <label>Precio Venta</label>
+                        <input type="text" class="form-control" name="sa_price_sale[<?php echo $this->result['type']; ?>]">
                     </div>
                 </div>
             </div>

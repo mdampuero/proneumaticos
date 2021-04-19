@@ -5,29 +5,22 @@
  * Organization: Inamika Interactive
  * E-Mail: mdampuero@gmail.com
  */
+class Model_DBTable_Roles extends Zend_Db_Table_Abstract {
 
-class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
-
-    protected $_name = 'sg_cbranch';
-    protected $names = 'cb_name';
-    protected $primary = 'cb_id';
-    protected $deleted = 'cb_deleted';
-    protected $status = 'cb_status';
-    protected $modified = 'cb_modified';
-    protected $created = 'cb_created';
-    protected $defultSort = 'cb_name';
-    protected $defultOrder = 'ASC';
-
-    public function init() {
-        
-    }
+    protected $_name = 'sg_admin_rol';
+    protected $primary = 'ar_id';
+    protected $names = 'ar_name';
+    protected $deleted = 'ar_delete';
+    protected $modified = 'ar_modified';
+    protected $created = 'ar_created';
+    protected $defultSort = 'ar_id';
+    protected $defultOrder = 'DESC';
 
     public function showAll($where = null, $sort = null, $order = null) {
-
         $select = $this->select();
         $select->setIntegrityCheck(false);
-        $select->from(array($this->_name), array("*", "(CASE " . $this->_name . "." . $this->status . " when 1 then 'Habilitado' when 0 then 'Deshabilitado' end ) as " . $this->status . ""));
-        $where = ($where == null) ? $this->deleted . "=0" : $this->deleted . "=0 AND " . $where;
+        $select->from(array($this->_name), array("*"));
+        $where = ($where == null) ? $this->deleted . '=0' : $this->deleted . '=0 AND ' . $where;
         $sort = ($sort == null) ? $this->defultSort : $sort;
         $order = ($order == null) ? $this->defultOrder : $order;
         $select->where($where);
@@ -40,7 +33,16 @@ class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
         $result = $this->showAll($where, $sort, $order);
         if (count($result)):
             foreach ($result as $value):
-                $list[$value[$this->primary]]="[".$value["cb_code"]."] - ".$value["cb_name"];
+                foreach ($value as $key => $val):
+                    if ($key == $this->primary):
+                        $names = explode("|", $this->names);
+                        $contact = null;
+                        foreach ($names as $name):
+                            $contact.=$value[$name] . " ";
+                        endforeach;
+                        $list[$val] = trim($contact);
+                    endif;
+                endforeach;
             endforeach;
         else:
             $list = null;
@@ -57,11 +59,23 @@ class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
         } else {
             return null;
         }
+        return ($id > 0) ? $id : -1;
     }
 
     public function edit($parameters, $id) {
 
         $parameters[$this->modified] = time();
+        if ($id > 0) {
+            $this->update($parameters, $this->primary . ' = ' . (int) $id);
+        } else {
+            return null;
+        }
+    }
+
+    public function delete_row($id) {
+
+        $parameters[$this->modified] = time();
+        $parameters[$this->deleted] = 1;
         if ($id > 0) {
             $this->update($parameters, $this->primary . ' = ' . (int) $id);
         } else {
@@ -83,24 +97,8 @@ class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
         return $row->toArray();
     }
 
-    public function delete_row($id) {
-
-        return $this->delete($this->primary . ' = ' . (int) $id);
-    }
-
-    public function delete_slow($id) {
-
-        $parameters[$this->modified] = time();
-        $parameters[$this->deleted] = 1;
-        if ($id > 0) {
-            $this->update($parameters, $this->primary . ' = ' . (int) $id);
-        } else {
-            return null;
-        }
-    }
-
-    public function clearData($conditions = 1) {
-        $this->delete($conditions);
+    public function clearData() {
+        $this->delete($this->primary . ' <> 1  AND ' . $this->primary . ' <> 2  AND ' . $this->primary . ' <> 3');
         return $this->info(Zend_Db_Table::NAME);
     }
 

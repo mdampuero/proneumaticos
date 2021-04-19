@@ -6,15 +6,15 @@
  * E-Mail: mdampuero@gmail.com
  */
 
-class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
+class Model_DBTable_Cmodel extends Zend_Db_Table_Abstract {
 
-    protected $_name = 'sg_cbranch';
-    protected $names = 'cb_name';
-    protected $primary = 'cb_id';
-    protected $deleted = 'cb_deleted';
-    protected $status = 'cb_status';
-    protected $modified = 'cb_modified';
-    protected $created = 'cb_created';
+    protected $_name = 'sg_cmodel';
+    protected $names = 'cm_name';
+    protected $primary = 'cm_id';
+    protected $deleted = 'cm_deleted';
+    protected $status = 'cm_status';
+    protected $modified = 'cm_modified';
+    protected $created = 'cm_created';
     protected $defultSort = 'cb_name';
     protected $defultOrder = 'ASC';
 
@@ -32,6 +32,7 @@ class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
         $order = ($order == null) ? $this->defultOrder : $order;
         $select->where($where);
         $select->order($sort . ' ' . $order);
+        $select->joinLeft("sg_cbranch as cb", "cb.cb_id=" . $this->_name . ".cm_cb_id");
         $results = $this->fetchAll($select);
         return $results->toArray();
     }
@@ -40,7 +41,16 @@ class Model_DBTable_Cbranch extends Zend_Db_Table_Abstract {
         $result = $this->showAll($where, $sort, $order);
         if (count($result)):
             foreach ($result as $value):
-                $list[$value[$this->primary]]="[".$value["cb_code"]."] - ".$value["cb_name"];
+                foreach ($value as $key => $val):
+                    if ($key == $this->primary):
+                        $names = explode("|", $this->names);
+                        $contact = null;
+                        foreach ($names as $name):
+                            $contact.=$value[$name] . " ";
+                        endforeach;
+                        $list[$val] = trim($contact);
+                    endif;
+                endforeach;
             endforeach;
         else:
             $list = null;
