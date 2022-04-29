@@ -33,7 +33,7 @@ services:
         environment:
             - MYSQL_DATABASE=proneumaticos
             - MYSQL_ROOT_PASSWORD=Secreta007
-            - MYSQL_USER=root
+            - MYSQL_USER=proneumaticos
             - MYSQL_PASSWORD=Secreta007
         command: mysqld --sql_mode=""
     proneumaticos_memcached:

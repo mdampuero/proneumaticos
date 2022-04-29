@@ -63,6 +63,8 @@ class Model_DBTable_Sinister extends Zend_Db_Table_Abstract {
         $select->joinLeft("sg_provider as pr_ba", "pr_ba.pr_id=" . $this->_name . ".si_ba_pr_id", array("pr_ba.pr_name as pr_ba_name"));
         $select->joinLeft("sg_provider as pr_au", "pr_au.pr_id=" . $this->_name . ".si_au_pr_id", array("pr_au.pr_name as pr_au_name"));
         $select->joinLeft("sg_provider as pr_co", "pr_co.pr_id=" . $this->_name . ".si_co_pr_id", array("pr_co.pr_name as pr_co_name"));
+        $select->joinLeft("sg_state as st", "st.st_id=" . $this->_name . ".si_st_id", array("st.st_state as st_state"));
+        $select->joinLeft("sg_locality as locality", "locality.id=" . $this->_name . ".si_locality_id",array("locality.name as locality_name"));
         $select->limit($limit);
         $results = $this->fetchAll($select);
         $resultsArray=$results->toArray();
@@ -165,6 +167,7 @@ class Model_DBTable_Sinister extends Zend_Db_Table_Abstract {
         $select->joinLeft("sg_branch as br", "br.br_id=" . $this->_name . ".si_br_id");
         $select->joinLeft("sg_model as mo", "mo.mo_id=" . $this->_name . ".si_mo_id");
         $select->joinLeft("sg_state as st", "st.st_id=" . $this->_name . ".si_st_id",array("st.st_state as state_name"));
+        $select->joinLeft("sg_locality as locality", "locality.id=" . $this->_name . ".si_locality_id",array("locality.name as locality_name"));
         $select->joinLeft("sg_tbranch as tb_au", "tb_au.tb_id=" . $this->_name . ".si_tb_id_au", array("CONCAT('[',COALESCE(tb_au.tb_code,''),'] - ',tb_au.tb_name) as tb_name_au"));
         $select->joinLeft("sg_tbranch as tb_po", "tb_po.tb_id=" . $this->_name . ".si_tb_id_po", array("CONCAT('[',COALESCE(tb_po.tb_code,''),'] - ',tb_po.tb_name) as tb_name_po"));
         $select->joinLeft("sg_cbranch as cb", "cb.cb_id=" . $this->_name . ".si_cb_id",array("CONCAT('[',COALESCE(cb.cb_code,''),'] - ',cb.cb_name) as cb_name"));

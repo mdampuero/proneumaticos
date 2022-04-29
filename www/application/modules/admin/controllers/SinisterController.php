@@ -14,6 +14,7 @@ require_once 'Sinisteractivity.php';
 require_once 'Branch.php';
 require_once 'Model.php';
 require_once 'State.php';
+require_once 'Locality.php';
 require_once 'Common.php';
 require_once 'Transport.php';
 
@@ -35,6 +36,7 @@ class Admin_SinisterController extends Zend_Controller_Action {
             $this->view->parameters = $this->_request->getParams();
             $this->company = new Model_DBTable_Company();
             $this->state = new Model_DBTable_State();
+            $this->locality = new Model_DBTable_Locality();
             $this->branch = new Model_DBTable_Branch();
             $this->gallery = new Model_DBTable_Gallery();
             $this->provider = new Model_DBTable_Provider();
@@ -60,7 +62,7 @@ class Admin_SinisterController extends Zend_Controller_Action {
                 array('field' => 'si_mo_id', 'label' => 'Modelo','notdisplay' => true, 'required' => '', 'type' => 'combo', 'data' => array(), 'option-empy' => 'Selecciona un Modelo'),
                 array('field' => 'si_version', 'label' => 'Versión/Año', 'notdisplay' => true, 'search' => true),
                 array('field' => 'si_st_id', 'label' => 'Provincia', 'notdisplay' => true, 'type' => 'combo', 'data' => $this->state->listAll(), 'option-empy' => 'Seleccione una Provincia'),
-                array('field' => 'si_city', 'label' => 'Localidad', 'notdisplay' => true, 'list'=>false),
+                array('field' => 'si_city', 'label' => 'Distrito', 'notdisplay' => true, 'list'=>false),
                 array('field' => 'si_delivery', 'label' => 'Enviar por encomienda', 'notdisplay' => true, 'type' => 'combo', 'data' => ['0'=>'NO','1'=>'SI']),
                 array('field' => 'si_delivery_name', 'label' => 'Nombre de quien retira', 'notdisplay' => true, 'list'=>false),
                 array('field' => 'si_delivery_document', 'label' => 'DNI de quien retira', 'notdisplay' => true, 'list'=>false),
@@ -74,6 +76,9 @@ class Admin_SinisterController extends Zend_Controller_Action {
                 array('field' => 'ga_si_id', 'label' => 'Galería de Fotos', 'type' => 'gallery', 'data' => $this->gallery->showAll("ga_si_id='" . $this->_getParam("id", 0) . "'"), 'notsave' => true, 'resize' => '800|600'),
                 array('field' => 'si_tr_id', 'label' => 'Transporte', 'notdisplay' => true, 'type' => 'combo', 'data' => $this->transport->listAll(), 'option-empy' => 'Seleccione un Transporte'),
                 array('field' => 'si_track_id','notdisplay' => true, 'label' => 'Nº de Guía', 'search' => true, 'order' => true, 'list' => true,'attr'=>'maxlength="24"'),
+                array('field' => 'st_state', 'label' => 'Provincia', 'notdisplay' => true, 'notsave' => true, 'list' => true, 'search' => true, 'order' => true),
+                array('field' => 'si_locality_id', 'label' => 'Localidad', 'notdisplay' => true, 'type' => 'combo', 'data' => [], 'option-empy' => 'Seleccione una Localidad'),
+                
             );
             $this->view->fields = $this->fields;
             $this->actions = array(
@@ -722,6 +727,22 @@ class Admin_SinisterController extends Zend_Controller_Action {
             exit();
         } catch (Exception $exc) {
 
+        }
+    }
+
+    public function loadlocalityAction() {
+        try {
+            if ($this->getRequest()->isPost()){
+                $models = $this->locality->listAll("provence_id=" . $_POST["provence"]);
+                echo '<option value="">Selecciona una Localidad</option>';
+                foreach ($models as $mo_id => $mo_name){
+                    $sel = ($mo_id == $_POST["selected"]) ? "selected='selected'" : "";
+                    echo '<option value="' . $mo_id . '" ' . $sel . '>' . $mo_name . '</option>';
+                }
+            }
+            exit();
+        } catch (Exception $exc) {
+            exit();
         }
     }
 

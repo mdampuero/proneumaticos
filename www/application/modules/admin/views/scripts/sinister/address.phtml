@@ -18,6 +18,18 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
+                <?php $key=34;?>
+                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                    <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> <?php echo ($this->fields[$key]["required"]) ? "*" : ""; ?></label>
+                    <select <?php echo ($this->fields[$key]["attr"]) ? $this->fields[$key]["attr"] : ""; ?> <?php echo ($this->formDisabled == true) ? " disabled " : ""; ?> class="form-control"  id="<?php echo $this->fields[$key]["field"] ?>" name="<?php echo $this->fields[$key]["field"] ?>" <?php echo ($this->fields[$key]["required"]) ? 'data-validate="' . $this->fields[$key]["required"] . '"' : ""; ?> >
+                        <?php if (!empty($this->fields[$key]["option-empy"])): ?>
+                            <option value=""><?php echo $this->fields[$key]["option-empy"] ?></option>
+                        <?php endif; ?>
+                        <?php foreach ($this->fields[$key]["data"] as $index => $value): ?>
+                            <option <?php echo ($this->result[$this->fields[$key]["field"]] == $index) ? 'selected="selected"' : ''; ?> value="<?php echo $index ?>"><?php echo $value; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
                 <?php $key=19;?>
                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
                     <label for="<?php echo $this->fields[$key]["field"] ?>"><?php echo $this->fields[$key]["label"] ?> <?php echo ($this->fields[$key]["required"]) ? "*" : ""; ?></label>
@@ -86,13 +98,29 @@
 <div class="clearfix"></div>
 <script>
     $(function (){
+        loadLocality($("#si_st_id").val(),'<?php echo $this->result[$this->fields[34]["field"]] ?>');
         $("#si_delivery").on('change',function(){
             checkIsDelivery($(this).val());
+        });
+        $("#si_st_id").on('change',function(){
+            loadLocality($(this).val(),'');
         });
         <?php if($this->result["si_id"]):?>
             checkIsDelivery(<?php echo $this->result["si_delivery"]?>);
         <?php endif; ?>
     });
+    function loadLocality(provence, selected) {
+            $.post("<?php echo $this->url(array('module' => 'admin', 'controller' => 'sinister', 'action' => 'loadlocality'), NULL, TRUE); ?>",
+                {
+                    provence: provence,
+                    selected: selected,
+                })
+                .done(function(data) {
+                    if (data.length > 0) {
+                        $("#si_locality_id").html(data);
+                    }
+                });
+        }
     function checkIsDelivery(val){
         if(val==1){
             $(".delivery").slideDown('fast');
