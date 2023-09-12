@@ -36,6 +36,13 @@ class Model_DBTable_Model extends Zend_Db_Table_Abstract {
         $results = $this->fetchAll($select);
         return $results->toArray();
     }
+    public function listTypes(){
+        return [
+            'AUTO' => 'AUTO',
+            'CAMIONETA' => 'CAMIONETA',
+            'CAMION' => 'CAMION'
+        ];
+    }
 
     public function listAll($where = null, $sort = null, $order = null) {
         $result = $this->showAll($where, $sort, $order);

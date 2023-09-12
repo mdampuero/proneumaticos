@@ -27,9 +27,11 @@ class Admin_ModelController extends Zend_Controller_Action {
             $this->view->setting = $this->_helper->Setting->getSetting();
             $this->view->parameters = $this->_request->getParams();
             $this->branch = new Model_DBTable_Branch();
+            $this->model = new Model_DBTable_Model();
             //SEND DATE VIEW
             $this->fields = array(
                 array('field' => 'mo_id', 'label' => 'ID', 'list' => true, 'class' => 'id', 'order' => true),
+                array('field' => 'mo_type', 'label' => 'Marca', 'required' => 'required', 'type' => 'combo', 'list' => true,'data' => $this->model->listTypes(), 'option-empy' => 'Seleccione una Tipo'),
                 array('field' => 'mo_br_id', 'label' => 'Marca', 'required' => 'required', 'type' => 'combo', 'data' => $this->branch->listAll(), 'option-empy' => 'Seleccione una Marca'),
                 array('field' => 'br_name', 'label' => 'Marca', 'notdisplay' => true, 'notsave' => true, 'list' => true, 'search' => true, 'order' => true),
                 array('field' => 'mo_name', 'label' => 'Nombre', 'required' => 'required', 'search' => true, 'order' => true, 'list' => true),
@@ -65,7 +67,6 @@ class Admin_ModelController extends Zend_Controller_Action {
 
             //MODELS   
             $this->view->title = $this->title;
-            $this->model = new Model_DBTable_Model();
         } catch (Zend_Exception $exc) {
             throw new Exception($exc->getMessage());
         }

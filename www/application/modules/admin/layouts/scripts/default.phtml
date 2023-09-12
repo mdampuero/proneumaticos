@@ -21,7 +21,7 @@
 //                ->prependStylesheet($this->baseUrl() . '/css/bootstrap-responsive-2.3.1.min.css');
 //                ->prependStylesheet($this->baseUrl() . '/css/bootstrap-2.3.1.min.css');
         echo $this->headScript()
-//                ->prependFile($this->baseUrl() . '/js/jquery.nicescroll.min.js', 'text/javascript')
+                ->prependFile($this->baseUrl() . '/extras/Chart.js/Chart.min.js', 'text/javascript')
                 ->prependFile($this->baseUrl() . '/extras/jQuery-File-Upload-9.21.0/js/jquery.fileupload.js', 'text/javascript')
                 ->prependFile($this->baseUrl() . '/extras/jQuery-File-Upload-9.21.0/js/jquery.iframe-transport.js', 'text/javascript')
                 ->prependFile($this->baseUrl() . '/extras/jQuery-File-Upload-9.21.0/js/vendor/jquery.ui.widget.js', 'text/javascript')
@@ -43,6 +43,7 @@
                 ->prependFile($this->baseUrl() . '/js/holder.js', 'text/javascript')
         ;
         ?>
+        
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -125,7 +126,7 @@
                                     ?>
                                     <a title="<?php echo $action['label'] ?>" class="search <?php echo $action['class'] ?> hidden-lg hidden-md hidden-sm" href="<?php echo $this->url(array('module' => 'admin', 'controller' => $action['controller'], 'action' => $action['action']), '', true); ?>">
                                         &nbsp;<span class="glyphicon glyphicon-<?php echo $action['icon'] ?>"></span>&nbsp; </a><?php
-                                } else {
+                                } else{
                                     ?>
                                     <a title="<?php echo $action['label'] ?>" class="btn btn-info <?php echo $action['class'] ?> hidden-xs" href="javascript:<?php echo $action["function"] ?>">
                                         &nbsp;<span class="glyphicon glyphicon-<?php echo $action['icon'] ?>"></span>&nbsp; </a><?php

@@ -1,0 +1,2 @@
+ALTER TABLE `sg_model` 
+ADD COLUMN `mo_type` VARCHAR(45) NOT NULL DEFAULT 'AUTO' AFTER `mo_deleted`;

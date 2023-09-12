@@ -1,39 +1,517 @@
-<blockquote>
-    <?php if ($this->title) { ?>
-        <p class="text-primary"><?php echo ($this->icon) ? '<label class="glyphicon glyphicon-' . $this->icon . '"></label> ' : ''; ?> <?php echo $this->title ?></p>
-    <?php } ?>
-    <?php if ($this->description) { ?>
-        <small class="visible-lg visible-md visible-sm"><?php echo $this->description ?></small>
-    <?php } ?>
-</blockquote>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                Siniestros
+<div class="page-header">
+    <div class="panel panel-default" id="filter">
+        <div class="panel-heading">Filtrar
+        </div>
+        <div class="panel-body row">
+            <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <label>Fecha desde</label>
+                <input class="form-control calendar" value="<?php echo "01/" . date("m/Y"); ?>" name="date_from"
+                    id="date_from">
             </div>
-            <div class="panel-body">
-                <table class="table table-striped table-condensed table-hover">
-                    <tr>
-                        <th>ID Siniestro</th>
-                        <th class="text-center">Número</th>
-                        <th>Fecha</th>
-                        <th>Asegurado</th>
-                        <th>Compañia</th>
-                        <th>Estado</th>
-                    </tr>
-                    <?php foreach ($this->result as $order): ?>
-                    <tr onclick="location.href='<?php echo $this->url(array('controller' => 'sinister', 'action' => 'detail', 'id' => $order["si_id"])); ?>'">
-                            <td><b> #<?php echo $order["si_id"] ?></b></td>
-                            <td><?php echo $order["si_number"] ?></td>
-                            <td><?php echo $order["si_date"] ?></td>
-                            <td><?php echo $order["si_fullname"] ?></td>
-                            <td><?php echo $order["co_name"] ?></td>
-                            <td><?php echo $order["status_label"] ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </table>
+            <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <label>Fecha desde</label>
+                <input class="form-control calendar" value="<?php echo date("d/m/Y"); ?>" name="date_to" id="date_to">
+            </div>
+            <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <label>Compañias</label>
+                <select class="form-control" name="si_co_id" id="si_co_id">
+                    <option value="">Todos</option>
+                    <?php foreach ($this->companies as $key => $value) { ?>
+                        <option value="<?php echo $key ?>"><?php echo $value ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <label>Estados</label>
+                <select class="form-control" name="si_status" id="si_status">
+                    <option value="">Todos</option>
+                    <?php foreach ($this->status as $key => $value) { ?>
+                        <option value="<?php echo $key ?>"><?php echo $value ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <label>Marcas</label>
+                <select class="form-control" name="si_br_id" id="si_br_id">
+                    <option value="">Todas</option>
+                    <?php foreach ($this->brands as $key => $value) { ?>
+                        <option value="<?php echo $key ?>"><?php echo $value ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                <label>Provincias</label>
+                <select class="form-control" name="si_st_id" id="si_st_id">
+                    <option value="">Todas</option>
+                    <?php foreach ($this->states as $key => $value) { ?>
+                        <option value="<?php echo $key ?>"><?php echo $value ?></option>
+                    <?php } ?>
+                </select>
             </div>
         </div>
     </div>
 </div>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Totales por estado
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="text-center" id="spin-chartBarTotalStatus"><i
+                                    class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>
+                            <canvas id="chartBarTotalStatus" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="text-center" id="spin-chartPieTotalStatus"><i
+                                    class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>
+                            <canvas id="chartPieTotalStatus" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Totales por compañia
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="text-center" id="spin-chartBarTotalCompany"><i
+                                    class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>
+                            <canvas id="chartBarTotalCompany" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="text-center" id="spin-chartPieTotalCompany"><i
+                                    class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>
+                            <canvas id="chartPieTotalCompany" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Totales por provincia
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="text-center" id="spin-chartBarTotalState"><i
+                                    class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>
+                            <canvas id="chartBarTotalState" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="text-center" id="spin-chartPieTotalState"><i
+                                    class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>
+                            <canvas id="chartPieTotalState" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Totales por Marca
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="text-center" id="spin-chartBarTotalBrand"><i
+                                    class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>
+                            <canvas id="chartBarTotalBrand" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="text-center" id="spin-chartPieTotalBrand"><i
+                                    class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>
+                            <canvas id="chartPieTotalBrand" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Totales por días
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="text-center" id="spin-chartBarTotalDay"><i
+                                    class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>
+                            <canvas id="chartBarTotalDay" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="text-center" id="spin-chartPieTotalDay"><i
+                                    class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>
+                            <canvas id="chartPieTotalDay" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Totales por Neumáticos
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="text-center" id="spin-chartBarTotalNeu"><i
+                                    class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>
+                            <canvas id="chartBarTotalNeu" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Totales por llantas de posición
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="text-center" id="spin-chartBarTotalPos"><i
+                                    class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>
+                            <canvas id="chartBarTotalPos" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        Totales por llantas Auxiliares
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="text-center" id="spin-chartBarTotalAux"><i
+                                    class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>
+                            <canvas id="chartBarTotalAux" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var contextTotalCompanyBar, contextTotalCompanyPie, chartBarTotalCompany, chartPieTotalCompany;
+    var contextTotalStatusBar, contextTotalStatusPie, chartBarTotalStatus, chartPieTotalStatus;
+    var contextTotalStateBar, contextTotalStatePie, chartBarTotalState, chartPieTotalState;
+    var contextTotalBrandBar, contextTotalBrandPie, chartBarTotalBrand, chartPieTotalBrand;
+    var contextTotalDayBar, contextTotalDayPie, chartBarTotalDay, chartPieTotalDay;
+    var contextTotalNeuBar, contextTotalNeuPie, chartBarTotalNeu, charTPieTotalNeu;
+    var contextTotalAuxBar, contextTotalAuxPie, chartBarTotalAux, charTPieTotalAux;
+    var contextTotalPosBar, contextTotalPosPie, chartBarTotalPos, charTPieTotalPos;
+    const optionsPie = {
+        segmentShowStroke: true,
+        segmentStrokeColor: "#fff",
+        segmentStrokeWidth: 0,
+        animationSteps: 100,
+        tooltipCornerRadius: 10,
+        animationEasing: "easeOutBounce",
+        animateRotate: true,
+        animateScale: false,
+        responsive: true,
+        showAllTooltips: true
+    }
+    const optionsBar = {
+        scaleBeginAtZero: true,
+        scaleShowGridLines: true,
+        scaleGridLineColor: "rgba(0,0,0,.005)",
+        scaleGridLineWidth: 0,
+        scaleShowHorizontalLines: true,
+        scaleShowVerticalLines: true,
+        barShowStroke: true,
+        barStrokeWidth: 0,
+        tooltipCornerRadius: 2,
+        barDatasetSpacing: 3,
+        responsive: true
+    }
+
+    function generatePercent(data) {
+        data1 = [];
+        let sum = 0;
+        for (var i = 0; i < data.length; i++) {
+            sum = sum + parseInt(data[i].value);
+        }
+        for (var i = 0; i < data.length; i++) {
+            data1.push({
+                label: data[i].label + " (" + Math.floor((data[i].value / sum) * 100) + "%)",
+                value: data[i].value,
+                color: data[i].color,
+            })
+
+        }
+        return data1;
+    }
+
+    function generateDataBar(data){
+        labels = [];
+        values = [];
+        colors = [];
+        for (var i = 0; i < data.length; i++) {
+            labels.push(data[i].label);
+            values.push(data[i].value);
+            colors.push(data[i].color);
+        }
+        var data2 = {
+            labels: labels,
+            datasets: [{
+                label: "Bar",
+                fillColor: "#009efb",
+                strokeColor: "#000000",
+                data: values
+            }
+            ]
+        };
+        return data2;
+    }
+
+    function hideSpin(id){
+        $(id).fadeOut('fast');
+    }
+
+    function destroyIfExist(chart){
+        if (typeof chart != "undefined")
+            chart.destroy();
+    }
+
+    function updateColours(chart){
+        for (var i = 0; i < colors.length; i++) {
+            chart.datasets[0].bars[i].fillColor = colors[i];
+        }
+        chart.update();
+    }
+
+    function loadChartsTotalCompany() {
+        $.ajax({
+            url: "<?php echo $this->url(array('module' => 'api', 'controller' => 'stats', 'action' => 'totalbycompany'), NULL, TRUE); ?>",
+            type: 'POST',
+            data: buildFilters(),
+            crossDomain: true,
+            success: function (data) {
+                hideSpin("#spin-chartBarTotalCompany");
+                hideSpin("#spin-chartPieTotalCompany");
+                destroyIfExist(chartBarTotalCompany);
+                destroyIfExist(chartPieTotalCompany);
+                chartPieTotalCompany = new Chart(document.getElementById("chartPieTotalCompany").getContext("2d")).Pie(generatePercent(data), optionsPie);
+                chartBarTotalCompany = new Chart(document.getElementById("chartBarTotalCompany").getContext("2d")).Bar(generateDataBar(data), optionsBar);
+                updateColours(chartBarTotalCompany);
+            }
+        });
+    }
+    function loadChartsTotalStatus() {
+        $.ajax({
+            url: "<?php echo $this->url(array('module' => 'api', 'controller' => 'stats', 'action' => 'totalbystatus'), NULL, TRUE); ?>",
+            type: 'POST',
+            data: buildFilters(),
+            crossDomain: true,
+            success: function (data) {
+                hideSpin("#spin-chartBarTotalStatus");
+                hideSpin("#spin-chartPieTotalStatus");
+                destroyIfExist(chartBarTotalStatus);
+                destroyIfExist(chartPieTotalStatus);
+                chartPieTotalStatus = new Chart(document.getElementById("chartPieTotalStatus").getContext("2d")).Pie(generatePercent(data), optionsPie);
+                chartBarTotalStatus = new Chart(document.getElementById("chartBarTotalStatus").getContext("2d")).Bar(generateDataBar(data), optionsBar);
+                updateColours(chartBarTotalStatus);
+            }
+        });
+    }
+
+    function loadChartsTotalState() {
+        $.ajax({
+            url: "<?php echo $this->url(array('module' => 'api', 'controller' => 'stats', 'action' => 'totalbyState'), NULL, TRUE); ?>",
+            type: 'POST',
+            data: buildFilters(),
+            crossDomain: true,
+            success: function (data) {
+                hideSpin("#spin-chartBarTotalState");
+                hideSpin("#spin-chartPieTotalState");
+                destroyIfExist(chartBarTotalState);
+                destroyIfExist(chartPieTotalState);
+                chartPieTotalState = new Chart(document.getElementById("chartPieTotalState").getContext("2d")).Pie(generatePercent(data), optionsPie);
+                chartBarTotalState = new Chart(document.getElementById("chartBarTotalState").getContext("2d")).Bar(generateDataBar(data), optionsBar);
+                updateColours(chartBarTotalState);
+            }
+        });
+    }
+    function loadChartsTotalBrand() {
+        $.ajax({
+            url: "<?php echo $this->url(array('module' => 'api', 'controller' => 'stats', 'action' => 'totalbyBrand'), NULL, TRUE); ?>",
+            type: 'POST',
+            data: buildFilters(),
+            crossDomain: true,
+            success: function (data) {
+                hideSpin("#spin-chartBarTotalBrand");
+                hideSpin("#spin-chartPieTotalBrand");
+                destroyIfExist(chartBarTotalBrand);
+                destroyIfExist(chartPieTotalBrand);
+                chartPieTotalBrand = new Chart(document.getElementById("chartPieTotalBrand").getContext("2d")).Pie(generatePercent(data), optionsPie);
+                chartBarTotalBrand = new Chart(document.getElementById("chartBarTotalBrand").getContext("2d")).Bar(generateDataBar(data), optionsBar);
+                updateColours(chartBarTotalBrand);
+            }
+        });
+    }
+    function loadChartsTotalDay() {
+        $.ajax({
+            url: "<?php echo $this->url(array('module' => 'api', 'controller' => 'stats', 'action' => 'totalbyDay'), NULL, TRUE); ?>",
+            type: 'POST',
+            data: buildFilters(),
+            crossDomain: true,
+            success: function (data) {
+                hideSpin("#spin-chartBarTotalDay");
+                hideSpin("#spin-chartPieTotalDay");
+                destroyIfExist(chartBarTotalDay);
+                destroyIfExist(chartPieTotalDay);
+                chartPieTotalDay = new Chart(document.getElementById("chartPieTotalDay").getContext("2d")).Pie(generatePercent(data), optionsPie);
+                chartBarTotalDay = new Chart(document.getElementById("chartBarTotalDay").getContext("2d")).Bar(generateDataBar(data), optionsBar);
+                updateColours(chartBarTotalDay);
+            }
+        });
+    }
+    function loadChartsTotalNeu() {
+        $.ajax({
+            url: "<?php echo $this->url(array('module' => 'api', 'controller' => 'stats', 'action' => 'totalbyNeu'), NULL, TRUE); ?>",
+            type: 'POST',
+            data: buildFilters(),
+            crossDomain: true,
+            success: function (data) {
+                hideSpin("#spin-chartBarTotalNeu");
+                destroyIfExist(chartBarTotalNeu);
+                chartBarTotalNeu = new Chart(document.getElementById("chartBarTotalNeu").getContext("2d")).Bar(generateDataBar(data), optionsBar);
+                updateColours(chartBarTotalNeu);
+            }
+        });
+    }
+    function loadChartsTotalAux() {
+        $.ajax({
+            url: "<?php echo $this->url(array('module' => 'api', 'controller' => 'stats', 'action' => 'totalbyAux'), NULL, TRUE); ?>",
+            type: 'POST',
+            data: buildFilters(),
+            crossDomain: true,
+            success: function (data) {
+                hideSpin("#spin-chartBarTotalAux");
+                destroyIfExist(chartBarTotalAux);
+                chartBarTotalAux = new Chart(document.getElementById("chartBarTotalAux").getContext("2d")).Bar(generateDataBar(data), optionsBar);
+                updateColours(chartBarTotalAux);
+            }
+        });
+    }
+    function loadChartsTotalPos() {
+        $.ajax({
+            url: "<?php echo $this->url(array('module' => 'api', 'controller' => 'stats', 'action' => 'totalbyPos'), NULL, TRUE); ?>",
+            type: 'POST',
+            data: buildFilters(),
+            crossDomain: true,
+            success: function (data) {
+                hideSpin("#spin-chartBarTotalPos");
+                destroyIfExist(chartBarTotalPos);
+                chartBarTotalPos = new Chart(document.getElementById("chartBarTotalPos").getContext("2d")).Bar(generateDataBar(data), optionsBar);
+                updateColours(chartBarTotalPos);
+            }
+        });
+    }
+
+    function updateAll() {
+        loadChartsTotalCompany();
+        loadChartsTotalStatus();
+        loadChartsTotalState();
+        loadChartsTotalBrand();
+        loadChartsTotalDay();
+        loadChartsTotalNeu();
+        loadChartsTotalAux();
+        loadChartsTotalPos();
+    }
+    function buildFilters() {
+        return {
+            date_from: $("#date_from").val(),
+            date_to: $("#date_to").val(),
+            si_co_id: $("#si_co_id").val(),
+            si_br_id: $("#si_br_id").val(),
+            si_status: $("#si_status").val(),
+            si_st_id: $("#si_st_id").val(),
+        }
+    }
+    $(function () {
+        updateAll()
+        $("#date_from").on("change", updateAll)
+        $("#date_to").on("change", updateAll)
+        $("#si_co_id").on("change", updateAll)
+        $("#si_br_id").on("change", updateAll)
+        $("#si_status").on("change", updateAll)
+        $("#si_st_id").on("change", updateAll)
+    })
+</script>

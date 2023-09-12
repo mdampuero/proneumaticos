@@ -30,7 +30,6 @@ class Admin_SinisterController extends Zend_Controller_Action {
 
     public function init() {
         try {
-
             $this->view->loginInfo = $this->_helper->Login->isLogin();
             $this->view->setting = $this->_helper->Setting->getSetting();
             $this->view->parameters = $this->_request->getParams();
