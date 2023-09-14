@@ -40,7 +40,8 @@ class Model_DBTable_Model extends Zend_Db_Table_Abstract {
         return [
             'AUTO' => 'AUTO',
             'CAMIONETA' => 'CAMIONETA',
-            'CAMION' => 'CAMION'
+            'CAMION' => 'CAMION',
+            'SUV' => 'SUV'
         ];
     }
 
