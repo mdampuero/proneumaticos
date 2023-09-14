@@ -25,6 +25,7 @@
                 <th><input type="checkbox" id="select_all"/></th>
                 <th><a href='<?php echo $this->url(array('sort' => 'si_id', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>ID</a></th>
                 <th><a href='<?php echo $this->url(array('sort' => 'si_number', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Nº Siniestro</a></th>
+                <th><a href='<?php echo $this->url(array('sort' => 'mo_type', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Tipo</a></th>
                 <th><a href='<?php echo $this->url(array('sort' => 'br_name', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Marca</a></th>
                 <th><a href='<?php echo $this->url(array('sort' => 'mo_name', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>Modelo</a></th>
                 <th><a href='<?php echo $this->url(array('sort' => 'si_date', 'order' => ($this->parameters["order"] == "asc") ? 'desc' : 'asc')) ?>'>F.Ingreso</a></th>
@@ -56,6 +57,7 @@
                         </td>
                         <td><b><?php echo $result['si_id'] ?></b></td>
                         <td class="nowrap"><?php echo $result['si_number'] ?></td>
+                        <td><?php echo $result['mo_type'] ?></td>
                         <td><?php echo $result['br_name'] ?></td>
                         <td class="trim-text">
                             <span class="tooltipon" data-placement="left" title="<?php echo $result['mo_name'] ?>"><?php echo $result['mo_name'] ?></span>

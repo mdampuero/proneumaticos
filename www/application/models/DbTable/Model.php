@@ -9,7 +9,7 @@
 class Model_DBTable_Model extends Zend_Db_Table_Abstract {
 
     protected $_name = 'sg_model';
-    protected $names = 'mo_name';
+    protected $names = 'mo_type|mo_name';
     protected $primary = 'mo_id';
     protected $deleted = 'mo_deleted';
     protected $status = 'mo_status';
@@ -52,7 +52,10 @@ class Model_DBTable_Model extends Zend_Db_Table_Abstract {
                     if ($key == $this->primary):
                         $names = explode("|", $this->names);
                         $contact = null;
-                        foreach ($names as $name):
+                        foreach ($names as $key=>$name):
+                            if($key==0){
+                                $contact.="(".$value[$name] . ") - ";
+                            }else 
                             $contact.=$value[$name] . " ";
                         endforeach;
                         $list[$val] = trim($contact);
